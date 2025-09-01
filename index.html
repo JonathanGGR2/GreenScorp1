@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Scorpions Environmental Compliance Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #0f2027 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            pointer-events: none;
+        }
+
+        .platform-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            max-width: 1400px;
+            width: 100%;
+            min-height: 90vh;
+            position: relative;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .platform-header {
+            background: linear-gradient(135deg, #2c5530 0%, #3d7c47 50%, #4a9960 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .platform-header h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .platform-header p {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            font-weight: 300;
+        }
+
+        .navigation-bar {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0e6ed;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: #4a9960;
+            border-color: #4a9960;
+            box-shadow: 0 5px 15px rgba(74, 153, 96, 0.3);
+        }
+
+        .user-info {
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .main-content {
+            padding: 0;
+            min-height: 600px;
+        }
+
+        .login-section {
+            padding: 40px 50px;
+            text-align: center;
+        }
+
+        .section-title {
+            color: #2c5530;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c5530;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #e0e6ed;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4a9960;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 153, 96, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, #4a9960, #3d7c47);
+            color: white;
+            padding: 16px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(74, 153, 96, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(74, 153, 96, 0.4);
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+            border-left: 4px solid #dc3545;
+        }
+
+        .info-section {
+            background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+            padding: 30px;
+            border-top: 3px solid #4a9960;
+            margin-top: 20px;
+        }
+
+        .info-section h3 {
+            color: #2c5530;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .info-section p {
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .tool-content {
+            display: none;
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .tool-content.active {
+            display: block;
+        }
+
+        .samples-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #e0e6ed;
+        }
+
+        .samples-header h2 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .btn-add-sample {
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-sample:hover {
+            transform: translateY(-3px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Ammonia Calculator Styles */
+        .calculator-button {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .calculator-button:hover {
+            background: #138496;
+            transform: scale(1.05);
+        }
+
+        .ammonia-calculator {
+            background: #f0f8ff;
+            border: 2px solid #17a2b8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .ammonia-calculator.active {
+            display: block;
+        }
+
+        .calc-header {
+            color: #17a2b8;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calc-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .calc-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calc-input-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+
+        .calc-input-group input {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .calc-result {
+            background: white;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .calc-result-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+
+        .calc-compliance {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .calc-compliance.safe {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .calc-compliance.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .calc-compliance.danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .calc-button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .calc-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .use-result-button {
+            background: #6f42c1;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .use-result-button:hover {
+            background: #5a32a3;
+        }
+
+        /* Statement Styles */
+        .statement-box {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #dee2e6;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .compliance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .compliance-table th,
+        .compliance-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .compliance-table th {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        .compliance-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .compliant {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .non-compliant {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .platform-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .platform-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .navigation-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .login-section {
+                padding: 30px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="platform-container">
+        <div class="platform-header">
+            <div class="header-content">
+                <div class="logo">🦂</div>
+                <h1>Green Scorpions Environmental Compliance Portal</h1>
+                <p>Department of Forestry, Fisheries and the Environment</p>
+                <p class="subtitle">Advanced Environmental Monitoring & Data Logging System</p>
+            </div>
+        </div>
+
+        <div id="navigationBar" class="navigation-bar" style="display: none;">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="showSection('dashboard')">📊 Dashboard</button>
+                <button class="nav-btn" onclick="showSection('sediment')">🏔️ Sediment Quality</button>
+                <button class="nav-btn" onclick="showSection('water')">💧 Water Quality</button>
+            </div>
+            <div class="user-info">
+                <span id="userDisplay">Welcome, User</span> |
+                <button class="nav-btn" onclick="logout()" style="padding: 5px 10px; font-size: 0.8rem;">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div id="loginSection" class="login-section">
+                <div class="info-section" style="margin-top: 0; margin-bottom: 30px;">
+                    <h3>About This System</h3>
+                    <p>This environmental enforcement tool has been developed by Dr. Jonathan Levin from the Department of Forestry, Fisheries and the Environment (DFFE) for the Green Scorpions environmental compliance unit.</p>
+                    <p><strong>Purpose:</strong> Data logging, environmental containment assessment, and determination of pollution limit exceedances as per:</p>
+                    <ul style="text-align: left; margin: 10px 0 0 20px; color: #495057;">
+                        <li>Water Quality Guidelines for Aquatic Ecosystems Volume 7 (1996)</li>
+                        <li>National Norms and Standards for Remediation of Contaminated Land and Soil Quality in South Africa</li>
+                    </ul>
+                </div>
+
+                <h2 class="section-title">Secure Access Portal</h2>
+                
+                <div class="error-message" id="errorMessage">
+                    Invalid credentials. Please check your username and password.
+                </div>
+
+                <form class="login-form" onsubmit="return handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" required autocomplete="username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" required autocomplete="current-password">
+                    </div>
+                    
+                    <button type="submit" class="btn-login">
+                        🔒 Access Compliance Tools
+                    </button>
+                </form>
+            </div>
+
+            <div id="dashboardSection" class="tool-content">
+                <h2 class="section-title">Environmental Compliance Assessment Tools</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 40px;">
+                    <div style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; border-radius: 15px; padding: 40px; text-align: center; box-shadow: 0 15px 35px rgba(139, 69, 19, 0.3); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">🏔️</div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 15px;">Sediment Quality Assessment</h3>
+                        <p style="opacity: 0.9; margin-bottom: 25px; line-height: 1.6;">Multi-site sediment quality assessment against South African soil screening values. Analyze contamination levels and generate compliance reports.</p>
+                        <button onclick="showSection('sediment')" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Launch Tool</button>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #2c3e50, #3498db); color: white; border-radius: 15px; padding: 40px; text-align: center; box-shadow: 0 15px 35px rgba(52, 152, 219, 0.3); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">💧</div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 15px;">Water Quality Assessment</h3>
+                        <p style="opacity: 0.9; margin-bottom: 25px; line-height: 1.6;">Comprehensive water quality analysis and compliance checking against aquatic ecosystem guidelines. Monitor water body health.</p>
+                        <button onclick="showSection('water')" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Launch Tool</button>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 30px; margin-top: 40px; text-align: center;">
+                    <h3 style="color: #2c5530; margin-bottom: 20px;">System Status</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div style="color: #28a745; font-size: 2rem; margin-bottom: 10px;">✅</div>
+                            <div style="font-weight: 600; color: #2c5530;">System Status</div>
+                            <div style="color: #6c757d;">Operational</div>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div style="color: #17a2b8; font-size: 2rem; margin-bottom: 10px;">📊</div>
+                            <div style="font-weight: 600; color: #2c5530;">Active Tools</div>
+                            <div style="color: #6c757d;">2 Available</div>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div style="color: #ffc107; font-size: 2rem; margin-bottom: 10px;">🔒</div>
+                            <div style="font-weight: 600; color: #2c5530;">Security</div>
+                            <div style="color: #6c757d;">Authenticated</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sedimentSection" class="tool-content">
+                <div id="sedimentToolContainer"></div>
+            </div>
+
+            <div id="waterSection" class="tool-content">
+                <div id="waterToolContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const validUsers = {
+            'Jonathan': '1872000',
+            'Grant': 'Water&Soil',
+            'Piet-Louis': 'Water&Soil',
+            'User': 'Password'
+        };
+
+        let currentUser = null;
+        let toolsLoaded = { sediment: false, water: false };
+        
+        // Water Tool Variables
+        let waterSampleCounter = 0;
+        let waterSamples = [];
+
+        // Sediment Tool Variables  
+        let sedimentSampleCounter = 0;
+        let sedimentSamples = [];
+
+        // DWAF 1996 conversion table - percentage of total ammonia as un-ionized NH3
+        const conversionTable = {
+            6.0: { 0: 0.0083, 5: 0.012, 10: 0.019, 15: 0.027, 20: 0.039, 25: 0.056, 30: 0.079, 35: 0.11 },
+            6.5: { 0: 0.026, 5: 0.039, 10: 0.059, 15: 0.086, 20: 0.12, 25: 0.18, 30: 0.25, 35: 0.35 },
+            7.0: { 0: 0.083, 5: 0.12, 10: 0.18, 15: 0.27, 20: 0.39, 25: 0.56, 30: 0.79, 35: 1.1 },
+            7.5: { 0: 0.26, 5: 0.39, 10: 0.58, 15: 0.85, 20: 1.2, 25: 1.7, 30: 2.4, 35: 3.4 },
+            8.0: { 0: 0.82, 5: 1.2, 10: 1.8, 15: 2.6, 20: 3.8, 25: 5.3, 30: 7.3, 35: 9.9 },
+            8.5: { 0: 2.6, 5: 3.8, 10: 5.5, 15: 7.9, 20: 11, 25: 15, 30: 20, 35: 26 },
+            9.0: { 0: 7.6, 5: 11, 10: 16, 15: 21, 20: 28, 25: 36, 30: 44, 35: 52 },
+            9.5: { 0: 21, 5: 28, 10: 37, 15: 46, 20: 55, 25: 64, 30: 71, 35: 78 }
+        };
+
+        // Water quality standards (South African guidelines)
+        const waterStandards = {
+            aluminum: { twqr: 0.005, cev: 0.150, aev: 0.200 },
+            arsenic: { twqr: 0.010, cev: 0.040, aev: 0.340 },
+            cadmium: { twqr: 0.0002, cev: 0.0005, aev: 0.009 },
+            chromium_total: { twqr: 0.007, cev: 0.014, aev: 0.200 },
+            cobalt: { twqr: 0.005, cev: 0.065, aev: 1.400 },
+            copper: { twqr: 0.001, cev: 0.003, aev: 0.016 },
+            iron: { twqr: 0.100, cev: 1.000, aev: 10.000 },
+            lead: { twqr: 0.001, cev: 0.006, aev: 0.470 },
+            manganese: { twqr: 0.018, cev: 1.300, aev: 13.400 },
+            mercury: { twqr: 0.0006, cev: 0.0033, aev: 0.0160 },
+            nickel: { twqr: 0.025, cev: 0.110, aev: 2.500 },
+            oxygen: { twqr_min: 5.0, twqr_max: null, cev: null, aev: null },
+            vanadium: { twqr: 0.005, cev: 0.020, aev: 0.200 },
+            zinc: { twqr: 0.002, cev: 0.036, aev: 0.180 },
+            sulfate: { twqr: 200, cev: 400, aev: 1000 },
+            ph: { twqr_min: 6.5, twqr_max: 8.5, cev: null, aev: null },
+            temperature: { twqr_min: null, twqr_max: 30, cev: null, aev: null },
+            ammonium: { twqr: 0.5, cev: 1.0, aev: 2.0 },
+            ammonia_unionized: { twqr: 0.007, cev: 0.015, aev: 0.100 },
+            nitrate: { twqr: 6.0, cev: 12.0, aev: 20.0 },
+            nitrite: { twqr: 0.9, cev: 1.8, aev: 5.0 }
+        };
+
+        // Water quality guidelines for unionized NH3 in mg/L-N
+        const ammoniaGuidelines = {
+            twqr: 0.007,  // 7 μg N/L converted to mg/L-N
+            cev: 0.015,   // 15 μg N/L converted to mg/L-N
+            aev: 0.100    // 100 μg N/L converted to mg/L-N
+        };
+
+        // Water parameter definitions
+        const waterParameterDefinitions = {
+            aluminum: { name: 'Aluminum (Al)', unit: 'mg/L', step: '0.001', placeholder: '0.005' },
+            arsenic: { name: 'Arsenic (As)', unit: 'mg/L', step: '0.001', placeholder: '0.010' },
+            cadmium: { name: 'Cadmium (Cd)', unit: 'mg/L', step: '0.0001', placeholder: '0.0002' },
+            chromium_total: { name: 'Chromium Total (Cr)', unit: 'mg/L', step: '0.001', placeholder: '0.007' },
+            cobalt: { name: 'Cobalt (Co)', unit: 'mg/L', step: '0.001', placeholder: '0.005' },
+            copper: { name: 'Copper (Cu)', unit: 'mg/L', step: '0.001', placeholder: '0.001' },
+            iron: { name: 'Iron (Fe)', unit: 'mg/L', step: '0.01', placeholder: '0.100' },
+            lead: { name: 'Lead (Pb)', unit: 'mg/L', step: '0.0001', placeholder: '0.001' },
+            manganese: { name: 'Manganese (Mn)', unit: 'mg/L', step: '0.001', placeholder: '0.018' },
+            mercury: { name: 'Mercury (Hg)', unit: 'mg/L', step: '0.0001', placeholder: '0.0006' },
+            nickel: { name: 'Nickel (Ni)', unit: 'mg/L', step: '0.001', placeholder: '0.025' },
+            oxygen: { name: 'Dissolved Oxygen (O₂)', unit: 'mg/L', step: '0.1', placeholder: '8.5' },
+            vanadium: { name: 'Vanadium (V)', unit: 'mg/L', step: '0.001', placeholder: '0.005' },
+            zinc: { name: 'Zinc (Zn)', unit: 'mg/L', step: '0.001', placeholder: '0.002' },
+            sulfate: { name: 'Sulfate (SO₄)', unit: 'mg/L', step: '1', placeholder: '200' },
+            ph: { name: 'pH', unit: '', step: '0.01', placeholder: '7.5' },
+            temperature: { name: 'Temperature', unit: '°C', step: '0.1', placeholder: '20.0' },
+            ammonium: { name: 'Ammonium (NH₄⁺)', unit: 'mg N/L', step: '0.001', placeholder: '0.500' },
+            ammonia_unionized: { name: 'Ammonia (NH₃) Unionized', unit: 'mg N/L', step: '0.0001', placeholder: '0.007' },
+            nitrate: { name: 'Nitrate (NO₃⁻)', unit: 'mg N/L', step: '0.01', placeholder: '6.0' },
+            nitrite: { name: 'Nitrite (NO₂⁻)', unit: 'mg N/L', step: '0.001', placeholder: '0.9' }
+        };
+
+        // South African Soil Screening Values (from Government Gazette No. 36447, 2013)
+        const sedimentStandards = {
+            // Metals and metalloids
+            arsenic: { ssv1: 5.8, informal: 23, standard: 47, commercial: 150, ecosystem: 580 },
+            cadmium: { ssv1: 7.5, informal: 15, standard: 32, commercial: 260, ecosystem: 37 },
+            chromium_iii: { ssv1: 46000, informal: 46000, standard: 96000, commercial: 790000, ecosystem: null },
+            chromium_vi: { ssv1: 6.5, informal: 6.5, standard: 13, commercial: 40, ecosystem: 260 },
+            cobalt: { ssv1: 300, informal: 300, standard: 630, commercial: 5000, ecosystem: 22000 },
+            copper: { ssv1: 16, informal: 1100, standard: 2300, commercial: 19000, ecosystem: 16 },
+            lead: { ssv1: 20, informal: 110, standard: 230, commercial: 1900, ecosystem: 100 },
+            manganese: { ssv1: 740, informal: 740, standard: 1500, commercial: 12000, ecosystem: 36000 },
+            mercury: { ssv1: 1.0, informal: 1.0, standard: 1.0, commercial: 6.5, ecosystem: 4.1 },
+            nickel: { ssv1: 91, informal: 620, standard: 1200, commercial: 10000, ecosystem: 1400 },
+            vanadium: { ssv1: 150, informal: 150, standard: 320, commercial: 2600, ecosystem: null },
+            zinc: { ssv1: 240, informal: 9200, standard: 19000, commercial: 150000, ecosystem: 240 },
+
+            // Petroleum Organics - Alkanes
+            c7_c9: { ssv1: 2300, informal: 2300, standard: 2400, commercial: 23000, ecosystem: null },
+            c10_c14: { ssv1: 440, informal: 440, standard: 500, commercial: 4400, ecosystem: null },
+            c15_c36: { ssv1: 45000, informal: 45000, standard: 91000, commercial: 740000, ecosystem: null },
+
+            // MAHs
+            benzene: { ssv1: 0.27, informal: 1.3, standard: 1.4, commercial: 10, ecosystem: 81 },
+            toluene: { ssv1: 25, informal: 110, standard: 120, commercial: 1100, ecosystem: 170 },
+            ethylbenzene: { ssv1: 26, informal: 57, standard: 60, commercial: 540, ecosystem: 1700 },
+            xylenes: { ssv1: 45, informal: 91, standard: 95, commercial: 880, ecosystem: 260 },
+
+            // Aromatics
+            naphthalene: { ssv1: 28, informal: 28, standard: 32, commercial: 290, ecosystem: 28 },
+            pyrene: { ssv1: 5.2, informal: 920, standard: 1900, commercial: 15000, ecosystem: 5.3 },
+            benzo_a_pyrene: { ssv1: 0.34, informal: 0.34, standard: 0.71, commercial: 1.7, ecosystem: 280 },
+
+            // Petroleum Additives
+            mtbe: { ssv1: 0.03, informal: 360, standard: 370, commercial: 5800, ecosystem: 810 },
+
+            // Organics
+            carbon_tetrachloride: { ssv1: 0.24, informal: 0.25, standard: 0.26, commercial: 4, ecosystem: 62 },
+            chlorobenzene: { ssv1: 610, informal: 610, standard: 1200, commercial: 10000, ecosystem: 960 },
+            chloroform: { ssv1: 0.1, informal: 0.1, standard: 0.1, commercial: 1.7, ecosystem: 11 },
+
+            // PCBs and Cyanide
+            pcbs: { ssv1: 0.61, informal: 1.7, standard: 3.6, commercial: 11, ecosystem: null },
+            cyanide: { ssv1: 14, informal: 610, standard: 1200, commercial: 10000, ecosystem: 20 },
+
+            // Anions (mg/kg)
+            chlorides: { ssv1: 12000, informal: null, standard: null, commercial: null, ecosystem: null },
+            fluorides: { ssv1: 30, informal: null, standard: null, commercial: null, ecosystem: null },
+            nitrates_nitrite: { ssv1: 120, informal: null, standard: null, commercial: null, ecosystem: null },
+            sulphates: { ssv1: 4000, informal: null, standard: null, commercial: null, ecosystem: null }
+        };
+
+        // Sediment parameter definitions organized by category
+        const sedimentParameterCategories = {
+            metals: {
+                name: 'Metals and Metalloids',
+                parameters: {
+                    arsenic: { name: 'Arsenic (As)', unit: 'mg/kg', step: '0.1', placeholder: '5.8' },
+                    cadmium: { name: 'Cadmium (Cd)', unit: 'mg/kg', step: '0.1', placeholder: '7.5' },
+                    chromium_iii: { name: 'Chromium (III)', unit: 'mg/kg', step: '1', placeholder: '46000' },
+                    chromium_vi: { name: 'Chromium (VI)', unit: 'mg/kg', step: '0.1', placeholder: '6.5' },
+                    cobalt: { name: 'Cobalt (Co)', unit: 'mg/kg', step: '1', placeholder: '300' },
+                    copper: { name: 'Copper (Cu)', unit: 'mg/kg', step: '0.1', placeholder: '16' },
+                    lead: { name: 'Lead (Pb)', unit: 'mg/kg', step: '0.1', placeholder: '20' },
+                    manganese: { name: 'Manganese (Mn)', unit: 'mg/kg', step: '1', placeholder: '740' },
+                    mercury: { name: 'Mercury (Hg)', unit: 'mg/kg', step: '0.1', placeholder: '1.0' },
+                    nickel: { name: 'Nickel (Ni)', unit: 'mg/kg', step: '1', placeholder: '91' },
+                    vanadium: { name: 'Vanadium (V)', unit: 'mg/kg', step: '1', placeholder: '150' },
+                    zinc: { name: 'Zinc (Zn)', unit: 'mg/kg', step: '1', placeholder: '240' }
+                }
+            },
+            petroleum_organics: {
+                name: 'Petroleum Organics',
+                parameters: {
+                    c7_c9: { name: 'Alkanes C7-C9', unit: 'mg/kg', step: '1', placeholder: '2300' },
+                    c10_c14: { name: 'Alkanes C10-C14', unit: 'mg/kg', step: '1', placeholder: '440' },
+                    c15_c36: { name: 'Alkanes C15-C36', unit: 'mg/kg', step: '1', placeholder: '45000' },
+                    benzene: { name: 'Benzene', unit: 'mg/kg', step: '0.01', placeholder: '0.27' },
+                    toluene: { name: 'Toluene', unit: 'mg/kg', step: '0.1', placeholder: '25' },
+                    ethylbenzene: { name: 'Ethylbenzene', unit: 'mg/kg', step: '0.1', placeholder: '26' },
+                    xylenes: { name: 'Xylenes', unit: 'mg/kg', step: '0.1', placeholder: '45' },
+                    naphthalene: { name: 'Naphthalene', unit: 'mg/kg', step: '0.1', placeholder: '28' },
+                    pyrene: { name: 'Pyrene', unit: 'mg/kg', step: '0.1', placeholder: '5.2' },
+                    benzo_a_pyrene: { name: 'Benzo(a)pyrene', unit: 'mg/kg', step: '0.01', placeholder: '0.34' }
+                }
+            },
+            petroleum_additives: {
+                name: 'Petroleum Additives',
+                parameters: {
+                    mtbe: { name: 'MTBE', unit: 'mg/kg', step: '0.01', placeholder: '0.03' }
+                }
+            },
+            organics: {
+                name: 'Organics',
+                parameters: {
+                    carbon_tetrachloride: { name: 'Carbon Tetrachloride', unit: 'mg/kg', step: '0.01', placeholder: '0.24' },
+                    chlorobenzene: { name: 'Chlorobenzene', unit: 'mg/kg', step: '1', placeholder: '610' },
+                    chloroform: { name: 'Chloroform', unit: 'mg/kg', step: '0.01', placeholder: '0.1' }
+                }
+            },
+            pcbs_cyanide: {
+                name: 'PCBs and Cyanide',
+                parameters: {
+                    pcbs: { name: 'PCBs', unit: 'mg/kg', step: '0.01', placeholder: '0.61' },
+                    cyanide: { name: 'Cyanide', unit: 'mg/kg', step: '0.1', placeholder: '14' }
+                }
+            },
+            anions: {
+                name: 'Anions',
+                parameters: {
+                    chlorides: { name: 'Chlorides', unit: 'mg/kg', step: '10', placeholder: '12000' },
+                    fluorides: { name: 'Fluorides', unit: 'mg/kg', step: '1', placeholder: '30' },
+                    nitrates_nitrite: { name: 'Nitrates-Nitrite', unit: 'mg/kg', step: '1', placeholder: '120' },
+                    sulphates: { name: 'Sulphates', unit: 'mg/kg', step: '10', placeholder: '4000' }
+                }
+            }
+        };
+
+        // Interpolation function for pH and temperature
+        function interpolateAmmoniaPercentage(pH, temp) {
+            const pHValues = Object.keys(conversionTable).map(Number).sort((a, b) => a - b);
+            const tempValues = [0, 5, 10, 15, 20, 25, 30, 35];
+
+            // Find pH bounds
+            let lowerPH = pHValues[0];
+            let upperPH = pHValues[pHValues.length - 1];
+            
+            for (let i = 0; i < pHValues.length - 1; i++) {
+                if (pH >= pHValues[i] && pH <= pHValues[i + 1]) {
+                    lowerPH = pHValues[i];
+                    upperPH = pHValues[i + 1];
+                    break;
+                }
+            }
+
+            // Find temperature bounds
+            let lowerTemp = tempValues[0];
+            let upperTemp = tempValues[tempValues.length - 1];
+            
+            for (let i = 0; i < tempValues.length - 1; i++) {
+                if (temp >= tempValues[i] && temp <= tempValues[i + 1]) {
+                    lowerTemp = tempValues[i];
+                    upperTemp = tempValues[i + 1];
+                    break;
+                }
+            }
+
+            // Get the four corner values
+            const q11 = conversionTable[lowerPH][lowerTemp];
+            const q12 = conversionTable[lowerPH][upperTemp];
+            const q21 = conversionTable[upperPH][lowerTemp];
+            const q22 = conversionTable[upperPH][upperTemp];
+
+            // Bilinear interpolation
+            if (lowerPH === upperPH && lowerTemp === upperTemp) {
+                return q11;
+            } else if (lowerPH === upperPH) {
+                return q11 + (q12 - q11) * (temp - lowerTemp) / (upperTemp - lowerTemp);
+            } else if (lowerTemp === upperTemp) {
+                return q11 + (q21 - q11) * (pH - lowerPH) / (upperPH - lowerPH);
+            } else {
+                const r1 = q11 + (q21 - q11) * (pH - lowerPH) / (upperPH - lowerPH);
+                const r2 = q12 + (q22 - q12) * (pH - lowerPH) / (upperPH - lowerPH);
+                return r1 + (r2 - r1) * (temp - lowerTemp) / (upperTemp - lowerTemp);
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (username in validUsers && validUsers[username] === password) {
+                errorMessage.style.display = 'none';
+                currentUser = username;
+                showLoggedInInterface();
+                showSection('dashboard');
+            } else {
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Invalid credentials. Please check your username and password.';
+                document.getElementById('password').value = '';
+            }
+            
+            return false;
+        }
+
+        function showLoggedInInterface() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('navigationBar').style.display = 'flex';
+            document.getElementById('userDisplay').textContent = `Welcome, ${currentUser}`;
+        }
+
+        function showSection(sectionName) {
+            document.querySelectorAll('.tool-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const sectionElement = document.getElementById(sectionName + 'Section');
+            if (sectionElement) {
+                sectionElement.classList.add('active');
+            }
+            
+            // Set active button
+            const targetButton = [...document.querySelectorAll('.nav-btn')].find(btn => 
+                btn.textContent.includes(sectionName === 'dashboard' ? 'Dashboard' : 
+                                       sectionName === 'sediment' ? 'Sediment' : 'Water')
+            );
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+            
+            if (sectionName === 'sediment' && !toolsLoaded.sediment) {
+                loadSedimentTool();
+                toolsLoaded.sediment = true;
+            } else if (sectionName === 'water' && !toolsLoaded.water) {
+                loadWaterTool();
+                toolsLoaded.water = true;
+            }
+        }
+
+        function logout() {
+            document.getElementById('navigationBar').style.display = 'none';
+            document.querySelectorAll('.tool-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.getElementById('loginSection').style.display = 'block';
+            
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            currentUser = null;
+            toolsLoaded = { sediment: false, water: false };
+            waterSamples = [];
+            waterSampleCounter = 0;
+            sedimentSamples = [];
+            sedimentSampleCounter = 0;
+        }
+
+        // SEDIMENT TOOL FUNCTIONS
+        function loadSedimentTool() {
+            const container = document.getElementById('sedimentToolContainer');
+            container.innerHTML = `
+                <div style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 20px; margin: -30px -30px 30px -30px; text-align: center;">
+                    <h1 style="font-size: 2rem; margin-bottom: 10px;">🏔️ Sediment Quality Compliance Tool</h1>
+                    <p>Multi-site sediment quality assessment against South African soil screening values</p>
+                </div>
+                
+                <div class="samples-header">
+                    <h2 style="color: #8B4513;">Sediment Samples</h2>
+                    <button class="btn-add-sample" style="background: linear-gradient(135deg, #228B22, #32CD32); box-shadow: 0 5px 15px rgba(34, 139, 34, 0.3);" onclick="addSedimentSample()">
+                        ➕ Add Sediment Sample
+                    </button>
+                </div>
+
+                <div id="sedimentSamplesContainer">
+                    <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #8B4513; font-size: 1.1rem; background: #F5DEB3; border: 2px dashed #D2691E; border-radius: 15px; margin: 30px 0;">
+                        <p style="margin-bottom: 20px;">🌾 No sediment samples added yet</p>
+                        <p>Click "Add Sediment Sample" to get started with your soil quality assessment</p>
+                    </div>
+                </div>
+
+                <div class="analyze-section" style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #F5DEB3, #DEB887); border-radius: 15px; border: 2px solid #D2691E;">
+                    <button class="btn-analyze" style="background: linear-gradient(135deg, #DC143C, #B22222); color: white; padding: 18px 40px; border: none; border-radius: 12px; cursor: pointer; font-size: 1.2rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(220, 20, 60, 0.3); text-transform: uppercase; letter-spacing: 1px;" onclick="performSedimentAnalysis()">
+                        🔬 Analyze Sediment Quality Compliance
+                    </button>
+                </div>
+
+                <div id="sedimentResults" class="results hidden" style="margin-top: 40px;">
+                    <div class="sample-results">
+                        <h3>📊 Compliance Analysis Results</h3>
+                        <div id="sedimentResultsContainer"></div>
+                        <div id="sedimentComplianceStatement" style="background: linear-gradient(135deg, #F5F5DC, #F0E68C); border: 2px solid #D2691E; border-radius: 15px; padding: 25px; margin-top: 25px; font-family: 'Georgia', serif; line-height: 1.8;"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addSedimentSample() {
+            const container = document.getElementById('sedimentSamplesContainer');
+            
+            // Remove empty state if it exists
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+
+            // Find the lowest available sample number
+            const existingNumbers = sedimentSamples.map(sample => sample.number).sort((a, b) => a - b);
+            let newSampleNumber = 1;
+            
+            for (let i = 0; i < existingNumbers.length; i++) {
+                if (existingNumbers[i] === newSampleNumber) {
+                    newSampleNumber++;
+                } else {
+                    break;
+                }
+            }
+
+            sedimentSampleCounter++;
+            const sampleId = `sediment_sample_${sedimentSampleCounter}`;
+
+            const sampleHTML = `
+                <div class="sediment-sample" data-sample-id="${sampleId}" style="background: white; border: 2px solid #D2691E; border-radius: 15px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);">
+                    <div class="sample-header" style="background: linear-gradient(135deg, #F5DEB3, #DEB887); padding: 20px 25px; border-bottom: 2px solid #D2691E; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 1.4rem; font-weight: 600; color: #8B4513; margin: 0;">Sediment Sample ${newSampleNumber}</h3>
+                        <button onclick="removeSedimentSample('${sampleId}')" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.3s ease;">
+                            🗑️ Remove Sample
+                        </button>
+                    </div>
+                    
+                    <div class="sample-content" style="padding: 25px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                            <div style="display: flex; flex-direction: column;">
+                                <label style="font-weight: 600; margin-bottom: 8px; color: #8B4513; font-size: 1rem;">Sample ID:</label>
+                                <input type="text" id="${sampleId}_id" placeholder="e.g., SED-001, TAIL-01" style="padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa;">
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column;">
+                                <label style="font-weight: 600; margin-bottom: 8px; color: #8B4513; font-size: 1rem;">Source/Location:</label>
+                                <input type="text" id="${sampleId}_source" placeholder="e.g., Tailings dump, Contaminated soil, Mining area" style="padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa;">
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column;">
+                                <label style="font-weight: 600; margin-bottom: 8px; color: #8B4513; font-size: 1rem;">GPS Coordinates (Decimal Degrees):</label>
+                                <div style="font-size: 0.85rem; color: #6c757d; font-style: italic; margin-bottom: 5px;">Example: -25.123456, 27.654321</div>
+                                <input type="text" id="${sampleId}_gps" placeholder="-25.123456, 27.654321" style="padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa;">
+                            </div>
+                        </div>
+
+                        <div style="background: #f8f9fa; border: 2px dashed #D2691E; border-radius: 10px; padding: 20px; margin-bottom: 25px;">
+                            <h4 style="color: #495057; margin-bottom: 15px; font-size: 1.2rem;">Select Parameter Categories and Parameters</h4>
+                            ${generateSedimentCategoriesHTML(sampleId)}
+                            
+                            <div id="${sampleId}_dataEntry" class="data-entry hidden" style="background: white; border: 1px solid #dee2e6; border-radius: 10px; padding: 20px; margin-top: 20px;">
+                                <h5 style="color: #8B4513; margin-bottom: 15px; font-size: 1.1rem;">Enter Measured Values (mg/kg)</h5>
+                                <div id="${sampleId}_dataGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                                    <!-- Data entry fields will appear here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', sampleHTML);
+
+            // Initialize sample tracking
+            sedimentSamples.push({
+                id: sampleId,
+                number: newSampleNumber,
+                parameters: []
+            });
+        }
+
+        function generateSedimentCategoriesHTML(sampleId) {
+            let html = '';
+            
+            Object.keys(sedimentParameterCategories).forEach(categoryKey => {
+                const category = sedimentParameterCategories[categoryKey];
+                html += `
+                    <div style="background: white; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="font-weight: 600; color: #8B4513; font-size: 1.1rem;">${category.name}</span>
+                            <button onclick="toggleSedimentCategory('${sampleId}', '${categoryKey}')" style="background: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem;">
+                                Show Parameters
+                            </button>
+                        </div>
+                        <div id="${sampleId}_${categoryKey}_content" style="display: none;">
+                            <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
+                                <select id="${sampleId}_${categoryKey}_select" style="flex: 1; min-width: 250px; padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa;">
+                                    <option value="">-- Choose a parameter to add --</option>
+                                    ${Object.keys(category.parameters).map(paramKey => 
+                                        `<option value="${paramKey}">${category.parameters[paramKey].name}</option>`
+                                    ).join('')}
+                                </select>
+                                <button onclick="addSedimentParameter('${sampleId}', '${categoryKey}')" style="background: linear-gradient(135deg, #FF8C00, #FF7F50); color: white; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; white-space: nowrap;">
+                                    ➕ Add Parameter
+                                </button>
+                            </div>
+                            <div id="${sampleId}_${categoryKey}_list" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
+                                <!-- Selected parameters will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        function toggleSedimentCategory(sampleId, categoryKey) {
+            const content = document.getElementById(`${sampleId}_${categoryKey}_content`);
+            const button = content.previousElementSibling.querySelector('button');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                button.textContent = 'Hide Parameters';
+            } else {
+                content.style.display = 'none';
+                button.textContent = 'Show Parameters';
+            }
+        }
+
+        function addSedimentParameter(sampleId, categoryKey) {
+            const select = document.getElementById(`${sampleId}_${categoryKey}_select`);
+            const parameterKey = select.value;
+
+            if (!parameterKey) {
+                alert('Please select a parameter to add');
+                return;
+            }
+
+            const sample = sedimentSamples.find(s => s.id === sampleId);
+            if (sample && sample.parameters.some(p => p.key === parameterKey)) {
+                alert('This parameter has already been added to this sample');
+                return;
+            }
+
+            // Add to sample tracking
+            if (sample) {
+                sample.parameters.push({
+                    key: parameterKey,
+                    category: categoryKey
+                });
+            }
+
+            // Add parameter tag
+            const category = sedimentParameterCategories[categoryKey];
+            const parameterDef = category.parameters[parameterKey];
+            const parameterList = document.getElementById(`${sampleId}_${categoryKey}_list`);
+            
+            const parameterTag = document.createElement('div');
+            parameterTag.style.cssText = 'background: #8B4513; color: white; padding: 6px 10px; border-radius: 5px; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 6px;';
+            parameterTag.setAttribute('data-parameter', parameterKey);
+            parameterTag.innerHTML = `
+                ${parameterDef.name}
+                <span style="background: #FF8C00; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 500; margin-left: 8px;">${category.name.split(' ')[0]}</span>
+                <button onclick="removeSedimentParameter('${sampleId}', '${categoryKey}', '${parameterKey}')" style="background: rgba(255, 255, 255, 0.3); border: none; color: white; cursor: pointer; font-size: 1rem; font-weight: bold; padding: 0; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">×</button>
+            `;
+            
+            parameterList.appendChild(parameterTag);
+
+            // Add data entry field
+            const dataGrid = document.getElementById(`${sampleId}_dataGrid`);
+            const dataEntry = document.getElementById(`${sampleId}_dataEntry`);
+            
+            const fieldHTML = `
+                <div data-parameter="${parameterKey}" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border-left: 4px solid #D2691E;">
+                    <div style="display: flex; flex-direction: column;">
+                        <label style="font-weight: 600; margin-bottom: 8px; color: #8B4513; font-size: 1rem;">
+                            ${parameterDef.name} (${parameterDef.unit}):
+                        </label>
+                        <input type="number" 
+                               id="${sampleId}_${parameterKey}" 
+                               step="${parameterDef.step}" 
+                               placeholder="${parameterDef.placeholder}"
+                               style="padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: white;">
+                    </div>
+                </div>
+            `;
+            
+            dataGrid.insertAdjacentHTML('beforeend', fieldHTML);
+
+            // Show data entry section
+            dataEntry.classList.remove('hidden');
+
+            // Hide from dropdown and reset
+            const option = select.querySelector(`option[value="${parameterKey}"]`);
+            option.style.display = 'none';
+            select.value = '';
+        }
+
+        function removeSedimentParameter(sampleId, categoryKey, parameterKey) {
+            // Remove from sample tracking
+            const sample = sedimentSamples.find(s => s.id === sampleId);
+            if (sample) {
+                sample.parameters = sample.parameters.filter(p => p.key !== parameterKey);
+            }
+
+            // Remove parameter tag
+            const parameterTag = document.querySelector(`[data-sample-id="${sampleId}"] [data-parameter="${parameterKey}"]`);
+            if (parameterTag && parameterTag.style.background === 'rgb(139, 69, 19)') {
+                parameterTag.remove();
+            }
+
+            // Remove data entry field
+            const dataField = document.querySelector(`[data-sample-id="${sampleId}"] div[data-parameter="${parameterKey}"]`);
+            if (dataField && dataField.style.background === 'rgb(248, 249, 250)') {
+                dataField.remove();
+            }
+
+            // Hide data entry section if no parameters left
+            if (sample && sample.parameters.length === 0) {
+                const dataEntry = document.getElementById(`${sampleId}_dataEntry`);
+                dataEntry.classList.add('hidden');
+            }
+
+            // Show in dropdown again
+            const select = document.getElementById(`${sampleId}_${categoryKey}_select`);
+            const option = select.querySelector(`option[value="${parameterKey}"]`);
+            if (option) {
+                option.style.display = 'block';
+            }
+        }
+
+        function removeSedimentSample(sampleId) {
+            const sampleElement = document.querySelector(`[data-sample-id="${sampleId}"]`);
+            if (sampleElement) {
+                sampleElement.remove();
+            }
+
+            // Remove from tracking
+            sedimentSamples = sedimentSamples.filter(sample => sample.id !== sampleId);
+
+            // Show empty state if no samples left
+            const container = document.getElementById('sedimentSamplesContainer');
+            if (sedimentSamples.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #8B4513; font-size: 1.1rem; background: #F5DEB3; border: 2px dashed #D2691E; border-radius: 15px; margin: 30px 0;">
+                        <p style="margin-bottom: 20px;">🌾 No sediment samples added yet</p>
+                        <p>Click "Add Sediment Sample" to get started with your soil quality assessment</p>
+                    </div>
+                `;
+            }
+        }
+
+        function performSedimentAnalysis() {
+            if (sedimentSamples.length === 0) {
+                alert('Please add at least one sediment sample before running analysis');
+                return;
+            }
+
+            const results = analyzeSedimentCompliance();
+            displaySedimentResults(results);
+            generateSedimentComplianceStatement(results);
+
+            document.getElementById('sedimentResults').classList.remove('hidden');
+            document.getElementById('sedimentResults').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function analyzeSedimentCompliance() {
+            const allResults = [];
+
+            sedimentSamples.forEach(sample => {
+                const sampleResults = {
+                    sampleId: sample.id,
+                    sampleNumber: sample.number,
+                    sampleInfo: {
+                        id: document.getElementById(`${sample.id}_id`).value || `Sample ${sample.number}`,
+                        source: document.getElementById(`${sample.id}_source`).value || 'Not specified',
+                        gps: document.getElementById(`${sample.id}_gps`).value || 'Not provided'
+                    },
+                    results: []
+                };
+
+                sample.parameters.forEach(param => {
+                    const inputElement = document.getElementById(`${sample.id}_${param.key}`);
+                    const value = parseFloat(inputElement.value);
+
+                    if (!isNaN(value) && sedimentStandards[param.key]) {
+                        const standard = sedimentStandards[param.key];
+                        const category = sedimentParameterCategories[param.category];
+                        const parameterDef = category.parameters[param.key];
+
+                        let result = {
+                            parameter: parameterDef.name,
+                            value: value,
+                            unit: parameterDef.unit,
+                            parameterKey: param.key,
+                            category: category.name,
+                            ssv1: standard.ssv1,
+                            informal: standard.informal,
+                            standard_res: standard.standard,
+                            commercial: standard.commercial,
+                            ecosystem: standard.ecosystem
+                        };
+
+                        // Determine highest exceeded threshold
+                        result.exceedsSSV1 = value > standard.ssv1;
+                        result.exceedsEcosystem = standard.ecosystem ? value > standard.ecosystem : false;
+                        result.exceedsCommercial = standard.commercial ? value > standard.commercial : false;
+                        result.exceedsStandard = standard.standard ? value > standard.standard : false;
+                        result.exceedsInformal = standard.informal ? value > standard.informal : false;
+
+                        // Determine compliance status and highest exceeded level
+                        if (result.exceedsCommercial) {
+                            result.highestExceeded = 'Commercial/Industrial';
+                            result.exceedanceFactor = value / standard.commercial;
+                            result.exceedanceThreshold = standard.commercial;
+                        } else if (result.exceedsStandard) {
+                            result.highestExceeded = 'Standard Residential';
+                            result.exceedanceFactor = value / standard.standard;
+                            result.exceedanceThreshold = standard.standard;
+                        } else if (result.exceedsInformal) {
+                            result.highestExceeded = 'Informal Residential';
+                            result.exceedanceFactor = value / standard.informal;
+                            result.exceedanceThreshold = standard.informal;
+                        } else if (result.exceedsEcosystem) {
+                            result.highestExceeded = 'Ecosystem Protection';
+                            result.exceedanceFactor = value / standard.ecosystem;
+                            result.exceedanceThreshold = standard.ecosystem;
+                        } else if (result.exceedsSSV1) {
+                            result.highestExceeded = 'SSV1 (Water Resource Protection)';
+                            result.exceedanceFactor = value / standard.ssv1;
+                            result.exceedanceThreshold = standard.ssv1;
+                        } else {
+                            result.highestExceeded = null;
+                            result.exceedanceFactor = value / standard.ssv1;
+                            result.exceedanceThreshold = standard.ssv1;
+                        }
+
+                        sampleResults.results.push(result);
+                    }
+                });
+
+                if (sampleResults.results.length > 0) {
+                    allResults.push(sampleResults);
+                }
+            });
+
+            return allResults;
+        }
+
+        function displaySedimentResults(sedimentResults) {
+            const container = document.getElementById('sedimentResultsContainer');
+
+            if (sedimentResults.length === 0) {
+                container.innerHTML = '<p>No sediment analysis data available for compliance checking.</p>';
+                return;
+            }
+
+            let html = '';
+
+            sedimentResults.forEach(sample => {
+                html += `<div style="margin-bottom: 30px;">`;
+                html += `<h4 style="color: #8B4513; margin-bottom: 15px; padding: 12px 18px; background: linear-gradient(135deg, #F5DEB3, #DEB887); border-radius: 8px; border-left: 4px solid #8B4513; font-size: 1.2rem;">🏔️ ${sample.sampleInfo.id} - ${sample.sampleInfo.source}</h4>`;
+                
+                if (sample.sampleInfo.gps !== 'Not provided') {
+                    html += `<p><strong>📍 GPS:</strong> ${sample.sampleInfo.gps}</p>`;
+                }
+
+                html += '<table style="width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);">';
+                html += `
+                    <thead>
+                        <tr>
+                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Parameter</th>
+                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Category</th>
+                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Measured<br>(mg/kg)</th>
+                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">SSV1<br>(mg/kg)</th>
+                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Ecosystem<br>(mg/kg)</th>
+                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Compliance Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+
+                sample.results.forEach(result => {
+                    let statusDisplay = '';
+                    let statusClass = '';
+
+                    if (result.highestExceeded) {
+                        statusClass = 'background: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.8rem;';
+                        statusDisplay = `Exceeds ${result.highestExceeded} by ${result.exceedanceFactor.toFixed(1)}×`;
+                    } else {
+                        statusClass = 'background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.8rem;';
+                        statusDisplay = 'Within All Limits';
+                    }
+
+                    html += `
+                        <tr style="border-bottom: 1px solid #e0e6ed;">
+                            <td style="padding: 12px;"><strong>${result.parameter}</strong></td>
+                            <td style="padding: 12px;">${result.category}</td>
+                            <td style="padding: 12px;">${result.value.toFixed(2)}</td>
+                            <td style="padding: 12px;">${result.ssv1}</td>
+                            <td style="padding: 12px;">${result.ecosystem || 'N/A'}</td>
+                            <td style="padding: 12px;"><span style="${statusClass}">${statusDisplay}</span></td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+                html += '</div><br>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function generateSedimentComplianceStatement(results) {
+            const container = document.getElementById('sedimentComplianceStatement');
+            
+            let criticalViolations = [];
+            
+            // Check sediment violations across all samples
+            results.forEach(sample => {
+                sample.results.forEach(result => {
+                    if (result.highestExceeded) {
+                        const sampleLabel = `${sample.sampleInfo.id} (${sample.sampleInfo.source})`;
+                        criticalViolations.push(`${result.parameter} in ${sampleLabel} exceeds ${result.highestExceeded} threshold (${result.value.toFixed(2)} mg/kg vs ${result.exceedanceThreshold} mg/kg, ${result.exceedanceFactor.toFixed(1)}× threshold)`);
+                    }
+                });
+            });
+
+            let statement = '<h3>🔬 Expert Assessment Statement</h3>';
+            
+            if (criticalViolations.length > 0) {
+                statement += '<div style="background: #f8d7da; color: #721c24; padding: 15px; margin: 15px 0; border-radius: 10px; font-weight: 600;">';
+                statement += '<strong>⚠️ CRITICAL VIOLATIONS IDENTIFIED</strong><br>';
+                statement += 'The following parameters exceed South African Soil Screening Values:';
+                statement += '<ul style="margin: 10px 0; padding-left: 20px;">';
+                criticalViolations.forEach(violation => {
+                    statement += `<li>${violation}</li>`;
+                });
+                statement += '</ul>';
+                statement += '</div>';
+
+                statement += '<p><strong>Regulatory Implications:</strong> ';
+                statement += 'Exceedances of Soil Screening Values (SSV) indicate potential risks to human health and/or ecological receptors according to the National Norms and Standards for Remediation of Contaminated Land and Soil Quality (Government Gazette No. 36447, 2013). These exceedances may trigger requirements for site assessment and potential remediation under the National Environmental Management: Waste Act, 2008. ';
+                statement += '</p>';
+
+                statement += '<p><strong>Environmental Risk:</strong> The detected contamination levels may pose risks to human health through multiple exposure pathways and/or ecological receptors through direct contact, bioaccumulation, and potential migration to water resources. The specific risk level depends on the intended land use and proximity to sensitive receptors.</p>';
+
+                statement += '<p><strong>Recommendation:</strong> The contaminated areas warrant immediate attention and appropriate management measures. A detailed site assessment should be conducted to determine the extent of contamination and develop appropriate remediation strategies to protect both human health and environmental integrity.</p>';
+
+            } else {
+                statement += '<div style="background: #fff3cd; color: #856404; padding: 15px; margin: 15px 0; border-radius: 10px; font-weight: 600;">';
+                statement += '<strong>✅ NO CRITICAL VIOLATIONS DETECTED</strong><br>';
+                statement += 'All measured parameters are within South African Soil Screening Values for the tested constituents.';
+                statement += '</div>';
+                
+                statement += '<p><strong>Assessment:</strong> Based on the provided analytical results, the measured concentrations comply with relevant South African Soil Screening Values (SSV1) and ecosystem protection guidelines for the parameters analyzed across all sampled locations.</p>';
+                
+                statement += '<p><strong>Recommendation:</strong> Continue routine monitoring to ensure ongoing compliance with soil quality standards. Maintain current soil management practices to prevent future contamination.</p>';
+            }
+
+            statement += `<p style="margin-top: 20px; font-style: italic; font-size: 0.9rem;"><strong>Note:</strong> This automated assessment analyzed ${results.length} sediment sample(s) against South African Soil Screening Values (Government Gazette No. 36447, 2013). A comprehensive environmental assessment may require additional parameters and expert interpretation by qualified environmental professionals.</p>`;
+
+            container.innerHTML = statement;
+        }
+
+        // WATER TOOL FUNCTIONS
+        function loadWaterTool() {
+            const container = document.getElementById('waterToolContainer');
+            container.innerHTML = `
+                <div style="background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 20px; margin: -30px -30px 30px -30px; text-align: center;">
+                    <h1 style="font-size: 2rem; margin-bottom: 10px;">💧 Water Quality Compliance Tool</h1>
+                    <p>Multi-site water quality assessment and compliance checking</p>
+                </div>
+                
+                <div class="samples-header">
+                    <h2 style="color: #2c3e50;">Water Samples</h2>
+                    <button class="btn-add-sample" style="background: linear-gradient(135deg, #27ae60, #2ecc71); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);" onclick="addWaterSample()">
+                        ➕ Add Water Sample
+                    </button>
+                </div>
+
+                <div id="waterSamplesContainer">
+                    <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #6c757d; font-size: 1.1rem; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 15px; margin: 30px 0;">
+                        <p style="margin-bottom: 20px;">🌊 No water samples added yet</p>
+                        <p>Click "Add Water Sample" to get started with your water quality assessment</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px;">
+                    <button style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 18px 40px; border: none; border-radius: 12px; cursor: pointer; font-size: 1.2rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3); text-transform: uppercase; letter-spacing: 1px;" onclick="performWaterAnalysis()" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(231, 76, 60, 0.4)'" onmouseout="this.style.transform='translateY(0px)'; this.style.boxShadow='0 8px 20px rgba(231, 76, 60, 0.3)'">
+                        🔬 Analyze Water Quality Compliance
+                    </button>
+                </div>
+
+                <div id="waterResults" class="results hidden" style="margin-top: 40px;">
+                    <div class="sample-results">
+                        <h3>📊 Compliance Analysis Results</h3>
+                        <div id="waterResultsContainer"></div>
+                        <div id="waterComplianceStatement" class="statement-box"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addWaterSample() {
+            const container = document.getElementById('waterSamplesContainer');
+            
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+
+            const existingNumbers = waterSamples.map(sample => sample.number).sort((a, b) => a - b);
+            let newSampleNumber = 1;
+            
+            for (let i = 0; i < existingNumbers.length; i++) {
+                if (existingNumbers[i] === newSampleNumber) {
+                    newSampleNumber++;
+                } else {
+                    break;
+                }
+            }
+
+            waterSampleCounter++;
+            const sampleId = `water_sample_${waterSampleCounter}`;
+
+            const sampleHTML = `
+                <div data-sample-id="${sampleId}" style="background: white; border: 2px solid #3498db; border-radius: 15px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);">
+                    <div style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); padding: 20px 25px; border-bottom: 2px solid #3498db; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 1.4rem; font-weight: 600; color: #2c3e50; margin: 0;">Water Sample ${newSampleNumber}</h3>
+                        <button onclick="removeWaterSample('${sampleId}')" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.3s ease;" onmouseover="this.style.background='#c0392b'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='#e74c3c'; this.style.transform='scale(1)'">
+                            🗑️ Remove Sample
+                        </button>
+                    </div>
+                    
+                    <div style="padding: 25px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                            <div style="display: flex; flex-direction: column;">
+                                <label style="font-weight: 600; margin-bottom: 8px; color: #2c3e50; font-size: 1rem;">Water Sample ID:</label>
+                                <input type="text" id="${sampleId}_id" placeholder="e.g., WS-001, RIVER-01" style="padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa;" onfocus="this.style.borderColor='#3498db'; this.style.background='white'; this.style.boxShadow='0 0 0 3px rgba(52, 152, 219, 0.1)'" onblur="this.style.borderColor='#e0e6ed'; this.style.background='#f8f9fa'; this.style.boxShadow='none'">
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column;">
+                                <label style="font-weight: 600; margin-bottom: 8px; color: #2c3e50; font-size: 1rem;">Water Body:</label>
+                                <input type="text" id="${sampleId}_waterbody" placeholder="e.g., Mooi River, Borehole 3, Dam outlet" style="padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa;" onfocus="this.style.borderColor='#3498db'; this.style.background='white'; this.style.boxShadow='0 0 0 3px rgba(52, 152, 219, 0.1)'" onblur="this.style.borderColor='#e0e6ed'; this.style.background='#f8f9fa'; this.style.boxShadow='none'">
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column;">
+                                <label style="font-weight: 600; margin-bottom: 8px; color: #2c3e50; font-size: 1rem;">GPS Coordinates:</label>
+                                <div style="font-size: 0.85rem; color: #6c757d; font-style: italic; margin-bottom: 5px;">Example: -25.123456, 27.654321</div>
+                                <input type="text" id="${sampleId}_gps" placeholder="-25.123456, 27.654321" style="padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa;" onfocus="this.style.borderColor='#3498db'; this.style.background='white'; this.style.boxShadow='0 0 0 3px rgba(52, 152, 219, 0.1)'" onblur="this.style.borderColor='#e0e6ed'; this.style.background='#f8f9fa'; this.style.boxShadow='none'">
+                            </div>
+                        </div>
+
+                        <div style="background: #f8f9fa; border: 2px dashed #3498db; border-radius: 10px; padding: 20px;">
+                            <h4 style="color: #495057; margin-bottom: 15px; font-size: 1.2rem;">Select Parameters to Test</h4>
+                            <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+                                <select id="${sampleId}_parameterSelect" style="flex: 1; min-width: 250px; padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa;" onfocus="this.style.borderColor='#3498db'; this.style.background='white'" onblur="this.style.borderColor='#e0e6ed'; this.style.background='#f8f9fa'">
+                                    <option value="">-- Choose a parameter to add --</option>
+                                    <option value="aluminum">Aluminum (Al)</option>
+                                    <option value="arsenic">Arsenic (As)</option>
+                                    <option value="cadmium">Cadmium (Cd)</option>
+                                    <option value="chromium_total">Chromium Total (Cr)</option>
+                                    <option value="cobalt">Cobalt (Co)</option>
+                                    <option value="copper">Copper (Cu)</option>
+                                    <option value="iron">Iron (Fe)</option>
+                                    <option value="lead">Lead (Pb)</option>
+                                    <option value="manganese">Manganese (Mn)</option>
+                                    <option value="mercury">Mercury (Hg)</option>
+                                    <option value="nickel">Nickel (Ni)</option>
+                                    <option value="oxygen">Dissolved Oxygen (O₂)</option>
+                                    <option value="vanadium">Vanadium (V)</option>
+                                    <option value="zinc">Zinc (Zn)</option>
+                                    <option value="sulfate">Sulfate (SO₄)</option>
+                                    <option value="ph">pH</option>
+                                    <option value="temperature">Temperature</option>
+                                    <option value="ammonium">Ammonium (NH₄⁺)</option>
+                                    <option value="ammonia_unionized">Ammonia (NH₃) Unionized</option>
+                                    <option value="nitrate">Nitrate (NO₃⁻)</option>
+                                    <option value="nitrite">Nitrite (NO₂⁻)</option>
+                                </select>
+                                <button onclick="addWaterParameter('${sampleId}')" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: all 0.3s ease; white-space: nowrap;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(52, 152, 219, 0.3)'" onmouseout="this.style.transform='translateY(0px)'; this.style.boxShadow='none'">
+                                    ➕ Add Parameter
+                                </button>
+                            </div>
+                            
+                            <div id="${sampleId}_parameterList" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+                                <!-- Selected parameters will appear here -->
+                            </div>
+                            
+                            <div id="${sampleId}_dataEntry" class="hidden" style="background: white; border: 1px solid #dee2e6; border-radius: 10px; padding: 20px; margin-top: 20px;">
+                                <h5 style="color: #2c3e50; margin-bottom: 15px; font-size: 1.1rem;">Enter Measured Values</h5>
+                                <div id="${sampleId}_dataGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                    <!-- Data entry fields will appear here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', sampleHTML);
+
+            waterSamples.push({
+                id: sampleId,
+                number: newSampleNumber,
+                parameters: []
+            });
+        }
+
+        function removeWaterSample(sampleId) {
+            const sampleElement = document.querySelector(`[data-sample-id="${sampleId}"]`);
+            if (sampleElement) {
+                sampleElement.remove();
+            }
+
+            waterSamples = waterSamples.filter(sample => sample.id !== sampleId);
+
+            const container = document.getElementById('waterSamplesContainer');
+            if (waterSamples.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #6c757d; font-size: 1.1rem; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 15px; margin: 30px 0;">
+                        <p style="margin-bottom: 20px;">🌊 No water samples added yet</p>
+                        <p>Click "Add Water Sample" to get started with your water quality assessment</p>
+                    </div>
+                `;
+            }
+        }
+
+        function addWaterParameter(sampleId) {
+            const select = document.getElementById(`${sampleId}_parameterSelect`);
+            const parameterKey = select.value;
+
+            if (!parameterKey) {
+                alert('Please select a parameter to add');
+                return;
+            }
+
+            const sample = waterSamples.find(s => s.id === sampleId);
+            if (sample && sample.parameters.includes(parameterKey)) {
+                alert('This parameter has already been added to this sample');
+                return;
+            }
+
+            // Add to sample tracking
+            if (sample) {
+                sample.parameters.push(parameterKey);
+            }
+
+            // Add parameter tag
+            const parameterDef = waterParameterDefinitions[parameterKey];
+            const parameterList = document.getElementById(`${sampleId}_parameterList`);
+            
+            const parameterTag = document.createElement('div');
+            parameterTag.style.cssText = 'background: #007bff; color: white; padding: 8px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px;';
+            parameterTag.setAttribute('data-parameter', parameterKey);
+            parameterTag.innerHTML = `
+                ${parameterDef.name}
+                <button onclick="removeWaterParameter('${sampleId}', '${parameterKey}')" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.1rem; font-weight: bold; padding: 0; width: 16px; height: 16px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">×</button>
+            `;
+            
+            parameterList.appendChild(parameterTag);
+
+            // Add data entry field
+            const dataGrid = document.getElementById(`${sampleId}_dataGrid`);
+            const dataEntry = document.getElementById(`${sampleId}_dataEntry`);
+            
+            let fieldHTML = '';
+
+            // Special handling for ammonia unionized with calculator
+            if (parameterKey === 'ammonia_unionized') {
+                fieldHTML = `
+                    <div style="display: flex; flex-direction: column;" data-parameter="${parameterKey}">
+                        <label style="font-weight: 600; margin-bottom: 8px; color: #2c3e50; font-size: 1rem;">
+                            ${parameterDef.name} ${parameterDef.unit ? `(${parameterDef.unit})` : ''}:
+                        </label>
+                        <div style="display: flex; align-items: center;">
+                            <input type="number" 
+                                   id="${sampleId}_${parameterKey}" 
+                                   step="${parameterDef.step}" 
+                                   placeholder="${parameterDef.placeholder}"
+                                   style="flex: 1; padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa;"
+                                   onfocus="this.style.borderColor='#3498db'; this.style.background='white'; this.style.boxShadow='0 0 0 3px rgba(52, 152, 219, 0.1)'"
+                                   onblur="this.style.borderColor='#e0e6ed'; this.style.background='#f8f9fa'; this.style.boxShadow='none'">
+                            <button type="button" class="calculator-button" onclick="toggleAmmoniaCalculator('${sampleId}')" title="Click to open ammonia calculator">
+                                🧮 Calculator
+                            </button>
+                        </div>
+                        <div style="font-size: 0.8rem; color: #6c757d; margin-top: 5px; font-style: italic;">
+                            💡 Click calculator to calculate unionized ammonia from ammonium (N), pH, and temperature
+                        </div>
+                        <div id="${sampleId}_ammoniaCalculator" class="ammonia-calculator">
+                            <div class="calc-header">
+                                🧮 Calculate Unionized Ammonia from Ammonium (N)
+                            </div>
+                            <div class="calc-inputs">
+                                <div class="calc-input-group">
+                                    <label>Ammonium (N) mg N/L:</label>
+                                    <input type="number" id="${sampleId}_totalAmmonia" step="0.01" placeholder="e.g., 11.50">
+                                </div>
+                                <div class="calc-input-group">
+                                    <label>pH:</label>
+                                    <input type="number" id="${sampleId}_calcPH" step="0.1" min="6.0" max="9.5" placeholder="e.g., 7.5">
+                                </div>
+                                <div class="calc-input-group">
+                                    <label>Temperature (°C):</label>
+                                    <input type="number" id="${sampleId}_calcTemp" step="0.1" min="0" max="35" placeholder="e.g., 20">
+                                </div>
+                            </div>
+                            <button type="button" class="calc-button" onclick="calculateUnionizedAmmonia('${sampleId}')">
+                                Calculate Unionized NH₃
+                            </button>
+                            <div id="${sampleId}_calcResult" style="display: none;"></div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Regular parameters
+                fieldHTML = `
+                    <div style="display: flex; flex-direction: column;" data-parameter="${parameterKey}">
+                        <label style="font-weight: 600; margin-bottom: 8px; color: #2c3e50; font-size: 1rem;">
+                            ${parameterDef.name} ${parameterDef.unit ? `(${parameterDef.unit})` : ''}:
+                        </label>
+                        <input type="number" 
+                               id="${sampleId}_${parameterKey}" 
+                               step="${parameterDef.step}" 
+                               placeholder="${parameterDef.placeholder}"
+                               style="padding: 12px 15px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa; width: 100%;"
+                               onfocus="this.style.borderColor='#3498db'; this.style.background='white'; this.style.boxShadow='0 0 0 3px rgba(52, 152, 219, 0.1)'"
+                               onblur="this.style.borderColor='#e0e6ed'; this.style.background='#f8f9fa'; this.style.boxShadow='none'">
+                    </div>
+                `;
+            }
+            
+            dataGrid.insertAdjacentHTML('beforeend', fieldHTML);
+
+            // Show data entry section
+            dataEntry.classList.remove('hidden');
+
+            // Hide from dropdown and reset
+            const option = select.querySelector(`option[value="${parameterKey}"]`);
+            option.style.display = 'none';
+            select.value = '';
+        }
+
+        function removeWaterParameter(sampleId, parameterKey) {
+            // Remove from sample tracking
+            const sample = waterSamples.find(s => s.id === sampleId);
+            if (sample) {
+                sample.parameters = sample.parameters.filter(p => p !== parameterKey);
+            }
+
+            // Remove parameter tag
+            const parameterTag = document.querySelector(`[data-sample-id="${sampleId}"] [data-parameter="${parameterKey}"]`);
+            if (parameterTag && parameterTag.style.background === 'rgb(0, 123, 255)') {
+                parameterTag.remove();
+            }
+
+            // Remove data entry field  
+            const dataField = document.querySelector(`[data-sample-id="${sampleId}"] div[data-parameter="${parameterKey}"]`);
+            if (dataField && dataField.style.display === 'flex') {
+                dataField.remove();
+            }
+
+            // Hide data entry section if no parameters left
+            if (sample && sample.parameters.length === 0) {
+                const dataEntry = document.getElementById(`${sampleId}_dataEntry`);
+                dataEntry.classList.add('hidden');
+            }
+
+            // Show in dropdown again
+            const select = document.getElementById(`${sampleId}_parameterSelect`);
+            const option = select.querySelector(`option[value="${parameterKey}"]`);
+            if (option) {
+                option.style.display = 'block';
+            }
+        }
+
+        function toggleAmmoniaCalculator(sampleId) {
+            const calculator = document.getElementById(`${sampleId}_ammoniaCalculator`);
+            calculator.classList.toggle('active');
+        }
+
+        function calculateUnionizedAmmonia(sampleId) {
+            const totalAmmonia = parseFloat(document.getElementById(`${sampleId}_totalAmmonia`).value);
+            const pH = parseFloat(document.getElementById(`${sampleId}_calcPH`).value);
+            const temperature = parseFloat(document.getElementById(`${sampleId}_calcTemp`).value);
+
+            if (!totalAmmonia || !pH || !temperature) {
+                alert('Please fill in all fields (Ammonium (N), pH, and Temperature)');
+                return;
+            }
+
+            if (totalAmmonia < 0) {
+                alert('Ammonium (N) must be a positive value');
+                return;
+            }
+
+            if (pH < 6.0 || pH > 9.5) {
+                alert('pH must be between 6.0 and 9.5 for accurate calculation');
+                return;
+            }
+
+            if (temperature < 0 || temperature > 35) {
+                alert('Temperature must be between 0°C and 35°C for accurate calculation');
+                return;
+            }
+
+            // Calculate unionized ammonia
+            const percentage = interpolateAmmoniaPercentage(pH, temperature);
+            const unionizedAmmonia = totalAmmonia * (percentage / 100);
+
+            // Determine compliance status using mg N/L guidelines
+            let complianceClass = '';
+            let complianceMessage = '';
+            
+            if (unionizedAmmonia <= ammoniaGuidelines.twqr) {
+                complianceClass = 'safe';
+                complianceMessage = `Within Target Water Quality Range (TWQR ≤ ${ammoniaGuidelines.twqr} mg N/L)`;
+            } else if (unionizedAmmonia <= ammoniaGuidelines.cev) {
+                complianceClass = 'warning';
+                complianceMessage = `Exceeds TWQR but below Chronic Effect Value (CEV ≤ ${ammoniaGuidelines.cev} mg N/L)`;
+            } else if (unionizedAmmonia <= ammoniaGuidelines.aev) {
+                complianceClass = 'danger';
+                complianceMessage = `Exceeds CEV - Chronic effects likely (AEV ≤ ${ammoniaGuidelines.aev} mg N/L)`;
+            } else {
+                complianceClass = 'danger';
+                complianceMessage = `Exceeds AEV - Acute toxicity risk! (>${ammoniaGuidelines.aev} mg N/L)`;
+            }
+
+            // Calculate exceedance factors
+            let exceedanceInfo = '';
+            if (unionizedAmmonia > ammoniaGuidelines.aev) {
+                const factor = (unionizedAmmonia / ammoniaGuidelines.aev).toFixed(1);
+                exceedanceInfo = `${factor}× above AEV threshold`;
+            } else if (unionizedAmmonia > ammoniaGuidelines.cev) {
+                const factor = (unionizedAmmonia / ammoniaGuidelines.cev).toFixed(1);
+                exceedanceInfo = `${factor}× above CEV threshold`;
+            } else if (unionizedAmmonia > ammoniaGuidelines.twqr) {
+                const factor = (unionizedAmmonia / ammoniaGuidelines.twqr).toFixed(1);
+                exceedanceInfo = `${factor}× above TWQR threshold`;
+            }
+
+            // Display results
+            const resultHTML = `
+                <div class="calc-result">
+                    <div class="calc-result-value">${unionizedAmmonia.toFixed(3)} mg N/L</div>
+                    <div style="font-size: 0.9rem; color: #666;">Unionized Ammonia (NH₃)</div>
+                    <div class="calc-compliance ${complianceClass}">
+                        ${complianceMessage}
+                        ${exceedanceInfo ? `<br><strong>${exceedanceInfo}</strong>` : ''}
+                    </div>
+                    <button type="button" class="use-result-button" onclick="useCalculatedResult('${sampleId}', ${unionizedAmmonia.toFixed(3)})">
+                        Use This Result
+                    </button>
+                    <div style="margin-top: 10px; font-size: 0.8rem; color: #666;">
+                        <strong>Calculation Breakdown:</strong><br>
+                        Ammonium (N): ${totalAmmonia} mg N/L<br>
+                        pH: ${pH} | Temperature: ${temperature}°C<br>
+                        Unionized Percentage: ${percentage.toFixed(3)}%<br>
+                        <br>
+                        <strong>Formula:</strong><br>
+                        Toxic NH₃ = ${totalAmmonia} × (${percentage.toFixed(1)}/100) = ${unionizedAmmonia.toFixed(3)} mg N/L
+                        <br><br>
+                        <strong>Guideline Comparison:</strong><br>
+                        TWQR: ≤ ${ammoniaGuidelines.twqr} mg N/L ${unionizedAmmonia <= ammoniaGuidelines.twqr ? '✓ Pass' : '✗ Exceed'}<br>
+                        CEV: ≤ ${ammoniaGuidelines.cev} mg N/L ${unionizedAmmonia <= ammoniaGuidelines.cev ? '✓ Pass' : '✗ Exceed'}<br>
+                        AEV: ≤ ${ammoniaGuidelines.aev} mg N/L ${unionizedAmmonia <= ammoniaGuidelines.aev ? '✓ Pass' : '✗ Exceed'}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById(`${sampleId}_calcResult`).innerHTML = resultHTML;
+            document.getElementById(`${sampleId}_calcResult`).style.display = 'block';
+        }
+
+        function useCalculatedResult(sampleId, result) {
+            document.getElementById(`${sampleId}_ammonia_unionized`).value = result;
+            alert(`Result (${result} mg N/L) has been entered into the Ammonia (NH₃) Unionized field`);
+        }
+
+        function performWaterAnalysis() {
+            if (waterSamples.length === 0) {
+                alert('Please add at least one water sample before running analysis');
+                return;
+            }
+
+            const results = analyzeWaterCompliance();
+            displayWaterResults(results);
+            generateWaterComplianceStatement(results);
+
+            document.getElementById('waterResults').classList.remove('hidden');
+            document.getElementById('waterResults').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function analyzeWaterCompliance() {
+            const allResults = [];
+
+            waterSamples.forEach(sample => {
+                const sampleResults = {
+                    sampleId: sample.id,
+                    sampleNumber: sample.number,
+                    sampleInfo: {
+                        id: document.getElementById(`${sample.id}_id`).value || `Sample ${sample.number}`,
+                        waterbody: document.getElementById(`${sample.id}_waterbody`).value || 'Not specified',
+                        gps: document.getElementById(`${sample.id}_gps`).value || 'Not provided'
+                    },
+                    results: []
+                };
+
+                sample.parameters.forEach(parameterKey => {
+                    const inputElement = document.getElementById(`${sample.id}_${parameterKey}`);
+                    const value = parseFloat(inputElement.value);
+
+                    if (!isNaN(value) && waterStandards[parameterKey]) {
+                        const standard = waterStandards[parameterKey];
+                        const parameterDef = waterParameterDefinitions[parameterKey];
+
+                        let result = {
+                            parameter: parameterDef.name,
+                            value: value,
+                            unit: parameterDef.unit,
+                            parameterKey: parameterKey
+                        };
+
+                        // Handle different standard types
+                        if (parameterKey === 'oxygen') {
+                            result.twqrThreshold = standard.twqr_min;
+                            result.exceedsTWQR = value < standard.twqr_min;
+                            result.twqrExceedanceFactor = standard.twqr_min / value;
+                            result.standardType = 'minimum';
+                        } else if (parameterKey === 'ph') {
+                            result.twqrMin = standard.twqr_min;
+                            result.twqrMax = standard.twqr_max;
+                            result.exceedsTWQR = value < standard.twqr_min || value > standard.twqr_max;
+                            result.standardType = 'range';
+                        } else if (parameterKey === 'temperature') {
+                            result.twqrMax = standard.twqr_max;
+                            result.exceedsTWQR = value > standard.twqr_max;
+                            result.standardType = 'maximum_only';
+                        } else {
+                            // Regular parameters with TWQR, CEV, AEV thresholds
+                            result.twqrThreshold = standard.twqr;
+                            result.cevThreshold = standard.cev;
+                            result.aevThreshold = standard.aev;
+                            result.exceedsTWQR = value > standard.twqr;
+                            result.exceedsCEV = value > standard.cev;
+                            result.exceedsAEV = value > standard.aev;
+                            result.twqrExceedanceFactor = value / standard.twqr;
+                            result.standardType = 'maximum';
+                        }
+
+                        sampleResults.results.push(result);
+                    }
+                });
+
+                if (sampleResults.results.length > 0) {
+                    allResults.push(sampleResults);
+                }
+            });
+
+            return allResults;
+        }
+
+        function displayWaterResults(waterResults) {
+            const container = document.getElementById('waterResultsContainer');
+
+            if (waterResults.length === 0) {
+                container.innerHTML = '<p>No water analysis data available for compliance checking.</p>';
+                return;
+            }
+
+            let html = '';
+
+            waterResults.forEach(sample => {
+                html += `<div style="margin-bottom: 30px;">`;
+                html += `<h4 style="color: #2c3e50; margin-bottom: 15px; padding: 12px 18px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 8px; border-left: 4px solid #2196f3; font-size: 1.2rem;">🌊 ${sample.sampleInfo.id} - ${sample.sampleInfo.waterbody}</h4>`;
+                
+                if (sample.sampleInfo.gps !== 'Not provided') {
+                    html += `<p><strong>📍 GPS:</strong> ${sample.sampleInfo.gps}</p>`;
+                }
+
+                html += '<table class="compliance-table">';
+                html += `
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Measured Value</th>
+                            <th>TWQR</th>
+                            <th>CEV</th>
+                            <th>AEV</th>
+                            <th>Compliance Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+
+                sample.results.forEach(result => {
+                    let twqrDisplay = '';
+                    let statusDisplay = '';
+                    let statusClass = '';
+
+                    if (result.standardType === 'minimum') {
+                        twqrDisplay = `≥${result.twqrThreshold} ${result.unit}`;
+                        statusClass = result.exceedsTWQR ? 'non-compliant' : 'compliant';
+                        statusDisplay = result.exceedsTWQR ? 
+                            `Below minimum TWQR (${result.twqrExceedanceFactor.toFixed(1)}× below)` : 
+                            'Within Limits';
+                    } else if (result.standardType === 'range') {
+                        twqrDisplay = `${result.twqrMin}-${result.twqrMax}`;
+                        statusClass = result.exceedsTWQR ? 'non-compliant' : 'compliant';
+                        statusDisplay = result.exceedsTWQR ? 'Outside acceptable range' : 'Within Range';
+                    } else if (result.standardType === 'maximum_only') {
+                        twqrDisplay = `≤${result.twqrMax} ${result.unit}`;
+                        statusClass = result.exceedsTWQR ? 'non-compliant' : 'compliant';
+                        statusDisplay = result.exceedsTWQR ? 
+                            `Exceeds maximum (${(result.value / result.twqrMax).toFixed(1)}× above)` : 
+                            'Within Limits';
+                    } else {
+                        // Regular parameters with TWQR, CEV, AEV thresholds
+                        let displayValue = result.value.toFixed(4);
+                        let twqrDisplayValue = result.twqrThreshold.toFixed(4);
+                        let cevDisplayValue = result.cevThreshold.toFixed(4);
+                        let aevDisplayValue = result.aevThreshold.toFixed(4);
+
+                        // Handle nitrogen parameters
+                        if (['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) {
+                            displayValue = result.value.toFixed(3);
+                            twqrDisplayValue = result.twqrThreshold;
+                            cevDisplayValue = result.cevThreshold;
+                            aevDisplayValue = result.aevThreshold;
+                        }
+
+                        twqrDisplay = `≤${twqrDisplayValue} ${result.unit}`;
+                        
+                        if (result.exceedsAEV) {
+                            statusClass = 'non-compliant';
+                            const aevExceedanceFactor = result.value / result.aevThreshold;
+                            statusDisplay = `Exceeds AEV by ${aevExceedanceFactor.toFixed(1)}×`;
+                        } else if (result.exceedsCEV) {
+                            statusClass = 'non-compliant';
+                            const cevExceedanceFactor = result.value / result.cevThreshold;
+                            statusDisplay = `Exceeds CEV by ${cevExceedanceFactor.toFixed(1)}×`;
+                        } else if (result.exceedsTWQR) {
+                            statusClass = 'non-compliant';
+                            statusDisplay = `Exceeds TWQR by ${result.twqrExceedanceFactor.toFixed(1)}×`;
+                        } else {
+                            statusClass = 'compliant';
+                            statusDisplay = 'Within Limits';
+                        }
+                    }
+
+                    html += `
+                        <tr>
+                            <td><strong>${result.parameter}</strong></td>
+                            <td>${result.standardType === 'minimum' || result.standardType === 'range' || result.standardType === 'maximum_only' ? result.value.toFixed(2) : ((['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) ? result.value.toFixed(3) : result.value.toFixed(4))} ${result.unit}</td>
+                            <td>${twqrDisplay}</td>
+                            <td>${result.cevThreshold ? ((['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) ? result.cevThreshold + ' ' + result.unit : result.cevThreshold.toFixed(4) + ' ' + result.unit) : 'N/A'}</td>
+                            <td>${result.aevThreshold ? ((['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) ? result.aevThreshold + ' ' + result.unit : result.aevThreshold.toFixed(4) + ' ' + result.unit) : 'N/A'}</td>
+                            <td><span class="${statusClass}">${statusDisplay}</span></td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+                html += '</div><br>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function generateWaterComplianceStatement(results) {
+            const container = document.getElementById('waterComplianceStatement');
+            
+            let criticalViolations = [];
+            
+            results.forEach(sample => {
+                sample.results.forEach(result => {
+                    if (result.exceedsTWQR) {
+                        const sampleLabel = `${sample.sampleInfo.id} (${sample.sampleInfo.waterbody})`;
+                        if (result.standardType === 'minimum') {
+                            criticalViolations.push(`${result.parameter} in ${sampleLabel} below minimum TWQR (${result.value.toFixed(3)} ${result.unit} vs ≥${result.twqrThreshold} ${result.unit})`);
+                        } else if (result.standardType === 'range') {
+                            criticalViolations.push(`${result.parameter} in ${sampleLabel} outside acceptable range (${result.value.toFixed(2)} vs ${result.twqrMin}-${result.twqrMax})`);
+                        } else if (result.standardType === 'maximum_only') {
+                            criticalViolations.push(`${result.parameter} in ${sampleLabel} exceeds maximum limit (${result.value.toFixed(2)} ${result.unit} vs ≤${result.twqrMax} ${result.unit})`);
+                        } else {
+                            if (result.exceedsAEV) {
+                                const aevFactor = result.value / result.aevThreshold;
+                                const displayValue = (['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) ? result.value.toFixed(3) : result.value.toFixed(4);
+                                const displayThreshold = (['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) ? result.aevThreshold : result.aevThreshold.toFixed(4);
+                                criticalViolations.push(`${result.parameter} in ${sampleLabel} exceeds AEV (${displayValue} ${result.unit} vs ≤${displayThreshold} ${result.unit}, ${aevFactor.toFixed(1)}× threshold)`);
+                            } else if (result.exceedsCEV) {
+                                const cevFactor = result.value / result.cevThreshold;
+                                const displayValue = (['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) ? result.value.toFixed(3) : result.value.toFixed(4);
+                                const displayThreshold = (['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) ? result.cevThreshold : result.cevThreshold.toFixed(4);
+                                criticalViolations.push(`${result.parameter} in ${sampleLabel} exceeds CEV (${displayValue} ${result.unit} vs ≤${displayThreshold} ${result.unit}, ${cevFactor.toFixed(1)}× threshold)`);
+                            } else {
+                                const displayValue = (['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) ? result.value.toFixed(3) : result.value.toFixed(4);
+                                const displayThreshold = (['ammonium', 'ammonia_unionized', 'nitrate', 'nitrite'].includes(result.parameterKey)) ? result.twqrThreshold : result.twqrThreshold.toFixed(4);
+                                criticalViolations.push(`${result.parameter} in ${sampleLabel} exceeds TWQR (${displayValue} ${result.unit} vs ≤${displayThreshold} ${result.unit}, ${result.twqrExceedanceFactor.toFixed(1)}× threshold)`);
+                            }
+                        }
+                    }
+                });
+            });
+
+            let statement = '<h3>🔬 Expert Assessment Statement</h3>';
+            
+            if (criticalViolations.length > 0) {
+                statement += '<div class="alert alert-danger">';
+                statement += '<strong>⚠️ CRITICAL VIOLATIONS IDENTIFIED</strong><br>';
+                statement += 'The following parameters exceed South African water quality standards:';
+                statement += '<ul style="margin: 10px 0; padding-left: 20px;">';
+                criticalViolations.forEach(violation => {
+                    statement += `<li>${violation}</li>`;
+                });
+                statement += '</ul>';
+                statement += '</div>';
+
+                statement += '<p><strong>Regulatory Implications:</strong> ';
+                statement += 'Exceedances of Target Water Quality Range (TWQR) indicate that water quality has moved away from ideal conditions and warrants regulatory concern and intervention to prevent long-term degradation of aquatic ecosystem health according to South African Water Quality Guidelines Volume 7 for Aquatic Ecosystems (DWAF, 1996). ';
+                statement += '</p>';
+
+                statement += '<p><strong>Environmental Risk:</strong> These levels may pose risks to aquatic ecosystem health, potentially causing adverse effects on sensitive aquatic species and ecosystem functionality in the affected water bodies.</p>';
+
+                statement += '<p><strong>Recommendation:</strong> The affected water bodies warrant immediate regulatory attention and appropriate management measures to prevent potential long-term environmental degradation and protect aquatic ecosystems. Further investigation and remedial action may be required under applicable environmental legislation.</p>';
+
+            } else {
+                statement += '<div class="alert alert-warning">';
+                statement += '<strong>✅ NO CRITICAL VIOLATIONS DETECTED</strong><br>';
+                statement += 'All measured parameters are within South African water quality standards for the tested constituents.';
+                statement += '</div>';
+                
+                statement += '<p><strong>Assessment:</strong> Based on the provided analytical results, the measured concentrations comply with relevant South African aquatic ecosystem guidelines (TWQR) for the parameters analyzed across all sampled water bodies.</p>';
+                
+                statement += '<p><strong>Recommendation:</strong> Continue routine monitoring to ensure ongoing compliance with environmental standards. Maintain current water quality management practices.</p>';
+            }
+
+            statement += `<p style="margin-top: 20px; font-style: italic; font-size: 0.9rem;"><strong>Note:</strong> This automated assessment analyzed ${results.length} water sample(s) against South African Water Quality Guidelines. A comprehensive environmental assessment may require additional parameters and expert interpretation.</p>`;
+
+            container.innerHTML = statement;
+        }
+    </script>
+</body>
+</html>
