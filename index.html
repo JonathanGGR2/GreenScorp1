@@ -83,6 +83,17 @@
             to { transform: rotate(360deg); }
         }
 
+        @keyframes fadeOut {
+            from { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+            to { 
+                opacity: 0; 
+                transform: scale(0.95); 
+            }
+        }
+
         .header-content {
             position: relative;
             z-index: 2;
@@ -553,6 +564,451 @@
                 padding: 30px 25px;
             }
         }
+    
+        /* MARINE & ESTUARINE TOOL STYLES */
+        .ecosystem-indicator {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 5px solid #1a7d9f;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .ecosystem-indicator.freshwater { 
+            border-left-color: #e74c3c; 
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        }
+        
+        .ecosystem-indicator.freshwater h4 {
+            color: #c62828;
+        }
+        .ecosystem-indicator.upper-estuary { border-left-color: #27ae60; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+        .ecosystem-indicator.mid-estuary { border-left-color: #16a085; background: linear-gradient(135deg, #e0f2f1, #b2dfdb); }
+        .ecosystem-indicator.lower-estuary { border-left-color: #2980b9; background: linear-gradient(135deg, #e1f5fe, #b3e5fc); }
+        .ecosystem-indicator.marine { border-left-color: #1a5490; background: linear-gradient(135deg, #e3f2fd, #90caf9); }
+
+        .ecosystem-indicator h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #0a4e68;
+        }
+
+        .ecosystem-indicator p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            color: #2c3e50;
+        }
+
+        .marine-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .marine-section.active {
+            display: block;
+        }
+
+        .marine-nav-bar {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid #e0e6ed;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .marine-nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .marine-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .marine-nav-btn.active {
+            background: #1a7d9f;
+            border-color: #1a7d9f;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-field label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        .input-field input, .input-field select {
+            padding: 12px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-field input:focus, .input-field select:focus {
+            outline: none;
+            border-color: #1a7d9f;
+            box-shadow: 0 0 0 3px rgba(26, 125, 159, 0.1);
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1a7d9f, #0a4e68);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0a4e68, #1a7d9f);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 125, 159, 0.3);
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+            border: 2px solid #bdc3c7;
+        }
+
+        .btn-secondary:hover {
+            background: #d5dbdb;
+            border-color: #95a5a6;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .results-table th {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            font-weight: 600;
+            color: #0a4e68;
+        }
+
+        .results-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-compliant { color: #27ae60; font-weight: 600; }
+        .status-concern { color: #f39c12; font-weight: 600; }
+        .status-exceeds { color: #e74c3c; font-weight: 600; }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1b0b7;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 1px solid #90caf9;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        .regional-selector {
+            background: #e8f5e9;
+            border: 2px solid #27ae60;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .reference-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        .reference-table th,
+        .reference-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .reference-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .reference-table input {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .tab-container {
+            border: 2px solid #1a7d9f;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .tab-header {
+            display: flex;
+            background: #f8f9fa;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            background: #1a7d9f;
+            color: white;
+            border-bottom-color: #0a4e68;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #e9ecef;
+        }
+
+        .tab-content {
+            padding: 25px;
+            background: white;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .use-type-indicator {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #f39c12;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .use-type-indicator h4 {
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        .parameter-section {
+            margin-bottom: 30px;
+        }
+
+        .parameter-section h4 {
+            color: #0a4e68;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e6ed;
+        }
+
+        /* Multi-Sample Card Styles */
+        .sample-card {
+            background: #f8f9fa;
+            border: 2px solid #e0e6ed;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sample-card:hover {
+            border-color: #4a9960;
+            box-shadow: 0 4px 12px rgba(74, 153, 96, 0.15);
+        }
+
+        .sample-card-header {
+            background: linear-gradient(135deg, #4a9960, #3d7c47);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .sample-card-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            border: none;
+            padding: 0;
+        }
+
+        .sample-card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-icon.btn-remove:hover {
+            background: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .sample-card-body {
+            padding: 25px;
+            background: white;
+            max-height: 2000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .sample-card.collapsed .sample-card-body {
+            max-height: 0;
+            padding: 0 25px;
+        }
+
+        .sample-card.collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
+        .collapse-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        #samplesContainer {
+            margin: 20px 0;
+        }
+
+        #samplesContainer:empty::before {
+            content: "Click 'Add Sample' to begin assessment";
+            display: block;
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-style: italic;
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+        }
+
+        .step-guide {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid;
+            margin-bottom: 15px;
+        }
+
+        .step-card.step1 { border-left-color: #4caf50; }
+        .step-card.step2 { border-left-color: #2196f3; }
+        .step-card.step3 { border-left-color: #ff9800; }
+
+        .step-card h4 {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .step-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        
     </style>
 </head>
 <body>
@@ -573,6 +1029,7 @@
                 <button class="nav-btn" onclick="showSection('dashboard')">📊 Dashboard</button>
                 <button class="nav-btn" onclick="showSection('sediment')">🏔️ Sediment Quality</button>
                 <button class="nav-btn" onclick="showSection('water')">💧 Water Quality</button>
+                <button class="nav-btn" onclick="showSection('marine')">🌊 Marine & Estuarine</button>
             </div>
             <div class="user-info">
                 <span id="userDisplay">Welcome, User</span> |
@@ -589,7 +1046,16 @@
                     <ul style="text-align: left; margin: 10px 0 0 20px; color: #495057;">
                         <li>Water Quality Guidelines for Aquatic Ecosystems Volume 7 (1996)</li>
                         <li>National Norms and Standards for Remediation of Contaminated Land and Soil Quality in South Africa</li>
+                        <li>South African Water Quality Guidelines for Coastal Marine Waters (2022)</li>
+                        <li>National Estuarine Management Protocol (2013)</li>
                     </ul>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 10px; border-left: 4px solid #4caf50;">
+                        <p style="margin: 0; color: #2c5530;"><strong>🔄 Version 2.0</strong></p>
+                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #495057;">
+                            <strong>Recent Updates:</strong> Added comprehensive Marine & Estuarine Water Quality Assessment capability with support for both Natural Environment (ecosystem health protection) and Mariculture (aquaculture operations) assessments, featuring multi-sample batch processing and regional baseline integration for South African coastal waters.
+                        </p>
+                    </div>
                 </div>
 
                 <h2 class="section-title">Secure Access Portal</h2>
@@ -632,6 +1098,13 @@
                         <p style="opacity: 0.9; margin-bottom: 25px; line-height: 1.6;">Comprehensive water quality analysis and compliance checking against aquatic ecosystem guidelines. Monitor water body health.</p>
                         <button onclick="showSection('water')" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Launch Tool</button>
                     </div>
+
+                    <div style="background: linear-gradient(135deg, #0a4e68, #1a7d9f); color: white; border-radius: 15px; padding: 40px; text-align: center; box-shadow: 0 15px 35px rgba(26, 125, 159, 0.3); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">🌊</div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 15px;">Marine & Estuarine Assessment</h3>
+                        <p style="opacity: 0.9; margin-bottom: 25px; line-height: 1.6;">SA coastal water quality assessment with regional baselines. Natural environment and mariculture compliance evaluation.</p>
+                        <button onclick="showSection('marine')" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Launch Tool</button>
+                    </div>
                 </div>
 
                 <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 30px; margin-top: 40px; text-align: center;">
@@ -645,7 +1118,7 @@
                         <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
                             <div style="color: #17a2b8; font-size: 2rem; margin-bottom: 10px;">📊</div>
                             <div style="font-weight: 600; color: #2c5530;">Active Tools</div>
-                            <div style="color: #6c757d;">2 Available</div>
+                            <div style="color: #6c757d;">3 Available</div>
                         </div>
                         <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
                             <div style="color: #ffc107; font-size: 2rem; margin-bottom: 10px;">🔒</div>
@@ -663,6 +1136,11 @@
             <div id="waterSection" class="tool-content">
                 <div id="waterToolContainer"></div>
             </div>
+
+            <!-- MARINE & ESTUARINE TOOL SECTION -->
+            <div id="marineSection" class="tool-content">
+                <div id="marineToolContainer"></div>
+            </div>
         </div>
     </div>
 
@@ -673,11 +1151,12 @@
             'Piet-Louis': 'Water&Soil',
             'User': 'Password',
             'Ryno': 'Ryno@1234!',
-            'Liza_Steyn_Keal': 'Water&Soil_52801'
+            'Liza_Steyn_Keal': 'Water&Soil_52801',
+            'Marie_Louise': 'SoilWaterMarine'
         };
 
         let currentUser = null;
-        let toolsLoaded = { sediment: false, water: false };
+        let toolsLoaded = { sediment: false, water: false, marine: false };
         
         // Water Tool Variables
         let waterSampleCounter = 0;
@@ -966,7 +1445,8 @@
             // Set active button
             const targetButton = [...document.querySelectorAll('.nav-btn')].find(btn => 
                 btn.textContent.includes(sectionName === 'dashboard' ? 'Dashboard' : 
-                                       sectionName === 'sediment' ? 'Sediment' : 'Water')
+                                       sectionName === 'sediment' ? 'Sediment' : 
+                                       sectionName === 'water' ? 'Water' : 'Marine')
             );
             if (targetButton) {
                 targetButton.classList.add('active');
@@ -978,6 +1458,9 @@
             } else if (sectionName === 'water' && !toolsLoaded.water) {
                 loadWaterTool();
                 toolsLoaded.water = true;
+            } else if (sectionName === 'marine' && !toolsLoaded.marine) {
+                loadMarineTool();
+                toolsLoaded.marine = true;
             }
         }
 
@@ -994,7 +1477,7 @@
             document.getElementById('errorMessage').style.display = 'none';
             
             currentUser = null;
-            toolsLoaded = { sediment: false, water: false };
+            toolsLoaded = { sediment: false, water: false, marine: false };
             waterSamples = [];
             waterSampleCounter = 0;
             sedimentSamples = [];
@@ -1448,6 +1931,11 @@
             });
 
             container.innerHTML = html;
+            
+            // Show results tab and navigate to it
+            const resultsTab = document.getElementById('marineResultsTab');
+            if (resultsTab) resultsTab.style.display = 'inline-block';
+            showMarineSection('results');
         }
 
         function generateSedimentComplianceStatement(results) {
@@ -2106,6 +2594,11 @@
             });
 
             container.innerHTML = html;
+            
+            // Show results tab and navigate to it
+            const resultsTab = document.getElementById('marineResultsTab');
+            if (resultsTab) resultsTab.style.display = 'inline-block';
+            showMarineSection('results');
         }
 
         function generateWaterComplianceStatement(results) {
@@ -2180,6 +2673,2166 @@
 
             container.innerHTML = statement;
         }
+    
+        // MARINE & ESTUARINE TOOL FUNCTIONS
+        function loadMarineTool() {
+            const container = document.getElementById('marineToolContainer');
+            container.innerHTML = `
+                <div style="background: linear-gradient(135deg, #0a4e68, #1a7d9f); color: white; padding: 20px; margin: -30px -30px 0px -30px; text-align: center;">
+                    <h1 style="font-size: 2rem; margin-bottom: 10px;">🌊 Marine & Estuarine Water Quality Assessment</h1>
+                    <p>South African Water Quality Guidelines for Coastal Marine Waters (2022)</p>
+                    <p style="font-size: 0.9rem; opacity: 0.9;">Natural Environment & Mariculture Assessment with Regional Baselines</p>
+                </div>
+
+                <div class="marine-nav-bar" style="margin: 0 -30px;">
+                    <button class="marine-nav-btn active" onclick="showMarineSection('userguide')">🏠 User Guide</button>
+                    <button class="marine-nav-btn" onclick="showMarineSection('baselines')">📍 Regional Baselines</button>
+                    <button class="marine-nav-btn" onclick="showMarineSection('assessment')">🧪 Assessment</button>
+                    <button class="marine-nav-btn" onclick="showMarineSection('results')" id="marineResultsTab" style="display: none;">📊 Results</button>
+                </div>
+
+                <div id="marineContentArea" style="margin-top: 20px;">
+                    <!-- User Guide Section -->
+            <div id="marine-userguide" class="marine-section active">
+                <div class="card">
+                    <h3>🏠 SA Estuarine & Marine Water Quality Assessment Tool</h3>
+                    <p style="line-height: 1.6; margin-bottom: 20px;">
+                        This specialized tool provides professional water quality assessment for <strong>South African estuarine and marine waters only</strong> (salinity >0.5 ppt), 
+                        implementing the 2022 Water Quality Guidelines with regional baseline defaults and separate assessments 
+                        for Natural Environment and Mariculture uses.
+                    </p>
+
+                    <div class="alert alert-warning">
+                        <strong>⚠️ FRESHWATER USERS:</strong><br>
+                        This tool is NOT for freshwater assessment (salinity ≤0.5 ppt). For freshwater systems, 
+                        use the dedicated Freshwater Assessment Tool based on DWAF 1996 Volume 7: Aquatic Ecosystems guidelines.
+                    </div>
+
+                    <div class="info-box">
+                        <strong>🎯 Tool Scope - Estuarine & Marine Only:</strong><br>
+                        • Estuarine waters: 0.5-30 ppt salinity<br>
+                        • Marine waters: >30 ppt salinity<br>
+                        • 39 parameters assessed against 2022 SA Marine Guidelines<br>
+                        • Regional baseline defaults for 5 SA coastal regions<br>
+                        • Separate Natural Environment and Mariculture assessments<br>
+                        • Gradient-specific values for estuarine vs marine environments
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🌊 Estuarine & Marine Ecosystem Classification</h3>
+                    <p style="margin-bottom: 20px;">The tool automatically classifies your sampling site based on salinity. <strong>Minimum salinity: 0.5 ppt</strong></p>
+                    
+                    <div class="alert alert-danger" style="margin-bottom: 20px;">
+                        <strong>🚫 FRESHWATER BLOCKED:</strong><br>
+                        Salinity ≤0.5 ppt is considered freshwater and cannot be assessed with this tool. 
+                        The tool will prevent assessment and direct you to use freshwater guidelines.
+                    </div>
+                    
+                    <div class="ecosystem-indicator upper-estuary">
+                        <h4>🌿 Upper Estuary (0.5-5 ppt)</h4>
+                        <p><strong>Guidelines:</strong> 2022 Marine Guidelines + National Estuarine Management Protocol</p>
+                        <p><strong>Ammonia Baseline:</strong> 20-80 µg/L (estuarine range)</p>
+                        <p><strong>Example locations:</strong> River mouths, upper reaches of major estuaries</p>
+                    </div>
+                    
+                    <div class="ecosystem-indicator mid-estuary">
+                        <h4>🏞️ Mid Estuary (5-18 ppt)</h4>
+                        <p><strong>Guidelines:</strong> 2022 Marine Guidelines + NEMP</p>
+                        <p><strong>Ammonia Baseline:</strong> 20-80 µg/L (estuarine range)</p>
+                        <p><strong>Example locations:</strong> Middle sections of Knysna, Swartkops, Sundays estuaries</p>
+                    </div>
+                    
+                    <div class="ecosystem-indicator lower-estuary">
+                        <h4>🌊 Lower Estuary (18-30 ppt)</h4>
+                        <p><strong>Guidelines:</strong> 2022 Marine Guidelines + NEMP</p>
+                        <p><strong>Ammonia Baseline:</strong> 20-80 µg/L (estuarine range)</p>
+                        <p><strong>Example locations:</strong> Estuary mouths, lower Berg River, Breede River mouth</p>
+                    </div>
+                    
+                    <div class="ecosystem-indicator marine">
+                        <h4>🏖️ Marine (>30 ppt)</h4>
+                        <p><strong>Guidelines:</strong> 2022 Marine Guidelines (full marine environment)</p>
+                        <p><strong>Ammonia Baseline:</strong> 5-25 µg/L (marine range)</p>
+                        <p><strong>Example locations:</strong> Open coast, marine protected areas, offshore waters</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔬 Parameter Types Explained</h3>
+                    
+                    <h4>📊 Fixed Limit Parameters (28 parameters)</h4>
+                    <p>These have specific numeric values that must not be exceeded:</p>
+                    <ul style="margin-left: 20px; line-height: 1.6;">
+                        <li><strong>Metals:</strong> Arsenic (8 µg/L), Cadmium (0.12 µg/L), Mercury (0.016 µg/L), etc.</li>
+                        <li><strong>Organics:</strong> PAHs, Organochlorines, Chlorophenols (mariculture only)</li>
+                        <li><strong>Toxicity:</strong> Ammonia total (600 µg/L chronic exposure)</li>
+                    </ul>
+                    
+                    <h4>🌊 Gradient-Specific Parameters (2 parameters)</h4>
+                    <p>These have different limits for estuarine vs marine environments:</p>
+                    <ul style="margin-left: 20px; line-height: 1.6;">
+                        <li><strong>Ammonia (nutrient baseline):</strong> Estuarine 20-80 µg/L vs Marine 5-25 µg/L</li>
+                        <li><strong>Fluoride (acute):</strong> Estuarine 1160 µg/L vs Marine 1500 µg/L</li>
+                    </ul>
+                    
+                    <h4>📈 Reference System Parameters (11 parameters)</h4>
+                    <p>These use site-specific baselines with regional defaults provided:</p>
+                    <ul style="margin-left: 20px; line-height: 1.6;">
+                        <li><strong>Physicochemical:</strong> Temperature, pH, Salinity, Dissolved Oxygen, Suspended Solids, Turbidity</li>
+                        <li><strong>Nutrients:</strong> Nitrate, Nitrite, Phosphorus, Silicon</li>
+                        <li><strong>Approach:</strong> 20th-80th percentile ranges define acceptable natural variability</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>🐟 Natural Environment vs Mariculture Assessment</h3>
+                    
+                    <div class="input-group">
+                        <div class="input-field">
+                            <h4>🌊 Natural Environment Assessment</h4>
+                            <p><strong>Purpose:</strong> Ecosystem health protection and biodiversity conservation</p>
+                            <p><strong>Parameters:</strong> All standard parameters for environmental protection</p>
+                            <p><strong>Focus:</strong> Long-term ecosystem sustainability and habitat quality</p>
+                        </div>
+                        
+                        <div class="input-field">
+                            <h4>🐟 Mariculture Assessment</h4>
+                            <p><strong>Purpose:</strong> Aquaculture operations and seafood production</p>
+                            <p><strong>Additional Parameters:</strong> Chlorophenols (organoleptic effects)</p>
+                            <p><strong>Stricter Requirements:</strong> pH changes ±0.5 units, enhanced DO monitoring</p>
+                            <p><strong>Focus:</strong> Product quality and organism health</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>⚙️ Regional Baselines Explained</h3>
+                    <p style="line-height: 1.6; margin-bottom: 15px;">
+                        The 2022 guidelines require site-specific baselines for physicochemical parameters. This tool provides 
+                        research-based default values for major SA coastal regions to make assessment immediately practical.
+                    </p>
+                    
+                    <div class="input-group">
+                        <div class="input-field">
+                            <strong>🌊 Available Regions:</strong>
+                            <ul style="margin: 10px 0 0 15px; line-height: 1.6;">
+                                <li>Cape Town / West Coast (cold upwelling)</li>
+                                <li>Durban / KZN Coast (warm Indian Ocean)</li>
+                                <li>Port Elizabeth / Algoa Bay (transitional)</li>
+                                <li>Garden Route (mixed coastal)</li>
+                                <li>East London / Wild Coast</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="input-field">
+                            <strong>🔧 Customization:</strong>
+                            <ul style="margin: 10px 0 0 15px; line-height: 1.6;">
+                                <li>All values are editable for site-specific needs</li>
+                                <li>Settings auto-save between sessions</li>
+                                <li>Export/import for sharing configurations</li>
+                                <li>Establish your own baselines over 1+ seasonal cycles</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>📊 Best Practice:</strong> Use regional defaults for immediate assessment, then refine with local data collected over minimum one seasonal cycle (12 months) for accurate site-specific baselines.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🚀 Quick Start Guide</h3>
+                    <div class="step-guide">
+                        <h4 style="color: #2e7d32; margin-bottom: 15px;">3-Step Assessment Process:</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                            <div class="step-card step1">
+                                <h4 style="color: #2e7d32;">Step 1: Configure Baselines ⚙️</h4>
+                                <p>Go to Regional Baselines tab → Select your coastal region → Load defaults or customize values</p>
+                            </div>
+                            
+                            <div class="step-card step2">
+                                <h4 style="color: #1976d2;">Step 2: Run Assessment 🧪</h4>
+                                <p>Choose Natural Environment or Mariculture → Enter sample data → Enter salinity (required) → Run assessment</p>
+                            </div>
+                            
+                            <div class="step-card step3">
+                                <h4 style="color: #f57c00;">Step 3: Review Results 📊</h4>
+                                <p>View ecosystem classification → Check compliance status → Follow recommendations → Print/export report</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>💡 Pro Tips:</strong><br>
+                        • Always enter salinity first - it determines ecosystem type and applicable guidelines<br>
+                        • For comprehensive assessment, measure all parameters during same sampling event<br>
+                        • Consider diurnal variations for dissolved oxygen in estuaries<br>
+                        • Document sampling methods and conditions for quality assurance
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📚 Regulatory Framework & Compliance</h3>
+                    
+                    <div class="alert alert-info" style="background: #e3f2fd; border: 1px solid #90caf9; color: #0d47a1;">
+                        <strong>🏛️ Legal Authority:</strong><br>
+                        National Environmental Management: Integrated Coastal Management Act, 2008 (ICM Act)<br>
+                        <strong>Implementation:</strong> Coastal Waters Discharge Permit (CWDP) Regulations (GN 382 in GG 42304, 15 March 2019)<br>
+                        <strong>Enforcement:</strong> Department of Forestry, Fisheries and the Environment (DFFE)
+                    </div>
+                    
+                    <h4>⚖️ When Guidelines Become Legally Binding:</h4>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>When referenced in a CWDP permit</li>
+                        <li>When set as specific permit conditions</li>
+                        <li>When required by Ministerial regulations</li>
+                        <li>When specified in Environmental Management Plans</li>
+                    </ul>
+                    
+                    <h4>📞 Support Contacts:</h4>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Regulatory compliance:</strong> DFFE (Department of Forestry, Fisheries and the Environment)</li>
+                        <li><strong>Technical guidelines:</strong> Refer to full 2022 guidelines document</li>
+                        <li><strong>Estuarine management:</strong> National Estuarine Management Protocol (2013)</li>
+                        <li><strong>Freshwater systems:</strong> DWAF 1996 Volume 7: Aquatic Ecosystems</li>
+                    </ul>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>⚠️ Important Disclaimer:</strong><br>
+                        This tool implements the 2022 SA Water Quality Guidelines for assessment purposes. For regulatory compliance, 
+                        official permits and site-specific conditions take precedence. Always consult with relevant authorities 
+                        for formal compliance requirements.
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn-primary" onclick="showSection('baselines')">⚙️ Configure Regional Baselines</button>
+                    <button class="btn-primary" onclick="showSection('assessment')">🧪 Start Assessment</button>
+                </div>
+            </div>
+
+            <!-- Regional Baselines Section -->
+            <div id="marine-baselines" class="marine-section">
+                <div class="card">
+                    <h3>⚙️ Regional Baseline Configuration</h3>
+                    
+                    <div class="regional-selector">
+                        <h4>🌍 Select Regional Defaults</h4>
+                        <p style="margin-bottom: 15px;">Choose a region to load default baseline values, then customize as needed for your site.</p>
+                        
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="regionSelect">Coastal Region</label>
+                                <select id="regionSelect" onchange="loadRegionalDefaults()">
+                                    <option value="custom">Custom Settings</option>
+                                    <option value="capeWest">Cape Town / West Coast</option>
+                                    <option value="durbanEast">Durban / KZN Coast</option>
+                                    <option value="portElizabeth">Port Elizabeth / Algoa Bay</option>
+                                    <option value="gardenRoute">Garden Route</option>
+                                    <option value="eastLondon">East London / Wild Coast</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-secondary" onclick="loadRegionalDefaults()">📥 Load Regional Defaults</button>
+                        <button class="btn-secondary" onclick="resetToDefaults()">🔄 Reset All</button>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>📊 Reference System Approach:</strong><br>
+                        These parameters use site-specific baselines rather than fixed limits. The 20th-80th percentile ranges 
+                        represent acceptable natural variability. Customize these values based on your local monitoring data.
+                    </div>
+
+                    <h4>📊 Physicochemical Properties</h4>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>20th Percentile</th>
+                                <th>Median</th>
+                                <th>80th Percentile</th>
+                                <th>Units</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Temperature</strong></td>
+                                <td><input type="number" step="0.1" id="temp_20th" value="15.0"></td>
+                                <td><input type="number" step="0.1" id="temp_median" value="17.5"></td>
+                                <td><input type="number" step="0.1" id="temp_80th" value="20.0"></td>
+                                <td>°C</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Salinity</strong></td>
+                                <td><input type="number" step="0.1" id="salinity_20th" value="34.5"></td>
+                                <td><input type="number" step="0.1" id="salinity_median" value="35.0"></td>
+                                <td><input type="number" step="0.1" id="salinity_80th" value="35.5"></td>
+                                <td>ppt</td>
+                            </tr>
+                            <tr>
+                                <td><strong>pH</strong></td>
+                                <td><input type="number" step="0.01" id="pH_20th" value="7.90"></td>
+                                <td><input type="number" step="0.01" id="pH_median" value="8.10"></td>
+                                <td><input type="number" step="0.01" id="pH_80th" value="8.30"></td>
+                                <td>pH units</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dissolved Oxygen</strong></td>
+                                <td><input type="number" step="0.1" id="DO_20th" value="6.5"></td>
+                                <td><input type="number" step="0.1" id="DO_median" value="8.0"></td>
+                                <td><input type="number" step="0.1" id="DO_80th" value="9.5"></td>
+                                <td>mg/L</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Suspended Solids</strong></td>
+                                <td><input type="number" step="1" id="SS_20th" value="2"></td>
+                                <td><input type="number" step="1" id="SS_median" value="8"></td>
+                                <td><input type="number" step="1" id="SS_80th" value="15"></td>
+                                <td>mg/L</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Turbidity</strong></td>
+                                <td><input type="number" step="0.1" id="turbidity_20th" value="0.5"></td>
+                                <td><input type="number" step="0.1" id="turbidity_median" value="2.0"></td>
+                                <td><input type="number" step="0.1" id="turbidity_80th" value="5.0"></td>
+                                <td>NTU</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>🧪 Nutrients (Gradient-Sensitive)</h4>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Estuarine (20th-80th)</th>
+                                <th>Marine (20th-80th)</th>
+                                <th>Units</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Ammonia (as N)</strong></td>
+                                <td><input type="text" id="ammonia_est" value="20-80" style="width: 100px;"></td>
+                                <td><input type="text" id="ammonia_mar" value="5-25" style="width: 100px;"></td>
+                                <td>µg/L</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nitrate (as N)</strong></td>
+                                <td><input type="text" id="nitrate_est" value="50-200" style="width: 100px;"></td>
+                                <td><input type="text" id="nitrate_mar" value="20-100" style="width: 100px;"></td>
+                                <td>µg/L</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nitrite (as N)</strong></td>
+                                <td><input type="text" id="nitrite_est" value="5-20" style="width: 100px;"></td>
+                                <td><input type="text" id="nitrite_mar" value="2-10" style="width: 100px;"></td>
+                                <td>µg/L</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phosphorus (as P)</strong></td>
+                                <td><input type="text" id="phosphorus_est" value="15-40" style="width: 100px;"></td>
+                                <td><input type="text" id="phosphorus_mar" value="8-25" style="width: 100px;"></td>
+                                <td>µg/L</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Silicon (as Si)</strong></td>
+                                <td><input type="text" id="silicon_est" value="100-500" style="width: 100px;"></td>
+                                <td><input type="text" id="silicon_mar" value="50-200" style="width: 100px;"></td>
+                                <td>µg/L</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box" style="margin-top: 25px;">
+                        <strong>💾 Saving Settings:</strong><br>
+                        Your baseline settings are automatically saved in browser storage and will persist between sessions. 
+                        For sharing between devices, note down your custom values or use the export feature.
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn-primary" onclick="saveBaselines()">💾 Save Baselines</button>
+                        <button class="btn-secondary" onclick="exportBaselines()">📤 Export Settings</button>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button class="btn-secondary" onclick="showMarineSection('userguide')">← Back to User Guide</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assessment Section -->
+            <div id="marine-assessment" class="marine-section">
+                <div class="card">
+                    <h3>🧪 Water Quality Assessment</h3>
+                    
+                    <!-- Assessment Type Selection -->
+                    <div class="tab-container">
+                        <div class="tab-header">
+                            <button class="tab-btn active" onclick="switchAssessmentType('natural')">
+                                🌊 Natural Environment
+                            </button>
+                            <button class="tab-btn" onclick="switchAssessmentType('mariculture')">
+                                🐟 Mariculture
+                            </button>
+                        </div>
+                        
+                        <div class="tab-content">
+                            <div id="natural-panel" class="tab-panel active">
+                                <div class="use-type-indicator">
+                                    <h4>🌊 Natural Environment Assessment</h4>
+                                    <p>For ecosystem health protection, biodiversity conservation, and general marine environment quality</p>
+                                </div>
+                            </div>
+                            
+                            <div id="mariculture-panel" class="tab-panel">
+                                <div class="use-type-indicator">
+                                    <h4>🐟 Mariculture Assessment</h4>
+                                    <p>For aquaculture operations - includes additional organoleptic parameters and stricter pH requirements</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Multi-Sample Container -->
+                    <div id="samplesContainer">
+                        <!-- Samples will be added here dynamically -->
+                    </div>
+
+                    <div style="text-align: center; margin: 30px 0;">
+                        <button class="btn-secondary" onclick="addMarineSample()" style="background: #4a9960; color: white; border: none;">
+                            ➕ Add Sample
+                        </button>
+                        <button class="btn-primary" onclick="runAllMarineAssessments()" id="runAllBtn" style="display: none;">
+                            🔬 Run All Assessments
+                        </button>
+                    </div>
+
+                    <!-- Sample Template (hidden, used for cloning) -->
+                    <template id="marineSampleTemplate">
+                        <div class="sample-card">
+                            <div class="sample-card-header">
+                                <h4>📊 Sample <span class="sample-number"></span></h4>
+                                <div class="sample-card-actions">
+                                    <button class="btn-icon" onclick="toggleSampleCard(this)" title="Collapse/Expand">
+                                        <span class="collapse-icon">▼</span>
+                                    </button>
+                                    <button class="btn-icon" onclick="clearSampleCard(this)" title="Clear Sample">
+                                        🗑️ Clear
+                                    </button>
+                                    <button class="btn-icon btn-remove" onclick="removeSampleCard(this)" title="Remove Sample">
+                                        ✖ Remove
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="sample-card-body">
+                    <!-- Sample Information -->
+                    <div class="parameter-section">
+                        <h4>📝 Sample Information</h4>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="sampleId">Sample ID</label>
+                                <input type="text" id="sampleId" placeholder="e.g., CTN-001-2024">
+                            </div>
+                            <div class="input-field">
+                                <label for="location">Location</label>
+                                <input type="text" id="location" placeholder="e.g., False Bay, Cape Town">
+                            </div>
+                            <div class="input-field">
+                                <label for="samplingRegion">Sampling Region *</label>
+                                <select id="samplingRegion" onchange="updateRegionalContext()">
+                                    <option value="">Select region for baseline application</option>
+                                    <option value="capeWest">Cape Town / West Coast</option>
+                                    <option value="durbanEast">Durban / KZN Coast</option>
+                                    <option value="portElizabeth">Port Elizabeth / Algoa Bay</option>
+                                    <option value="gardenRoute">Garden Route</option>
+                                    <option value="eastLondon">East London / Wild Coast</option>
+                                    <option value="custom">Custom Baselines</option>
+                                </select>
+                                <small style="color: #666; font-size: 0.85rem;">Determines which regional baselines to apply</small>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="sampleDate">Sample Date</label>
+                                <input type="date" id="sampleDate">
+                            </div>
+                            <div class="input-field">
+                                <label for="samplingDepth">Sampling Depth (m)</label>
+                                <input type="number" step="0.1" id="samplingDepth" placeholder="e.g., 1.0">
+                            </div>
+                        </div>
+                        
+                        <!-- Regional Context Display -->
+                        <div id="regionalContext" class="info-box" style="display: none; margin-top: 15px;">
+                            <strong>📍 Regional Baselines Applied:</strong><br>
+                            <span id="regionalContextText">Select a sampling region to see which baselines will be applied</span>
+                        </div>
+                    </div>
+
+                    <!-- Core Parameters -->
+                    <div class="parameter-section">
+                        <h4>🌡️ Core Physicochemical Parameters</h4>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="salinity">Salinity (ppt) *</label>
+                                <input type="number" step="0.1" id="salinity" placeholder="e.g., 35.0 (>0.5 required)" onchange="updateEcosystemType()" min="0.5">
+                                <small style="color: #e74c3c; font-weight: 500;">⚠️ Minimum: 0.5 ppt (freshwater blocked)</small>
+                            </div>
+                            <div class="input-field">
+                                <label for="temperature">Temperature (°C)</label>
+                                <input type="number" step="0.1" id="temperature" placeholder="e.g., 18.5">
+                            </div>
+                            <div class="input-field">
+                                <label for="pH">pH</label>
+                                <input type="number" step="0.01" id="pH" placeholder="e.g., 8.1">
+                            </div>
+                            <div class="input-field">
+                                <label for="dissolvedOxygen">Dissolved Oxygen (mg/L)</label>
+                                <input type="number" step="0.1" id="dissolvedOxygen" placeholder="e.g., 7.5">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="suspendedSolids">Suspended Solids (mg/L)</label>
+                                <input type="number" step="1" id="suspendedSolids" placeholder="e.g., 10">
+                            </div>
+                            <div class="input-field">
+                                <label for="turbidity">Turbidity (NTU)</label>
+                                <input type="number" step="0.1" id="turbidity" placeholder="e.g., 2.5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nutrients -->
+                    <div class="parameter-section">
+                        <h4>🧪 Nutrients</h4>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="ammoniaTotal">Ammonia - Total (µg/L as N)</label>
+                                <input type="number" step="1" id="ammoniaTotal" placeholder="e.g., 30">
+                            </div>
+                            <div class="input-field">
+                                <label for="ammoniaBaseline">Ammonia - Baseline (µg/L as N)</label>
+                                <input type="number" step="1" id="ammoniaBaseline" placeholder="e.g., 15">
+                            </div>
+                            <div class="input-field">
+                                <label for="nitrate">Nitrate (µg/L as N)</label>
+                                <input type="number" step="1" id="nitrate" placeholder="e.g., 50">
+                            </div>
+                            <div class="input-field">
+                                <label for="nitrite">Nitrite (µg/L as N)</label>
+                                <input type="number" step="1" id="nitrite" placeholder="e.g., 5">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="phosphorus">Phosphorus (µg/L as P)</label>
+                                <input type="number" step="1" id="phosphorus" placeholder="e.g., 20">
+                            </div>
+                            <div class="input-field">
+                                <label for="silicon">Silicon (µg/L as Si)</label>
+                                <input type="number" step="1" id="silicon" placeholder="e.g., 150">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metals -->
+                    <div class="parameter-section">
+                        <h4>⚗️ Metals (Total Recoverable)</h4>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="arsenic">Arsenic (µg/L)</label>
+                                <input type="number" step="0.1" id="arsenic" placeholder="e.g., 2.5">
+                            </div>
+                            <div class="input-field">
+                                <label for="cadmium">Cadmium (µg/L)</label>
+                                <input type="number" step="0.01" id="cadmium" placeholder="e.g., 0.05">
+                            </div>
+                            <div class="input-field">
+                                <label for="chromium">Chromium (Cr⁶⁺) (µg/L)</label>
+                                <input type="number" step="0.1" id="chromium" placeholder="e.g., 0.8">
+                            </div>
+                            <div class="input-field">
+                                <label for="copper">Copper (µg/L)</label>
+                                <input type="number" step="0.1" id="copper" placeholder="e.g., 1.2">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="lead">Lead (µg/L)</label>
+                                <input type="number" step="0.1" id="lead" placeholder="e.g., 0.5">
+                            </div>
+                            <div class="input-field">
+                                <label for="mercury">Mercury (µg/L)</label>
+                                <input type="number" step="0.001" id="mercury" placeholder="e.g., 0.008">
+                            </div>
+                            <div class="input-field">
+                                <label for="nickel">Nickel (µg/L)</label>
+                                <input type="number" step="0.1" id="nickel" placeholder="e.g., 2.0">
+                            </div>
+                            <div class="input-field">
+                                <label for="silver">Silver (µg/L)</label>
+                                <input type="number" step="0.1" id="silver" placeholder="e.g., 0.3">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="zinc">Zinc (µg/L)</label>
+                                <input type="number" step="0.1" id="zinc" placeholder="e.g., 8.0">
+                            </div>
+                            <div class="input-field">
+                                <label for="fluoride">Fluoride (µg/L)</label>
+                                <input type="number" step="1" id="fluoride" placeholder="e.g., 800">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mariculture-Specific Parameters -->
+                    <div id="mariculture-params" class="parameter-section" style="display: none;">
+                        <h4>🐟 Mariculture-Specific Parameters</h4>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="chlorophenol2">2-Chlorophenol (µg/L)</label>
+                                <input type="number" step="0.01" id="chlorophenol2" placeholder="e.g., 0.05">
+                            </div>
+                            <div class="input-field">
+                                <label for="chlorophenol3">3-Chlorophenol (µg/L)</label>
+                                <input type="number" step="0.01" id="chlorophenol3" placeholder="e.g., 0.05">
+                            </div>
+                            <div class="input-field">
+                                <label for="chlorophenol4">4-Chlorophenol (µg/L)</label>
+                                <input type="number" step="0.01" id="chlorophenol4" placeholder="e.g., 0.05">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Optional Parameters -->
+                    <div class="parameter-section">
+                        <h4>🔬 Optional Organic Parameters</h4>
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="anthracene">Anthracene (µg/L)</label>
+                                <input type="number" step="0.001" id="anthracene" placeholder="e.g., 0.05">
+                            </div>
+                            <div class="input-field">
+                                <label for="naphthalene">Naphthalene (µg/L)</label>
+                                <input type="number" step="0.1" id="naphthalene" placeholder="e.g., 0.8">
+                            </div>
+                            <div class="input-field">
+                                <label for="aldrin">Aldrin (µg/L)</label>
+                                <input type="number" step="0.001" id="aldrin" placeholder="e.g., 0.001">
+                            </div>
+                            <div class="input-field">
+                                <label for="dieldrin">Dieldrin (µg/L)</label>
+                                <input type="number" step="0.001" id="dieldrin" placeholder="e.g., 0.001">
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="marine-results" class="marine-section">
+                <div id="marineResultsContent">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+                </div>
+            `;
+            
+            // Initialize marine tool after loading HTML
+            initializeMarineTool();
+        }
+
+        // Marine tool specific navigation
+        function showMarineSection(sectionId) {
+            document.querySelectorAll('.marine-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.marine-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const sectionElement = document.getElementById('marine-' + sectionId);
+            if (sectionElement) {
+                sectionElement.classList.add('active');
+            }
+            
+            // Set active button based on text content
+            const buttons = document.querySelectorAll('.marine-nav-btn');
+            buttons.forEach(btn => {
+                if ((sectionId === 'userguide' && btn.textContent.includes('User Guide')) ||
+                    (sectionId === 'baselines' && btn.textContent.includes('Regional Baselines')) ||
+                    (sectionId === 'assessment' && btn.textContent.includes('Assessment')) ||
+                    (sectionId === 'results' && btn.textContent.includes('Results'))) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Show results tab when navigating to results
+            if (sectionId === 'results') {
+                const resultsTab = document.getElementById('marineResultsTab');
+                if (resultsTab) resultsTab.style.display = 'inline-block';
+            }
+        }
+
+        // Initialize marine tool
+        function initializeMarineTool() {
+            // Add first sample automatically
+            addMarineSample();
+            
+            // Set current date in the first sample
+            setTimeout(() => {
+                const dateInput = document.querySelector('[id^="sampleDate_"]');
+                if (dateInput) {
+                    dateInput.valueAsDate = new Date();
+                }
+            }, 100);
+            
+            loadSavedBaselines();
+        }
+
+        // Global variables
+        let currentAssessmentType = 'natural';
+        let currentRegion = 'custom';
+
+        // Regional baseline data
+        const regionalDefaults = {
+            capeWest: {
+                name: "Cape Town / West Coast",
+                temperature: { p20: 12.0, median: 15.0, p80: 18.0 },
+                salinity: { p20: 34.7, median: 35.0, p80: 35.4 },
+                pH: { p20: 7.9, median: 8.1, p80: 8.3 },
+                dissolvedOxygen: { p20: 6.5, median: 8.0, p80: 9.5 },
+                suspendedSolids: { p20: 2, median: 5, p80: 15 },
+                turbidity: { p20: 0.5, median: 2.0, p80: 8.0 },
+                nutrients: {
+                    ammonia_est: "30-70", ammonia_mar: "5-20",
+                    nitrate_est: "40-150", nitrate_mar: "15-80",
+                    nitrite_est: "3-15", nitrite_mar: "1-8",
+                    phosphorus_est: "12-35", phosphorus_mar: "6-20",
+                    silicon_est: "80-400", silicon_mar: "40-150"
+                }
+            },
+            durbanEast: {
+                name: "Durban / KZN Coast",
+                temperature: { p20: 19.0, median: 22.5, p80: 26.0 },
+                salinity: { p20: 35.0, median: 35.3, p80: 35.5 },
+                pH: { p20: 8.0, median: 8.2, p80: 8.4 },
+                dissolvedOxygen: { p20: 6.0, median: 7.5, p80: 8.5 },
+                suspendedSolids: { p20: 1, median: 3, p80: 12 },
+                turbidity: { p20: 0.3, median: 1.5, p80: 6.0 },
+                nutrients: {
+                    ammonia_est: "25-60", ammonia_mar: "3-18",
+                    nitrate_est: "35-120", nitrate_mar: "12-70",
+                    nitrite_est: "2-12", nitrite_mar: "1-6",
+                    phosphorus_est: "10-30", phosphorus_mar: "5-18",
+                    silicon_est: "60-300", silicon_mar: "30-120"
+                }
+            },
+            portElizabeth: {
+                name: "Port Elizabeth / Algoa Bay",
+                temperature: { p20: 15.0, median: 18.5, p80: 22.0 },
+                salinity: { p20: 34.8, median: 35.1, p80: 35.3 },
+                pH: { p20: 7.9, median: 8.1, p80: 8.3 },
+                dissolvedOxygen: { p20: 6.2, median: 7.8, p80: 9.0 },
+                suspendedSolids: { p20: 2, median: 4, p80: 14 },
+                turbidity: { p20: 0.4, median: 1.8, p80: 7.0 },
+                nutrients: {
+                    ammonia_est: "28-65", ammonia_mar: "4-19",
+                    nitrate_est: "38-130", nitrate_mar: "14-75",
+                    nitrite_est: "3-14", nitrite_mar: "1-7",
+                    phosphorus_est: "11-32", phosphorus_mar: "6-19",
+                    silicon_est: "70-350", silicon_mar: "35-130"
+                }
+            },
+            gardenRoute: {
+                name: "Garden Route",
+                temperature: { p20: 14.0, median: 17.0, p80: 21.0 },
+                salinity: { p20: 34.6, median: 34.9, p80: 35.2 },
+                pH: { p20: 7.9, median: 8.0, p80: 8.2 },
+                dissolvedOxygen: { p20: 6.3, median: 7.9, p80: 9.2 },
+                suspendedSolids: { p20: 2, median: 6, p80: 16 },
+                turbidity: { p20: 0.6, median: 2.2, p80: 8.5 },
+                nutrients: {
+                    ammonia_est: "32-75", ammonia_mar: "6-22",
+                    nitrate_est: "42-160", nitrate_mar: "16-85",
+                    nitrite_est: "4-16", nitrite_mar: "2-9",
+                    phosphorus_est: "13-36", phosphorus_mar: "7-21",
+                    silicon_est: "85-420", silicon_mar: "42-160"
+                }
+            },
+            eastLondon: {
+                name: "East London / Wild Coast",
+                temperature: { p20: 16.0, median: 19.0, p80: 23.0 },
+                salinity: { p20: 34.9, median: 35.2, p80: 35.4 },
+                pH: { p20: 7.9, median: 8.1, p80: 8.3 },
+                dissolvedOxygen: { p20: 6.1, median: 7.7, p80: 8.8 },
+                suspendedSolids: { p20: 2, median: 5, p80: 13 },
+                turbidity: { p20: 0.4, median: 1.9, p80: 6.5 },
+                nutrients: {
+                    ammonia_est: "26-62", ammonia_mar: "4-17",
+                    nitrate_est: "36-125", nitrate_mar: "13-72",
+                    nitrite_est: "3-13", nitrite_mar: "1-7",
+                    phosphorus_est: "10-31", phosphorus_mar: "5-18",
+                    silicon_est: "65-320", silicon_mar: "32-125"
+                }
+            }
+        };
+
+        // Fixed guidelines from 2022 SA Marine Guidelines
+        const fixedGuidelines = {
+            // Metals (µg/L total recoverable)
+            arsenic: { limit: 8, name: 'Arsenic' },
+            cadmium: { limit: 0.12, name: 'Cadmium' },
+            chromium: { limit: 2, name: 'Chromium (Cr⁶⁺)' },
+            copper: { limit: 3, name: 'Copper' },
+            lead: { limit: 2, name: 'Lead' },
+            mercury: { limit: 0.016, name: 'Mercury' },
+            nickel: { limit: 5, name: 'Nickel' },
+            silver: { limit: 0.7, name: 'Silver' },
+            zinc: { limit: 20, name: 'Zinc' },
+            
+            // Inorganic non-metals
+            ammoniaTotal: { limit: 600, name: 'Ammonia (Total as N)' },
+            
+            // Organochlorines
+            aldrin: { limit: 0.003, name: 'Aldrin' },
+            dieldrin: { limit: 0.003, name: 'Dieldrin' },
+            
+            // PAHs
+            anthracene: { limit: 0.1, name: 'Anthracene' },
+            naphthalene: { limit: 2, name: 'Naphthalene' },
+            
+            // Chlorophenols (mariculture only)
+            chlorophenol2: { limit: 0.1, name: '2-Chlorophenol', maricultureOnly: true },
+            chlorophenol3: { limit: 0.1, name: '3-Chlorophenol', maricultureOnly: true },
+            chlorophenol4: { limit: 0.1, name: '4-Chlorophenol', maricultureOnly: true }
+        };
+
+        // Gradient-specific limits
+        const gradientLimits = {
+            fluoride: {
+                estuarine: 1160,
+                marine: 1500,
+                name: 'Fluoride (Acute)'
+            }
+        };
+
+        // Initialize the application
+        function initializeApp() {
+            document.getElementById('sampleDate').valueAsDate = new Date();
+            loadSavedBaselines();
+        }
+
+        // Assessment type switching
+        function switchAssessmentType(type) {
+            currentAssessmentType = type;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab panels
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(type + '-panel').classList.add('active');
+            
+            // Show/hide mariculture-specific parameters
+            const maricultureParams = document.getElementById('mariculture-params');
+            if (type === 'mariculture') {
+                maricultureParams.style.display = 'block';
+            } else {
+                maricultureParams.style.display = 'none';
+            }
+        }
+
+        // Regional defaults functions
+        function loadRegionalDefaults() {
+            const regionSelect = document.getElementById('regionSelect');
+            const selectedRegion = regionSelect.value;
+            
+            if (selectedRegion === 'custom') return;
+            
+            // Check if there are saved custom baselines for this region
+            const allSavedBaselines = JSON.parse(localStorage.getItem('saMarineBaselines') || '{}');
+            let region;
+            
+            if (allSavedBaselines[selectedRegion]) {
+                // Use saved custom baselines
+                region = allSavedBaselines[selectedRegion];
+                console.log(`Loading saved custom baselines for ${selectedRegion}`);
+            } else {
+                // Use hardcoded defaults
+                region = regionalDefaults[selectedRegion];
+                console.log(`Loading hardcoded defaults for ${selectedRegion}`);
+            }
+            
+            if (!region) return;
+            
+            // Load physicochemical defaults
+            document.getElementById('temp_20th').value = region.temperature.p20;
+            document.getElementById('temp_median').value = region.temperature.median;
+            document.getElementById('temp_80th').value = region.temperature.p80;
+            
+            document.getElementById('salinity_20th').value = region.salinity.p20;
+            document.getElementById('salinity_median').value = region.salinity.median;
+            document.getElementById('salinity_80th').value = region.salinity.p80;
+            
+            document.getElementById('pH_20th').value = region.pH.p20;
+            document.getElementById('pH_median').value = region.pH.median;
+            document.getElementById('pH_80th').value = region.pH.p80;
+            
+            document.getElementById('DO_20th').value = region.dissolvedOxygen.p20;
+            document.getElementById('DO_median').value = region.dissolvedOxygen.median;
+            document.getElementById('DO_80th').value = region.dissolvedOxygen.p80;
+            
+            document.getElementById('SS_20th').value = region.suspendedSolids.p20;
+            document.getElementById('SS_median').value = region.suspendedSolids.median;
+            document.getElementById('SS_80th').value = region.suspendedSolids.p80;
+            
+            document.getElementById('turbidity_20th').value = region.turbidity.p20;
+            document.getElementById('turbidity_median').value = region.turbidity.median;
+            document.getElementById('turbidity_80th').value = region.turbidity.p80;
+            
+            // Load nutrient defaults
+            document.getElementById('ammonia_est').value = region.nutrients.ammonia_est;
+            document.getElementById('ammonia_mar').value = region.nutrients.ammonia_mar;
+            document.getElementById('nitrate_est').value = region.nutrients.nitrate_est;
+            document.getElementById('nitrate_mar').value = region.nutrients.nitrate_mar;
+            document.getElementById('nitrite_est').value = region.nutrients.nitrite_est;
+            document.getElementById('nitrite_mar').value = region.nutrients.nitrite_mar;
+            document.getElementById('phosphorus_est').value = region.nutrients.phosphorus_est;
+            document.getElementById('phosphorus_mar').value = region.nutrients.phosphorus_mar;
+            document.getElementById('silicon_est').value = region.nutrients.silicon_est;
+            document.getElementById('silicon_mar').value = region.nutrients.silicon_mar;
+            
+            currentRegion = selectedRegion;
+            
+            // Show confirmation
+            const hasSaved = allSavedBaselines[selectedRegion] ? ' (using your saved values)' : '';
+            alert(`Loaded ${region.name} regional baselines successfully${hasSaved}!`);
+        }
+
+        function resetToDefaults() {
+            document.getElementById('regionSelect').value = 'capeWest';
+            loadRegionalDefaults();
+        }
+
+        // Baseline management
+        function saveBaselines() {
+            // Get all saved baselines from localStorage
+            const allBaselines = JSON.parse(localStorage.getItem('saMarineBaselines') || '{}');
+            
+            // Collect current baseline values
+            const baselines = {
+                name: regionalDefaults[currentRegion]?.name || "Custom Baselines",
+                temperature: {
+                    p20: parseFloat(document.getElementById('temp_20th').value),
+                    median: parseFloat(document.getElementById('temp_median').value),
+                    p80: parseFloat(document.getElementById('temp_80th').value)
+                },
+                salinity: {
+                    p20: parseFloat(document.getElementById('salinity_20th').value),
+                    median: parseFloat(document.getElementById('salinity_median').value),
+                    p80: parseFloat(document.getElementById('salinity_80th').value)
+                },
+                pH: {
+                    p20: parseFloat(document.getElementById('pH_20th').value),
+                    median: parseFloat(document.getElementById('pH_median').value),
+                    p80: parseFloat(document.getElementById('pH_80th').value)
+                },
+                dissolvedOxygen: {
+                    p20: parseFloat(document.getElementById('DO_20th').value),
+                    median: parseFloat(document.getElementById('DO_median').value),
+                    p80: parseFloat(document.getElementById('DO_80th').value)
+                },
+                suspendedSolids: {
+                    p20: parseFloat(document.getElementById('SS_20th').value),
+                    median: parseFloat(document.getElementById('SS_median').value),
+                    p80: parseFloat(document.getElementById('SS_80th').value)
+                },
+                turbidity: {
+                    p20: parseFloat(document.getElementById('turbidity_20th').value),
+                    median: parseFloat(document.getElementById('turbidity_median').value),
+                    p80: parseFloat(document.getElementById('turbidity_80th').value)
+                },
+                nutrients: {
+                    ammonia_est: document.getElementById('ammonia_est').value,
+                    ammonia_mar: document.getElementById('ammonia_mar').value,
+                    nitrate_est: document.getElementById('nitrate_est').value,
+                    nitrate_mar: document.getElementById('nitrate_mar').value,
+                    nitrite_est: document.getElementById('nitrite_est').value,
+                    nitrite_mar: document.getElementById('nitrite_mar').value,
+                    phosphorus_est: document.getElementById('phosphorus_est').value,
+                    phosphorus_mar: document.getElementById('phosphorus_mar').value,
+                    silicon_est: document.getElementById('silicon_est').value,
+                    silicon_mar: document.getElementById('silicon_mar').value
+                }
+            };
+            
+            // Save under the current region key
+            allBaselines[currentRegion] = baselines;
+            
+            // Save back to localStorage
+            localStorage.setItem('saMarineBaselines', JSON.stringify(allBaselines));
+            
+            const regionName = regionalDefaults[currentRegion]?.name || currentRegion;
+            alert(`✅ Baselines saved successfully for ${regionName}!\n\nThese values will now be used when you select this region in assessments.`);
+        }
+
+        function loadSavedBaselines() {
+            const saved = localStorage.getItem('saMarineBaselines');
+            if (saved) {
+                const baselines = JSON.parse(saved);
+                
+                // Load physicochemical
+                const physico = baselines.physicochemical;
+                if (physico) {
+                    if (physico.temperature) {
+                        document.getElementById('temp_20th').value = physico.temperature.p20 || 15.0;
+                        document.getElementById('temp_median').value = physico.temperature.median || 17.5;
+                        document.getElementById('temp_80th').value = physico.temperature.p80 || 20.0;
+                    }
+                    // ... (continue for other parameters)
+                }
+            }
+        }
+
+        function exportBaselines() {
+            const baselines = {
+                region: currentRegion,
+                timestamp: new Date().toISOString(),
+                data: {
+                    // Collect all current baseline values
+                    temperature: {
+                        p20: document.getElementById('temp_20th').value,
+                        median: document.getElementById('temp_median').value,
+                        p80: document.getElementById('temp_80th').value
+                    }
+                    // ... add other parameters
+                }
+            };
+            
+            const dataStr = JSON.stringify(baselines, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `sa-marine-baselines-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        // Regional context updating
+        function updateRegionalContext() {
+            const regionSelect = document.getElementById('samplingRegion');
+            const contextDiv = document.getElementById('regionalContext');
+            const contextText = document.getElementById('regionalContextText');
+            
+            if (regionSelect.value === '') {
+                contextDiv.style.display = 'none';
+                return;
+            }
+            
+            const region = regionalDefaults[regionSelect.value];
+            if (region) {
+                contextText.innerHTML = `
+                    <strong>${region.name}</strong> baselines will be applied:<br>
+                    • Temperature: ${region.temperature.p20}-${region.temperature.p80}°C<br>
+                    • pH: ${region.pH.p20}-${region.pH.p80}<br>
+                    • Dissolved Oxygen: ≥${region.dissolvedOxygen.p20} mg/L<br>
+                    • Nutrients: Regional gradient-specific values
+                `;
+            } else {
+                contextText.innerHTML = `
+                    <strong>Custom Baselines</strong> from Regional Baselines tab will be applied:<br>
+                    • Using your manually configured baseline values<br>
+                    • Check Regional Baselines tab to verify settings
+                `;
+            }
+            
+            contextDiv.style.display = 'block';
+        }
+
+        // Get current regional baselines for assessment
+        function getCurrentRegionalBaselines(regionKey) {
+            // First, check if there are saved custom baselines for this region
+            const allSavedBaselines = JSON.parse(localStorage.getItem('saMarineBaselines') || '{}');
+            
+            if (allSavedBaselines[regionKey]) {
+                // Use saved custom baselines for this region
+                return allSavedBaselines[regionKey];
+            } else if (regionKey && regionalDefaults[regionKey]) {
+                // Use hardcoded defaults if no custom values saved
+                return regionalDefaults[regionKey];
+            } else {
+                // For 'custom' region, read directly from the form
+                return {
+                    name: "Custom Baselines",
+                    temperature: {
+                        p20: parseFloat(document.getElementById('temp_20th').value) || 15.0,
+                        median: parseFloat(document.getElementById('temp_median').value) || 17.5,
+                        p80: parseFloat(document.getElementById('temp_80th').value) || 20.0
+                    },
+                    salinity: {
+                        p20: parseFloat(document.getElementById('salinity_20th').value) || 34.5,
+                        median: parseFloat(document.getElementById('salinity_median').value) || 35.0,
+                        p80: parseFloat(document.getElementById('salinity_80th').value) || 35.5
+                    },
+                    pH: {
+                        p20: parseFloat(document.getElementById('pH_20th').value) || 7.9,
+                        median: parseFloat(document.getElementById('pH_median').value) || 8.1,
+                        p80: parseFloat(document.getElementById('pH_80th').value) || 8.3
+                    },
+                    dissolvedOxygen: {
+                        p20: parseFloat(document.getElementById('DO_20th').value) || 6.5,
+                        median: parseFloat(document.getElementById('DO_median').value) || 8.0,
+                        p80: parseFloat(document.getElementById('DO_80th').value) || 9.5
+                    },
+                    suspendedSolids: {
+                        p20: parseFloat(document.getElementById('SS_20th').value) || 2,
+                        median: parseFloat(document.getElementById('SS_median').value) || 8,
+                        p80: parseFloat(document.getElementById('SS_80th').value) || 15
+                    },
+                    turbidity: {
+                        p20: parseFloat(document.getElementById('turbidity_20th').value) || 0.5,
+                        median: parseFloat(document.getElementById('turbidity_median').value) || 2.5,
+                        p80: parseFloat(document.getElementById('turbidity_80th').value) || 5.0
+                    },
+                    nutrients: {
+                        ammonia_est: document.getElementById('ammonia_est').value || "20-80",
+                        ammonia_mar: document.getElementById('ammonia_mar').value || "5-25",
+                        nitrate_est: document.getElementById('nitrate_est').value || "50-200",
+                        nitrate_mar: document.getElementById('nitrate_mar').value || "20-100",
+                        nitrite_est: document.getElementById('nitrite_est').value || "5-20",
+                        nitrite_mar: document.getElementById('nitrite_mar').value || "2-10",
+                        phosphorus_est: document.getElementById('phosphorus_est').value || "15-40",
+                        phosphorus_mar: document.getElementById('phosphorus_mar').value || "8-25",
+                        silicon_est: document.getElementById('silicon_est').value || "100-500",
+                        silicon_mar: document.getElementById('silicon_mar').value || "50-200"
+                    }
+                };
+            }
+        }
+        function updateEcosystemType() {
+            const salinity = parseFloat(document.getElementById('salinity').value);
+            if (isNaN(salinity)) return;
+            
+            let ecosystem;
+            if (salinity <= 0.5) {
+                // BLOCK FRESHWATER - This tool is not for freshwater assessment
+                ecosystem = { 
+                    name: 'FRESHWATER - NOT SUPPORTED', 
+                    class: 'freshwater', 
+                    icon: '🚫', 
+                    guidelines: 'USE FRESHWATER TOOL', 
+                    ammoniaBaseline: 'Not applicable',
+                    blocked: true
+                };
+                
+                // Show immediate warning
+                setTimeout(() => {
+                    alert('⚠️ FRESHWATER DETECTED\n\nSalinity ≤0.5 ppt indicates freshwater.\n\nThis tool is for estuarine and marine waters only.\nPlease use the Freshwater Assessment Tool for DWAF 1996 guidelines.\n\nMinimum salinity: 0.5 ppt');
+                }, 500);
+                
+            } else if (salinity <= 5) {
+                ecosystem = { name: 'Upper Estuary', class: 'upper-estuary', icon: '🌿', guidelines: '2022 Marine + NEMP', ammoniaBaseline: '20-80 µg/L (estuarine)' };
+            } else if (salinity <= 18) {
+                ecosystem = { name: 'Mid Estuary', class: 'mid-estuary', icon: '🏞️', guidelines: '2022 Marine + NEMP', ammoniaBaseline: '20-80 µg/L (estuarine)' };
+            } else if (salinity <= 30) {
+                ecosystem = { name: 'Lower Estuary', class: 'lower-estuary', icon: '🌊', guidelines: '2022 Marine + NEMP', ammoniaBaseline: '20-80 µg/L (estuarine)' };
+            } else {
+                ecosystem = { name: 'Marine', class: 'marine', icon: '🏖️', guidelines: '2022 Marine Guidelines', ammoniaBaseline: '5-25 µg/L (marine)' };
+            }
+            
+            return ecosystem;
+        }
+
+        // Multi-Sample Management Functions
+        let sampleCounter = 0;
+
+        function addMarineSample() {
+            sampleCounter++;
+            const container = document.getElementById('samplesContainer');
+            const template = document.getElementById('marineSampleTemplate');
+            const clone = template.content.cloneNode(true);
+            
+            // Set sample number
+            clone.querySelector('.sample-number').textContent = sampleCounter;
+            
+            // Add unique IDs to all inputs
+            const sampleDiv = clone.querySelector('.sample-card');
+            sampleDiv.setAttribute('data-sample-id', sampleCounter);
+            
+            const inputs = clone.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                if (input.id) {
+                    input.id = input.id + '_' + sampleCounter;
+                }
+            });
+            
+            container.appendChild(clone);
+            
+            // Show Run All button if we have samples
+            document.getElementById('runAllBtn').style.display = 'inline-block';
+            
+            // Auto-expand the new sample
+            const newCard = container.lastElementChild;
+            newCard.classList.remove('collapsed');
+        }
+
+        function toggleSampleCard(button) {
+            const card = button.closest('.sample-card');
+            card.classList.toggle('collapsed');
+        }
+
+        function clearSampleCard(button) {
+            const card = button.closest('.sample-card');
+            const inputs = card.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                if (input.type === 'date') {
+                    input.value = '';
+                } else if (input.tagName === 'SELECT') {
+                    input.selectedIndex = 0;
+                } else {
+                    input.value = '';
+                }
+            });
+        }
+
+        function removeSampleCard(button) {
+            const card = button.closest('.sample-card');
+            card.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => {
+                card.remove();
+                
+                // Renumber remaining samples
+                const remaining = document.querySelectorAll('.sample-card');
+                remaining.forEach((card, index) => {
+                    card.querySelector('.sample-number').textContent = index + 1;
+                    card.setAttribute('data-sample-id', index + 1);
+                });
+                
+                sampleCounter = remaining.length;
+                
+                // Hide Run All button if no samples
+                if (sampleCounter === 0) {
+                    document.getElementById('runAllBtn').style.display = 'none';
+                }
+            }, 300);
+        }
+
+        function runAllMarineAssessments() {
+            const sampleCards = document.querySelectorAll('.sample-card');
+            if (sampleCards.length === 0) {
+                alert('⚠️ Please add at least one sample to assess.');
+                return;
+            }
+            
+            const allAssessments = [];
+            let hasErrors = false;
+            
+            sampleCards.forEach((card, index) => {
+                const sampleId = card.getAttribute('data-sample-id');
+                const params = collectParametersFromSample(card, sampleId);
+                
+                if (!validateParameters(params)) {
+                    alert(`⚠️ Sample ${index + 1} has validation errors. Please check all required fields.`);
+                    hasErrors = true;
+                    return;
+                }
+                
+                // Add ecosystem based on salinity
+                params.ecosystem = getEcosystemFromSalinity(params.salinity);
+                
+                // Add regional baselines
+                params.regionalBaselines = getCurrentRegionalBaselines(params.samplingRegion);
+                
+                const assessment = performAssessment(params);
+                assessment.sampleNumber = index + 1;
+                allAssessments.push(assessment);
+            });
+            
+            if (hasErrors) return;
+            
+            displayMultipleResults(allAssessments);
+        }
+
+        function collectParametersFromSample(card, sampleId) {
+            const getValue = (id) => {
+                const element = card.querySelector(`#${id}_${sampleId}`);
+                return element ? element.value : '';
+            };
+            
+            const getNumValue = (id) => {
+                const val = getValue(id);
+                return val === '' ? NaN : parseFloat(val);
+            };
+            
+            // Get assessment type from active tab
+            const assessmentType = document.getElementById('natural-panel').classList.contains('active') ? 'natural' : 'mariculture';
+            
+            return {
+                sampleId: getValue('sampleId') || `Sample-${sampleId}`,
+                location: getValue('location'),
+                samplingRegion: getValue('samplingRegion'),
+                sampleDate: getValue('sampleDate'),
+                samplingDepth: getNumValue('samplingDepth'),
+                salinity: getNumValue('salinity'),
+                temperature: getNumValue('temperature'),
+                pH: getNumValue('pH'),
+                dissolvedOxygen: getNumValue('dissolvedOxygen'),
+                suspendedSolids: getNumValue('suspendedSolids'),
+                turbidity: getNumValue('turbidity'),
+                ammonia: getNumValue('ammonia'),
+                nitrate: getNumValue('nitrate'),
+                nitrite: getNumValue('nitrite'),
+                phosphorus: getNumValue('phosphorus'),
+                silicon: getNumValue('silicon'),
+                chlorophyllA: getNumValue('chlorophyllA'),
+                copper: getNumValue('copper'),
+                zinc: getNumValue('zinc'),
+                lead: getNumValue('lead'),
+                mercury: getNumValue('mercury'),
+                cadmium: getNumValue('cadmium'),
+                chromium: getNumValue('chromium'),
+                nickel: getNumValue('nickel'),
+                arsenic: getNumValue('arsenic'),
+                aluminium: getNumValue('aluminium'),
+                iron: getNumValue('iron'),
+                manganese: getNumValue('manganese'),
+                selenium: getNumValue('selenium'),
+                tin: getNumValue('tin'),
+                vanadium: getNumValue('vanadium'),
+                antimony: getNumValue('antimony'),
+                cobalt: getNumValue('cobalt'),
+                silver: getNumValue('silver'),
+                phenol: getNumValue('phenol'),
+                totalPAH: getNumValue('totalPAH'),
+                totalPCB: getNumValue('totalPCB'),
+                lindane: getNumValue('lindane'),
+                DDT: getNumValue('DDT'),
+                aldrin: getNumValue('aldrin'),
+                dieldrin: getNumValue('dieldrin'),
+                assessmentType: assessmentType
+            };
+        }
+
+        // Helper function to determine ecosystem from salinity value
+        function getEcosystemFromSalinity(salinity) {
+            let ecosystem;
+            if (salinity <= 0.5) {
+                ecosystem = { 
+                    name: 'FRESHWATER - NOT SUPPORTED', 
+                    class: 'freshwater', 
+                    icon: '🚫', 
+                    guidelines: 'USE FRESHWATER TOOL', 
+                    ammoniaBaseline: 'Not applicable',
+                    blocked: true
+                };
+            } else if (salinity > 0.5 && salinity <= 5) {
+                ecosystem = { name: 'Upper Estuary', class: 'upper-estuary', icon: '🌿', guidelines: '2022 Marine + NEMP', ammoniaBaseline: '30-70 µg/L (estuarine)' };
+            } else if (salinity > 5 && salinity <= 18) {
+                ecosystem = { name: 'Middle Estuary', class: 'middle-estuary', icon: '🌊', guidelines: '2022 Marine + NEMP', ammoniaBaseline: '20-80 µg/L (estuarine)' };
+            } else if (salinity > 18 && salinity <= 30) {
+                ecosystem = { name: 'Lower Estuary', class: 'lower-estuary', icon: '🌊', guidelines: '2022 Marine + NEMP', ammoniaBaseline: '20-80 µg/L (estuarine)' };
+            } else {
+                ecosystem = { name: 'Marine', class: 'marine', icon: '🏖️', guidelines: '2022 Marine Guidelines', ammoniaBaseline: '5-25 µg/L (marine)' };
+            }
+            
+            return ecosystem;
+        }
+
+        function displayMultipleResults(assessments) {
+            const container = document.getElementById('marineResultsContent');
+            
+            // Summary statistics
+            const totalSamples = assessments.length;
+            let compliantSamples = 0;
+            let concernSamples = 0;
+            let violationSamples = 0;
+            
+            assessments.forEach(assessment => {
+                if (assessment.summary.violations > 0) {
+                    violationSamples++;
+                } else if (assessment.summary.concerns > 0) {
+                    concernSamples++;
+                } else {
+                    compliantSamples++;
+                }
+            });
+            
+            let html = `
+                <div class="card">
+                    <h3>📊 Multi-Sample Assessment Results</h3>
+                    <div style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <h4 style="margin-bottom: 15px; color: #0d47a1;">Batch Summary</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: #2196f3;">${totalSamples}</div>
+                                <div style="color: #666;">Total Samples</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: #4caf50;">${compliantSamples}</div>
+                                <div style="color: #666;">Compliant</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: #ff9800;">${concernSamples}</div>
+                                <div style="color: #666;">With Concerns</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: #f44336;">${violationSamples}</div>
+                                <div style="color: #666;">Violations</div>
+                            </div>
+                        </div>
+                    </div>
+            `;
+            
+            // Individual sample results
+            assessments.forEach((assessment, index) => {
+                const params = assessment.parameters;
+                const results = assessment.results;
+                const summary = assessment.summary;
+                
+                let statusClass = 'compliant';
+                let statusIcon = '✅';
+                let statusText = 'COMPLIANT';
+                
+                if (summary.violations > 0) {
+                    statusClass = 'violation';
+                    statusIcon = '⚠️';
+                    statusText = 'VIOLATIONS DETECTED';
+                } else if (summary.concerns > 0) {
+                    statusClass = 'concern';
+                    statusIcon = '⚠️';
+                    statusText = 'CONCERNS IDENTIFIED';
+                }
+                
+                html += `
+                    <div class="card" style="margin-top: 30px; border-left: 5px solid ${statusClass === 'violation' ? '#f44336' : statusClass === 'concern' ? '#ff9800' : '#4caf50'};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3>Sample ${assessment.sampleNumber}: ${params.sampleId}</h3>
+                            <span style="background: ${statusClass === 'violation' ? '#f44336' : statusClass === 'concern' ? '#ff9800' : '#4caf50'}; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600;">
+                                ${statusIcon} ${statusText}
+                            </span>
+                        </div>
+                        
+                        <div class="input-group" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <div><strong>Location:</strong> ${params.location || 'Not specified'}</div>
+                            <div><strong>Date:</strong> ${params.sampleDate || 'Not specified'}</div>
+                            <div><strong>Salinity:</strong> ${params.salinity.toFixed(1)} ppt</div>
+                            <div><strong>Assessment Type:</strong> ${params.assessmentType.charAt(0).toUpperCase() + params.assessmentType.slice(1)}</div>
+                        </div>
+                        
+                        <div style="margin: 15px 0;">
+                            <strong>Parameters Assessed:</strong> ${results.length} | 
+                            <span class="status-compliant">${summary.compliant} Compliant</span> | 
+                            <span class="status-concern">${summary.concerns} Concerns</span> | 
+                            <span class="status-exceeds">${summary.violations} Violations</span>
+                        </div>
+                        
+                        <details style="margin-top: 15px;">
+                            <summary style="cursor: pointer; font-weight: 600; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+                                📋 View Detailed Results
+                            </summary>
+                            <table class="results-table" style="margin-top: 15px;">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Measured Value</th>
+                                        <th>Guideline</th>
+                                        <th>Status</th>
+                                        <th>Assessment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+                
+                results.forEach(result => {
+                    html += `
+                        <tr>
+                            <td><strong>${result.parameter}</strong></td>
+                            <td>${result.value.toFixed(result.parameter.includes('Mercury') ? 3 : result.parameter.includes('Cadmium') ? 2 : 1)} ${result.unit}</td>
+                            <td>${result.guideline}<br><small style="color: #666;">${result.toxicLimit}</small></td>
+                            <td><span class="${result.statusClass}">${result.status}</span></td>
+                            <td>${result.message}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                                </tbody>
+                            </table>
+                        </details>
+                    </div>
+                `;
+            });
+            
+            html += `
+                </div>
+                
+                <div class="card">
+                    <h3>💡 Overall Recommendations</h3>
+            `;
+            
+            if (violationSamples > 0) {
+                html += `
+                    <div class="alert alert-danger">
+                        <strong>🚨 Priority Actions Required</strong><br>
+                        ${violationSamples} of ${totalSamples} samples show violations exceeding guidelines.
+                    </div>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Immediately report violations to relevant authorities (DFFE)</li>
+                        <li>Identify and control pollution sources at affected sites</li>
+                        <li>Conduct follow-up sampling to confirm results</li>
+                        <li>Implement corrective measures to address exceedances</li>
+                    </ul>
+                `;
+            } else if (concernSamples > 0) {
+                html += `
+                    <div class="alert alert-warning">
+                        <strong>⚠️ Monitoring Required</strong><br>
+                        ${concernSamples} of ${totalSamples} samples show elevated parameters requiring attention.
+                    </div>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Increase monitoring frequency for affected sites</li>
+                        <li>Investigate potential sources of nutrient/pollutant inputs</li>
+                        <li>Establish trend analysis over time</li>
+                        <li>Consider preventive measures to avoid further increases</li>
+                    </ul>
+                `;
+            } else {
+                html += `
+                    <div class="alert alert-success">
+                        <strong>✅ All Samples Compliant</strong><br>
+                        All ${totalSamples} samples meet water quality guidelines.
+                    </div>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Continue routine monitoring to maintain compliance</li>
+                        <li>Document baseline conditions for future comparison</li>
+                        <li>Maintain current water quality management practices</li>
+                    </ul>
+                `;
+            }
+            
+            html += `
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>📚 Regulatory Framework:</strong><br>
+                        This assessment is based on the South African Water Quality Guidelines for Coastal Marine Waters (2022) 
+                        and the National Estuarine Management Protocol (2013), enforced under the NEM: Integrated Coastal Management Act, 2008.
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn-secondary" onclick="showMarineSection('assessment')">← New Assessment</button>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            
+            // Show results tab and navigate to it
+            const resultsTab = document.getElementById('marineResultsTab');
+            if (resultsTab) resultsTab.style.display = 'inline-block';
+            showMarineSection('results');
+        }
+
+        // Assessment functions
+        function runAssessment() {
+            const params = collectParameters();
+            if (!validateParameters(params)) return;
+            
+            const assessment = performAssessment(params);
+            displayResults(assessment);
+            
+            // Show results section
+            document.getElementById('resultsTab').style.display = 'inline-block';
+            showSection('results');
+        }
+
+        function collectParameters() {
+            return {
+                // Sample info
+                sampleId: document.getElementById('sampleId').value || 'Unnamed Sample',
+                location: document.getElementById('location').value,
+                sampleDate: document.getElementById('sampleDate').value,
+                samplingDepth: parseFloat(document.getElementById('samplingDepth').value),
+                samplingRegion: document.getElementById('samplingRegion').value,
+                assessmentType: currentAssessmentType,
+                
+                // Core parameters
+                salinity: parseFloat(document.getElementById('salinity').value),
+                temperature: parseFloat(document.getElementById('temperature').value),
+                pH: parseFloat(document.getElementById('pH').value),
+                dissolvedOxygen: parseFloat(document.getElementById('dissolvedOxygen').value),
+                suspendedSolids: parseFloat(document.getElementById('suspendedSolids').value),
+                turbidity: parseFloat(document.getElementById('turbidity').value),
+                
+                // Nutrients
+                ammoniaTotal: parseFloat(document.getElementById('ammoniaTotal').value),
+                ammoniaBaseline: parseFloat(document.getElementById('ammoniaBaseline').value),
+                nitrate: parseFloat(document.getElementById('nitrate').value),
+                nitrite: parseFloat(document.getElementById('nitrite').value),
+                phosphorus: parseFloat(document.getElementById('phosphorus').value),
+                silicon: parseFloat(document.getElementById('silicon').value),
+                
+                // Metals
+                arsenic: parseFloat(document.getElementById('arsenic').value),
+                cadmium: parseFloat(document.getElementById('cadmium').value),
+                chromium: parseFloat(document.getElementById('chromium').value),
+                copper: parseFloat(document.getElementById('copper').value),
+                lead: parseFloat(document.getElementById('lead').value),
+                mercury: parseFloat(document.getElementById('mercury').value),
+                nickel: parseFloat(document.getElementById('nickel').value),
+                silver: parseFloat(document.getElementById('silver').value),
+                zinc: parseFloat(document.getElementById('zinc').value),
+                fluoride: parseFloat(document.getElementById('fluoride').value),
+                
+                // Organics
+                anthracene: parseFloat(document.getElementById('anthracene').value),
+                naphthalene: parseFloat(document.getElementById('naphthalene').value),
+                aldrin: parseFloat(document.getElementById('aldrin').value),
+                dieldrin: parseFloat(document.getElementById('dieldrin').value),
+                
+                // Mariculture-specific
+                chlorophenol2: parseFloat(document.getElementById('chlorophenol2').value),
+                chlorophenol3: parseFloat(document.getElementById('chlorophenol3').value),
+                chlorophenol4: parseFloat(document.getElementById('chlorophenol4').value)
+            };
+        }
+
+        function validateParameters(params) {
+            if (isNaN(params.salinity)) {
+                alert('Salinity is required for ecosystem classification.');
+                return false;
+            }
+            
+            if (!params.samplingRegion) {
+                alert('Please select a sampling region to apply appropriate regional baselines.');
+                return false;
+            }
+            
+            // BLOCK FRESHWATER ASSESSMENT
+            if (params.salinity <= 0.5) {
+                alert('⚠️ FRESHWATER DETECTED\n\nThis tool is designed for estuarine and marine waters only (salinity >0.5 ppt).\n\nFor freshwater assessment (salinity ≤0.5 ppt), please use the dedicated Freshwater Assessment Tool based on DWAF 1996 Volume 7: Aquatic Ecosystems guidelines.\n\nMinimum salinity for this tool: 0.5 ppt');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function performAssessment(params) {
+            // Use ecosystem from params if provided (multi-sample), otherwise get from DOM (single sample)
+            if (!params.ecosystem) {
+                const ecosystem = updateEcosystemType();
+                params.ecosystem = ecosystem;
+            }
+            
+            // Get regional baselines for the selected region if not already provided
+            if (!params.regionalBaselines) {
+                const regionalBaselines = getCurrentRegionalBaselines(params.samplingRegion);
+                params.regionalBaselines = regionalBaselines;
+            }
+            
+            let results = [];
+            let violations = 0;
+            let concerns = 0;
+            
+            // Assess fixed limit parameters
+            for (const [paramKey, value] of Object.entries(params)) {
+                if (isNaN(value) || value === null) continue;
+                
+                const guideline = fixedGuidelines[paramKey];
+                if (!guideline) continue;
+                
+                // Skip mariculture-only parameters for natural environment assessment
+                if (guideline.maricultureOnly && params.assessmentType !== 'mariculture') continue;
+                
+                let status, statusClass, message;
+                
+                if (value <= guideline.limit * 0.5) {
+                    status = 'COMPLIANT';
+                    statusClass = 'status-compliant';
+                    message = 'Well within guideline limits';
+                } else if (value <= guideline.limit) {
+                    status = 'ACCEPTABLE';
+                    statusClass = 'status-compliant';
+                    message = 'Within acceptable limits';
+                } else if (value <= guideline.limit * 2) {
+                    status = 'ELEVATED';
+                    statusClass = 'status-concern';
+                    message = `Moderately exceeds guideline (${(value / guideline.limit).toFixed(1)}× limit)`;
+                    concerns++;
+                } else {
+                    status = 'SIGNIFICANTLY EXCEEDS';
+                    statusClass = 'status-exceeds';
+                    message = `Significantly exceeds guideline (${(value / guideline.limit).toFixed(1)}× limit)`;
+                    violations++;
+                }
+
+                results.push({
+                    parameter: guideline.name,
+                    value: value,
+                    unit: 'µg/L',
+                    guideline: `≤${guideline.limit} µg/L`,
+                    toxicLimit: 'Chronic exposure',
+                    status: status,
+                    statusClass: statusClass,
+                    message: message
+                });
+            }
+            
+            // Assess gradient-specific parameters
+            if (!isNaN(params.fluoride)) {
+                const isEstuarine = params.salinity <= 30;
+                const limit = isEstuarine ? gradientLimits.fluoride.estuarine : gradientLimits.fluoride.marine;
+                
+                let status, statusClass, message;
+                if (params.fluoride <= limit) {
+                    status = 'COMPLIANT';
+                    statusClass = 'status-compliant';
+                    message = 'Within gradient-specific limits';
+                } else {
+                    status = 'EXCEEDS';
+                    statusClass = 'status-exceeds';
+                    message = `Exceeds ${isEstuarine ? 'estuarine' : 'marine'} limit (${(params.fluoride / limit).toFixed(1)}× limit)`;
+                    violations++;
+                }
+                
+                results.push({
+                    parameter: 'Fluoride (Acute)',
+                    value: params.fluoride,
+                    unit: 'µg/L',
+                    guideline: `≤${limit} µg/L (${isEstuarine ? 'estuarine' : 'marine'})`,
+                    toxicLimit: 'Acute exposure',
+                    status: status,
+                    statusClass: statusClass,
+                    message: message
+                });
+            }
+            
+            // Assess reference system parameters
+            assessReferenceSystemParameters(params, results, violations, concerns);
+            
+            return {
+                parameters: params,
+                results: results,
+                summary: {
+                    violations: violations,
+                    concerns: concerns,
+                    compliant: results.length - violations - concerns
+                }
+            };
+        }
+
+        function assessReferenceSystemParameters(params, results, violations, concerns) {
+            // Use regional baselines from the selected region
+            const baselines = params.regionalBaselines;
+            
+            // Assess temperature
+            if (!isNaN(params.temperature)) {
+                let status, statusClass, message;
+                if (params.temperature >= baselines.temperature.p20 && params.temperature <= baselines.temperature.p80) {
+                    status = 'WITHIN RANGE';
+                    statusClass = 'status-compliant';
+                    message = `Within expected range for ${baselines.name}`;
+                } else {
+                    status = 'OUTSIDE RANGE';
+                    statusClass = 'status-concern';
+                    message = params.temperature < baselines.temperature.p20 ? 
+                        `Below expected range for ${baselines.name}` : 
+                        `Above expected range for ${baselines.name}`;
+                    concerns++;
+                }
+                
+                results.push({
+                    parameter: 'Temperature',
+                    value: params.temperature,
+                    unit: '°C',
+                    guideline: `${baselines.temperature.p20}-${baselines.temperature.p80}°C (${baselines.name})`,
+                    toxicLimit: 'Regional baseline',
+                    status: status,
+                    statusClass: statusClass,
+                    message: message
+                });
+            }
+            
+            // pH assessment
+            if (!isNaN(params.pH)) {
+                let status, statusClass, message;
+                
+                // For mariculture, apply stricter ±0.5 units rule
+                if (params.assessmentType === 'mariculture') {
+                    const refpH = (baselines.pH.p20 + baselines.pH.p80) / 2;
+                    if (Math.abs(params.pH - refpH) <= 0.5) {
+                        status = 'ACCEPTABLE';
+                        statusClass = 'status-compliant';
+                        message = `Within mariculture pH tolerance (±0.5 units) for ${baselines.name}`;
+                    } else {
+                        status = 'EXCEEDS TOLERANCE';
+                        statusClass = 'status-concern';
+                        message = `Outside mariculture pH tolerance (±0.5 units from ${refpH.toFixed(2)}) for ${baselines.name}`;
+                        concerns++;
+                    }
+                } else {
+                    if (params.pH >= baselines.pH.p20 && params.pH <= baselines.pH.p80) {
+                        status = 'WITHIN RANGE';
+                        statusClass = 'status-compliant';
+                        message = `Within expected range for ${baselines.name}`;
+                    } else {
+                        status = 'OUTSIDE RANGE';
+                        statusClass = 'status-concern';
+                        message = `Outside expected range for ${baselines.name}`;
+                        concerns++;
+                    }
+                }
+                
+                results.push({
+                    parameter: 'pH',
+                    value: params.pH,
+                    unit: 'pH units',
+                    guideline: params.assessmentType === 'mariculture' ? 
+                        `±0.5 units from reference (${baselines.name})` : 
+                        `${baselines.pH.p20}-${baselines.pH.p80} (${baselines.name})`,
+                    toxicLimit: params.assessmentType === 'mariculture' ? 'Mariculture-specific' : 'Regional baseline',
+                    status: status,
+                    statusClass: statusClass,
+                    message: message
+                });
+            }
+            
+            // Dissolved Oxygen assessment
+            if (!isNaN(params.dissolvedOxygen)) {
+                let status, statusClass, message;
+                if (params.dissolvedOxygen >= baselines.dissolvedOxygen.p20) {
+                    status = 'ADEQUATE';
+                    statusClass = 'status-compliant';
+                    message = `Adequate oxygen levels for ${baselines.name}`;
+                } else if (params.dissolvedOxygen >= 5.0) {
+                    status = 'MODERATE';
+                    statusClass = 'status-concern';
+                    message = `Moderate levels for ${baselines.name} - may stress sensitive species`;
+                    concerns++;
+                } else {
+                    status = 'LOW';
+                    statusClass = 'status-exceeds';
+                    message = `Low oxygen for ${baselines.name} - harmful to aquatic life`;
+                    violations++;
+                }
+
+                results.push({
+                    parameter: 'Dissolved Oxygen',
+                    value: params.dissolvedOxygen,
+                    unit: 'mg/L',
+                    guideline: `≥${baselines.dissolvedOxygen.p20} mg/L (${baselines.name})`,
+                    toxicLimit: 'Regional baseline',
+                    status: status,
+                    statusClass: statusClass,
+                    message: message
+                });
+            }
+
+            // Suspended Solids assessment
+            if (!isNaN(params.suspendedSolids)) {
+                let status, statusClass, message;
+                if (params.suspendedSolids <= baselines.suspendedSolids.p80) {
+                    status = 'WITHIN RANGE';
+                    statusClass = 'status-compliant';
+                    message = `Within expected range for ${baselines.name}`;
+                } else {
+                    status = 'ELEVATED';
+                    statusClass = 'status-concern';
+                    message = `Above expected range for ${baselines.name}`;
+                    concerns++;
+                }
+
+                results.push({
+                    parameter: 'Suspended Solids',
+                    value: params.suspendedSolids,
+                    unit: 'mg/L',
+                    guideline: `≤${baselines.suspendedSolids.p80} mg/L (${baselines.name})`,
+                    toxicLimit: 'Regional baseline',
+                    status: status,
+                    statusClass: statusClass,
+                    message: message
+                });
+            }
+
+            // Turbidity assessment
+            if (!isNaN(params.turbidity)) {
+                let status, statusClass, message;
+                if (params.turbidity <= baselines.turbidity.p80) {
+                    status = 'WITHIN RANGE';
+                    statusClass = 'status-compliant';
+                    message = `Within expected range for ${baselines.name}`;
+                } else {
+                    status = 'ELEVATED';
+                    statusClass = 'status-concern';
+                    message = `Above expected range for ${baselines.name}`;
+                    concerns++;
+                }
+
+                results.push({
+                    parameter: 'Turbidity',
+                    value: params.turbidity,
+                    unit: 'NTU',
+                    guideline: `≤${baselines.turbidity.p80} NTU (${baselines.name})`,
+                    toxicLimit: 'Regional baseline',
+                    status: status,
+                    statusClass: statusClass,
+                    message: message
+                });
+            }
+
+            // Nutrient assessments using gradient-specific baselines
+            const isEstuarine = params.salinity <= 30;
+            
+            if (!isNaN(params.ammoniaBaseline)) {
+                const ammoniaRange = isEstuarine ? 
+                    baselines.nutrients.ammonia_est : 
+                    baselines.nutrients.ammonia_mar;
+                
+                const [minAmmonia, maxAmmonia] = ammoniaRange.split('-').map(x => parseFloat(x));
+                
+                let status, statusClass, message;
+                if (params.ammoniaBaseline >= minAmmonia && params.ammoniaBaseline <= maxAmmonia) {
+                    status = 'WITHIN BASELINE';
+                    statusClass = 'status-compliant';
+                    message = `Within ${isEstuarine ? 'estuarine' : 'marine'} baseline for ${baselines.name}`;
+                } else {
+                    status = 'OUTSIDE BASELINE';
+                    statusClass = 'status-concern';
+                    message = `Outside ${isEstuarine ? 'estuarine' : 'marine'} baseline for ${baselines.name}`;
+                    concerns++;
+                }
+
+                results.push({
+                    parameter: 'Ammonia (Baseline)',
+                    value: params.ammoniaBaseline,
+                    unit: 'µg/L as N',
+                    guideline: `${ammoniaRange} µg/L (${isEstuarine ? 'estuarine' : 'marine'}, ${baselines.name})`,
+                    toxicLimit: 'Regional gradient baseline',
+                    status: status,
+                    statusClass: statusClass,
+                    message: message
+                });
+            }
+
+            // Similar assessments for other nutrients...
+            assessNutrientParameter('nitrate', params.nitrate, baselines, isEstuarine, results, concerns, baselines.name);
+            assessNutrientParameter('nitrite', params.nitrite, baselines, isEstuarine, results, concerns, baselines.name);
+            assessNutrientParameter('phosphorus', params.phosphorus, baselines, isEstuarine, results, concerns, baselines.name);
+            assessNutrientParameter('silicon', params.silicon, baselines, isEstuarine, results, concerns, baselines.name);
+        }
+
+        // Helper function for nutrient assessment
+        function assessNutrientParameter(paramName, paramValue, baselines, isEstuarine, results, concerns, regionName) {
+            if (isNaN(paramValue)) return;
+            
+            const nutrientKey = paramName + (isEstuarine ? '_est' : '_mar');
+            const nutrientRange = baselines.nutrients[nutrientKey];
+            
+            if (!nutrientRange) return;
+            
+            const [minVal, maxVal] = nutrientRange.split('-').map(x => parseFloat(x));
+            
+            let status, statusClass, message;
+            if (paramValue >= minVal && paramValue <= maxVal) {
+                status = 'WITHIN BASELINE';
+                statusClass = 'status-compliant';
+                message = `Within ${isEstuarine ? 'estuarine' : 'marine'} baseline for ${regionName}`;
+            } else {
+                status = 'OUTSIDE BASELINE';
+                statusClass = 'status-concern';
+                message = `Outside ${isEstuarine ? 'estuarine' : 'marine'} baseline for ${regionName}`;
+                concerns++;
+            }
+
+            results.push({
+                parameter: paramName.charAt(0).toUpperCase() + paramName.slice(1),
+                value: paramValue,
+                unit: 'µg/L',
+                guideline: `${nutrientRange} µg/L (${isEstuarine ? 'estuarine' : 'marine'}, ${regionName})`,
+                toxicLimit: 'Regional gradient baseline',
+                status: status,
+                statusClass: statusClass,
+                message: message
+            });
+        }
+
+        function displayResults(assessment) {
+            const container = document.getElementById('marineResultsContent');
+            const params = assessment.parameters;
+            const results = assessment.results;
+            const summary = assessment.summary;
+
+            let html = `
+                <div class="card">
+                    <h3>📊 Assessment Results</h3>
+                    <div class="input-group">
+                        <div><strong>Sample ID:</strong> ${params.sampleId}</div>
+                        <div><strong>Location:</strong> ${params.location || 'Not specified'}</div>
+                        <div><strong>Date:</strong> ${params.sampleDate || 'Not specified'}</div>
+                        <div><strong>Assessment Type:</strong> ${params.assessmentType.charAt(0).toUpperCase() + params.assessmentType.slice(1)}</div>
+                    </div>
+                    <p><strong>Salinity:</strong> ${params.salinity.toFixed(1)} ppt</p>
+                    <p><strong>Regional Baselines Applied:</strong> ${params.regionalBaselines.name}</p>
+                </div>
+
+                <div class="ecosystem-indicator ${params.ecosystem.class}">
+                    <h4>${params.ecosystem.icon} Ecosystem Classification</h4>
+                    <p><strong>Type:</strong> ${params.ecosystem.name}</p>
+                    <p><strong>Guidelines Applied:</strong> ${params.ecosystem.guidelines}</p>
+                    <p><strong>Ammonia Baseline Used:</strong> ${params.ecosystem.ammoniaBaseline}</p>
+                    <p><strong>Regional Context:</strong> ${params.regionalBaselines.name} baseline values applied</p>
+                </div>
+
+                <div class="card">
+                    <h3>📈 Summary</h3>
+            `;
+
+            if (summary.violations > 0) {
+                html += `
+                    <div class="alert alert-danger">
+                        <strong>⚠️ VIOLATIONS DETECTED</strong><br>
+                        ${summary.violations} parameter(s) exceed guidelines and may pose environmental risk.
+                    </div>
+                `;
+            } else if (summary.concerns > 0) {
+                html += `
+                    <div class="alert alert-warning">
+                        <strong>⚠️ CONCERNS IDENTIFIED</strong><br>
+                        ${summary.concerns} parameter(s) elevated but not critically exceeding limits.
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="alert alert-success">
+                        <strong>✅ COMPLIANT</strong><br>
+                        All measured parameters within acceptable limits.
+                    </div>
+                `;
+            }
+
+            html += `
+                    <p style="margin-top: 15px;">
+                        <strong>Parameters Assessed:</strong> ${results.length}<br>
+                        <strong>Compliant:</strong> <span class="status-compliant">${summary.compliant}</span> | 
+                        <strong>Concerns:</strong> <span class="status-concern">${summary.concerns}</span> | 
+                        <strong>Violations:</strong> <span class="status-exceeds">${summary.violations}</span>
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>📋 Detailed Results</h3>
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Measured Value</th>
+                                <th>Guideline</th>
+                                <th>Status</th>
+                                <th>Assessment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            results.forEach(result => {
+                html += `
+                    <tr>
+                        <td><strong>${result.parameter}</strong></td>
+                        <td>${result.value.toFixed(result.parameter.includes('Mercury') ? 3 : result.parameter.includes('Cadmium') ? 2 : 1)} ${result.unit}</td>
+                        <td>${result.guideline}<br><small style="color: #666;">${result.toxicLimit}</small></td>
+                        <td><span class="${result.statusClass}">${result.status}</span></td>
+                        <td>${result.message}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h3>💡 Recommendations</h3>
+            `;
+
+            if (summary.violations > 0) {
+                html += `
+                    <p><strong>🚨 Priority Actions:</strong></p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Immediately report violations to relevant authorities (DFFE)</li>
+                        <li>Identify and control pollution sources</li>
+                        <li>Conduct follow-up sampling to confirm results</li>
+                        <li>Implement corrective measures to address exceedances</li>
+                        <li>Consider additional parameters for comprehensive assessment</li>
+                    </ul>
+                `;
+            } else if (summary.concerns > 0) {
+                html += `
+                    <p><strong>⚠️ Monitoring Actions:</strong></p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Increase monitoring frequency for elevated parameters</li>
+                        <li>Investigate potential sources of nutrient/pollutant inputs</li>
+                        <li>Establish trend analysis over time</li>
+                        <li>Consider preventive measures to avoid further increases</li>
+                    </ul>
+                `;
+            } else {
+                html += `
+                    <p><strong>✅ Maintenance Actions:</strong></p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Continue routine monitoring to maintain compliance</li>
+                        <li>Document baseline conditions for future comparison</li>
+                        <li>Maintain current water quality management practices</li>
+                    </ul>
+                `;
+            }
+
+            html += `
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>📚 Regulatory Framework:</strong><br>
+                        This assessment is based on the South African Water Quality Guidelines for Coastal Marine Waters (2022) 
+                        and the National Estuarine Management Protocol (2013), enforced under the NEM: Integrated Coastal Management Act, 2008.
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn-secondary" onclick="showMarineSection('assessment')">← New Assessment</button>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            
+            // Show results tab and navigate to it
+            const resultsTab = document.getElementById('marineResultsTab');
+            if (resultsTab) resultsTab.style.display = 'inline-block';
+            showMarineSection('results');
+        }
+
+
+
+        function clearForm() {
+            const inputs = document.querySelectorAll('#assessment input');
+            inputs.forEach(input => {
+                if (input.type === 'date') {
+                    input.valueAsDate = new Date();
+                } else {
+                    input.value = '';
+                }
+            });
+        }
+
+        // Initialize app when page loads
     </script>
 </body>
 </html>
