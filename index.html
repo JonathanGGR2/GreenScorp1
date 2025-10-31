@@ -1030,6 +1030,7 @@
                 <button class="nav-btn" onclick="showSection('sediment')">🏔️ Sediment Quality</button>
                 <button class="nav-btn" onclick="showSection('water')">💧 Water Quality</button>
                 <button class="nav-btn" onclick="showSection('marine')">🌊 Marine & Estuarine</button>
+                <button class="nav-btn" onclick="showSection('field')">📍 Field Data Collection</button>
             </div>
             <div class="user-info">
                 <span id="userDisplay">Welcome, User</span> |
@@ -1051,10 +1052,16 @@
                     </ul>
                     
                     <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 10px; border-left: 4px solid #4caf50;">
-                        <p style="margin: 0; color: #2c5530;"><strong>🔄 Version 2.0</strong></p>
+                        <p style="margin: 0; color: #2c5530;"><strong>🔄 Version 2.1</strong> <span style="font-size: 0.85rem; opacity: 0.8;">(Updated: 31 October 2025)</span></p>
                         <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #495057;">
-                            <strong>Recent Updates:</strong> Added comprehensive Marine & Estuarine Water Quality Assessment capability with support for both Natural Environment (ecosystem health protection) and Mariculture (aquaculture operations) assessments, featuring multi-sample batch processing and regional baseline integration for South African coastal waters.
+                            <strong>Recent Updates:</strong>
                         </p>
+                        <ul style="margin: 8px 0 0 0; padding-left: 20px; font-size: 0.9rem; color: #495057; line-height: 1.6;">
+                            <li>Added comprehensive Marine & Estuarine Water Quality Assessment capability with support for both Natural Environment (ecosystem health protection) and Mariculture (aquaculture operations) assessments, featuring multi-sample batch processing and regional baseline integration for South African coastal waters.</li>
+                            <li>Enhanced data persistence: Download all sample input sheets without losing your data - input samples, download the file, perform assessments, logout, login, upload the file, and continue exactly where you left off.</li>
+                            <li>Marine & Estuarine baseline configuration management: Save custom regional baseline values, download configuration files to share with colleagues, upload configuration files from team members, and revert to factory defaults when needed.</li>
+                            <li><strong>Beta:</strong> Field data collection tool - download your field data in one standardized digital format for seamless data management.</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -1105,6 +1112,13 @@
                         <p style="opacity: 0.9; margin-bottom: 25px; line-height: 1.6;">SA coastal water quality assessment with regional baselines. Natural environment and mariculture compliance evaluation.</p>
                         <button onclick="showSection('marine')" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Launch Tool</button>
                     </div>
+
+                    <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 15px; padding: 40px; text-align: center; box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">📍</div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 15px;">Field Data Collection</h3>
+                        <p style="opacity: 0.9; margin-bottom: 25px; line-height: 1.6;">Mobile-friendly field data capture tool. Record GPS coordinates, parameters, photos, and notes. Works offline!</p>
+                        <button onclick="showSection('field')" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Launch Tool</button>
+                    </div>
                 </div>
 
                 <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px; padding: 30px; margin-top: 40px; text-align: center;">
@@ -1141,6 +1155,11 @@
             <div id="marineSection" class="tool-content">
                 <div id="marineToolContainer"></div>
             </div>
+
+            <!-- FIELD DATA COLLECTION TOOL SECTION -->
+            <div id="fieldSection" class="tool-content">
+                <div id="fieldToolContainer"></div>
+            </div>
         </div>
     </div>
 
@@ -1156,7 +1175,7 @@
         };
 
         let currentUser = null;
-        let toolsLoaded = { sediment: false, water: false, marine: false };
+        let toolsLoaded = { sediment: false, water: false, marine: false, field: false };
         
         // Water Tool Variables
         let waterSampleCounter = 0;
@@ -1446,7 +1465,8 @@
             const targetButton = [...document.querySelectorAll('.nav-btn')].find(btn => 
                 btn.textContent.includes(sectionName === 'dashboard' ? 'Dashboard' : 
                                        sectionName === 'sediment' ? 'Sediment' : 
-                                       sectionName === 'water' ? 'Water' : 'Marine')
+                                       sectionName === 'water' ? 'Water' : 
+                                       sectionName === 'marine' ? 'Marine' : 'Field')
             );
             if (targetButton) {
                 targetButton.classList.add('active');
@@ -1461,6 +1481,9 @@
             } else if (sectionName === 'marine' && !toolsLoaded.marine) {
                 loadMarineTool();
                 toolsLoaded.marine = true;
+            } else if (sectionName === 'field' && !toolsLoaded.field) {
+                loadFieldTool();
+                toolsLoaded.field = true;
             }
         }
 
@@ -1504,6 +1527,19 @@
                     <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #8B4513; font-size: 1.1rem; background: #F5DEB3; border: 2px dashed #D2691E; border-radius: 15px; margin: 30px 0;">
                         <p style="margin-bottom: 20px;">🌾 No sediment samples added yet</p>
                         <p>Click "Add Sediment Sample" to get started with your soil quality assessment</p>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; border-radius: 15px; padding: 25px; margin: 30px 0;">
+                    <h4 style="color: #2c5530; margin: 0 0 15px 0; font-size: 1.1rem;">💾 Data Management</h4>
+                    <p style="color: #555; margin-bottom: 20px; font-size: 0.95rem;">Save your sediment sample data as a file to continue later or transfer to another device</p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button class="btn-primary" onclick="downloadSedimentData()" style="background: linear-gradient(135deg, #8B4513, #A0522D); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                            📥 Download Data File
+                        </button>
+                        <button class="btn-primary" onclick="uploadSedimentData()" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                            📤 Upload Previous Data
+                        </button>
                     </div>
                 </div>
 
@@ -1772,6 +1808,267 @@
             }
         }
 
+        // ============================================
+        // SEDIMENT TOOL - DOWNLOAD/UPLOAD FUNCTIONALITY
+        // ============================================
+        
+        function findParameterCategory(parameterKey) {
+            // Find which category a parameter belongs to
+            for (const [categoryKey, category] of Object.entries(sedimentParameterCategories)) {
+                if (category.parameters[parameterKey]) {
+                    return categoryKey;
+                }
+            }
+            return null;
+        }
+        
+        function collectCurrentSedimentSampleData() {
+            // Collect data from all visible sediment sample forms
+            const updatedSamples = [];
+            
+            sedimentSamples.forEach(sample => {
+                const sampleId = sample.id;
+                const sampleData = {
+                    id: sampleId,
+                    number: sample.number,
+                    sampleInfo: {},
+                    parameters: []
+                };
+                
+                // Collect basic sample info
+                const idField = document.getElementById(`${sampleId}_id`);
+                const sourceField = document.getElementById(`${sampleId}_source`);
+                const gpsField = document.getElementById(`${sampleId}_gps`);
+                
+                if (idField) sampleData.sampleInfo.id = idField.value || '';
+                if (sourceField) sampleData.sampleInfo.source = sourceField.value || '';
+                if (gpsField) sampleData.sampleInfo.gps = gpsField.value || '';
+                
+                // Collect all parameters from the form (metals and contaminants)
+                const parameterFields = document.querySelectorAll(`[id^="${sampleId}_"]:not([id$="_id"]):not([id$="_source"]):not([id$="_gps"])`);
+                parameterFields.forEach(field => {
+                    if (field.value && field.value.trim() !== '') {
+                        const paramName = field.id.replace(`${sampleId}_`, '');
+                        sampleData.parameters.push({
+                            name: paramName,
+                            value: field.value
+                        });
+                    }
+                });
+                
+                updatedSamples.push(sampleData);
+            });
+            
+            return updatedSamples;
+        }
+        
+        function downloadSedimentData() {
+            if (sedimentSamples.length === 0) {
+                alert('⚠️ No sediment samples to download. Please add at least one sample first.');
+                return;
+            }
+            
+            // Collect current data from forms
+            const currentSamples = collectCurrentSedimentSampleData();
+            
+            const exportData = {
+                tool: "Sediment Quality Assessment",
+                version: "2.0",
+                user: currentUser,
+                exportDate: new Date().toISOString(),
+                exportDateReadable: new Date().toLocaleString(),
+                sampleCount: currentSamples.length,
+                samples: currentSamples,
+                sampleCounter: sedimentSampleCounter
+            };
+            
+            // Create and download file
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `sediment-samples-${currentUser}-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            alert(`✅ Downloaded ${currentSamples.length} sediment sample(s) successfully!\n\nFile: sediment-samples-${currentUser}-${new Date().toISOString().split('T')[0]}.json`);
+        }
+        
+        function uploadSedimentData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        // Validate it's sediment tool data
+                        if (!data.tool || !data.tool.includes('Sediment')) {
+                            alert('⚠️ Invalid file! This does not appear to be a sediment quality data file.');
+                            return;
+                        }
+                        
+                        if (!data.samples || data.samples.length === 0) {
+                            alert('⚠️ No sample data found in this file.');
+                            return;
+                        }
+                        
+                        // Confirm before overwriting
+                        if (sedimentSamples.length > 0) {
+                            if (!confirm(`⚠️ You currently have ${sedimentSamples.length} sample(s).\n\nUploading this file will REPLACE your current samples with ${data.sampleCount} sample(s) from ${data.exportDateReadable || data.exportDate}.\n\nContinue?`)) {
+                                return;
+                            }
+                        }
+                        
+                        // Clear current samples
+                        sedimentSamples = [];
+                        sedimentSampleCounter = data.sampleCounter || 0;
+                        
+                        // Restore samples from file
+                        data.samples.forEach((sampleData, index) => {
+                            sedimentSampleCounter++;
+                            const sampleId = `sediment_sample_${sedimentSampleCounter}`;
+                            
+                            // Reconstruct parameters array with key and category
+                            const parametersArray = [];
+                            if (sampleData.parameters && sampleData.parameters.length > 0) {
+                                sampleData.parameters.forEach(param => {
+                                    const category = findParameterCategory(param.name);
+                                    if (category) {
+                                        parametersArray.push({
+                                            key: param.name,
+                                            category: category
+                                        });
+                                    }
+                                });
+                            }
+                            
+                            // Create sample object for tracking WITH parameters array
+                            sedimentSamples.push({
+                                id: sampleId,
+                                number: sampleData.number || (index + 1),
+                                parameters: parametersArray
+                            });
+                            
+                            // Add sample to UI
+                            const container = document.getElementById('sedimentSamplesContainer');
+                            const emptyState = container.querySelector('.empty-state');
+                            if (emptyState) emptyState.remove();
+                            
+                            // Create sample HTML
+                            const sampleHTML = createUploadedSedimentSample(sampleId, sampleData);
+                            container.insertAdjacentHTML('beforeend', sampleHTML);
+                        });
+                        
+                        alert(`✅ Successfully uploaded ${data.sampleCount} sediment sample(s)!\n\nFrom: ${data.exportDateReadable || data.exportDate}\nUser: ${data.user}`);
+                        
+                    } catch (err) {
+                        alert('⚠️ Failed to load file. Please ensure it is a valid JSON file from this tool.');
+                        console.error('Upload error:', err);
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+        
+        function createUploadedSedimentSample(sampleId, sampleData) {
+            const number = sampleData.number;
+            const info = sampleData.sampleInfo || {};
+            
+            let parametersHTML = '';
+            if (sampleData.parameters && sampleData.parameters.length > 0) {
+                sampleData.parameters.forEach(param => {
+                    const paramLabel = formatSedimentParameterName(param.name);
+                    parametersHTML += `
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #8B4513;">${paramLabel}</label>
+                            <input type="number" step="any" id="${sampleId}_${param.name}" value="${param.value}" style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem;">
+                        </div>
+                    `;
+                });
+            }
+            
+            return `
+                <div class="sediment-sample" data-sample-id="${sampleId}" style="background: white; border: 2px solid #D2691E; border-radius: 15px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);">
+                    <div class="sample-header" style="background: linear-gradient(135deg, #F5DEB3, #DEB887); padding: 20px 25px; border-bottom: 2px solid #D2691E; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 1.4rem; font-weight: 600; color: #8B4513; margin: 0;">Sediment Sample ${number}</h3>
+                        <button onclick="removeSedimentSample('${sampleId}')" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
+                            🗑️ Remove Sample
+                        </button>
+                    </div>
+                    <div class="sample-content" style="padding: 25px;">
+                        <div style="background: #F5F5DC; padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 2px solid #D2691E;">
+                            <h4 style="color: #8B4513; margin-bottom: 15px;">📋 Sample Information</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #8B4513;">Sample ID</label>
+                                    <input type="text" id="${sampleId}_id" value="${info.id || ''}" style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #8B4513;">Source/Location</label>
+                                    <input type="text" id="${sampleId}_source" value="${info.source || ''}" style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #8B4513;">GPS Coordinates</label>
+                                    <input type="text" id="${sampleId}_gps" value="${info.gps || ''}" style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px;">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #FFF8DC, #F5DEB3); padding: 20px; border-radius: 10px; border: 2px solid #D2691E;">
+                            <h4 style="color: #8B4513; margin-bottom: 20px;">🧪 Sediment Quality Parameters</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                ${parametersHTML || '<p style="color: #666;">No parameters found in uploaded data</p>'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function formatSedimentParameterName(paramKey) {
+            // Convert parameter key to readable label
+            const paramLabels = {
+                'arsenic': 'Arsenic (As) - mg/kg',
+                'cadmium': 'Cadmium (Cd) - mg/kg',
+                'chromium': 'Chromium (Cr) - mg/kg',
+                'copper': 'Copper (Cu) - mg/kg',
+                'lead': 'Lead (Pb) - mg/kg',
+                'mercury': 'Mercury (Hg) - mg/kg',
+                'nickel': 'Nickel (Ni) - mg/kg',
+                'zinc': 'Zinc (Zn) - mg/kg',
+                'antimony': 'Antimony (Sb) - mg/kg',
+                'beryllium': 'Beryllium (Be) - mg/kg',
+                'boron': 'Boron (B) - mg/kg',
+                'cobalt': 'Cobalt (Co) - mg/kg',
+                'molybdenum': 'Molybdenum (Mo) - mg/kg',
+                'selenium': 'Selenium (Se) - mg/kg',
+                'silver': 'Silver (Ag) - mg/kg',
+                'thallium': 'Thallium (Tl) - mg/kg',
+                'vanadium': 'Vanadium (V) - mg/kg',
+                'benzo_a_pyrene': 'Benzo(a)pyrene - mg/kg',
+                'phenol': 'Phenol - mg/kg',
+                'cresol': 'Cresol - mg/kg',
+                'benzene': 'Benzene - mg/kg',
+                'toluene': 'Toluene - mg/kg',
+                'ethylbenzene': 'Ethylbenzene - mg/kg',
+                'xylene': 'Xylene - mg/kg'
+            };
+            
+            return paramLabels[paramKey] || paramKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
         function performSedimentAnalysis() {
             if (sedimentSamples.length === 0) {
                 alert('Please add at least one sediment sample before running analysis');
@@ -2010,6 +2307,19 @@
                     <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #6c757d; font-size: 1.1rem; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 15px; margin: 30px 0;">
                         <p style="margin-bottom: 20px;">🌊 No water samples added yet</p>
                         <p>Click "Add Water Sample" to get started with your water quality assessment</p>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; border-radius: 15px; padding: 25px; margin: 30px 0;">
+                    <h4 style="color: #2c5530; margin: 0 0 15px 0; font-size: 1.1rem;">💾 Data Management</h4>
+                    <p style="color: #555; margin-bottom: 20px; font-size: 0.95rem;">Save your sample data as a file to continue later or transfer to another device</p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button class="btn-primary" onclick="downloadWaterData()" style="background: linear-gradient(135deg, #3498db, #2980b9); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                            📥 Download Data File
+                        </button>
+                        <button class="btn-primary" onclick="uploadWaterData()" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                            📤 Upload Previous Data
+                        </button>
                     </div>
                 </div>
 
@@ -2406,6 +2716,250 @@
             alert(`Result (${result} mg N/L) has been entered into the Ammonia (NH₃) Unionized field`);
         }
 
+        // ============================================
+        // WATER TOOL - DOWNLOAD/UPLOAD FUNCTIONALITY
+        // ============================================
+        
+        function collectCurrentWaterSampleData() {
+            // Collect data from all visible water sample forms
+            const updatedSamples = [];
+            
+            waterSamples.forEach(sample => {
+                const sampleId = sample.id;
+                const sampleData = {
+                    id: sampleId,
+                    number: sample.number,
+                    sampleInfo: {},
+                    parameters: []
+                };
+                
+                // Collect basic sample info
+                const idField = document.getElementById(`${sampleId}_id`);
+                const waterbodyField = document.getElementById(`${sampleId}_waterbody`);
+                const gpsField = document.getElementById(`${sampleId}_gps`);
+                
+                if (idField) sampleData.sampleInfo.id = idField.value || '';
+                if (waterbodyField) sampleData.sampleInfo.source = waterbodyField.value || '';
+                if (gpsField) sampleData.sampleInfo.gps = gpsField.value || '';
+                
+                // Collect all parameters from the form
+                const parameterFields = document.querySelectorAll(`[id^="${sampleId}_"]:not([id$="_id"]):not([id$="_waterbody"]):not([id$="_gps"]):not([id$="_parameterSelect"]):not([id$="_parameterList"])`);
+                parameterFields.forEach(field => {
+                    if (field.value && field.value.trim() !== '') {
+                        const paramName = field.id.replace(`${sampleId}_`, '');
+                        sampleData.parameters.push({
+                            name: paramName,
+                            value: field.value
+                        });
+                    }
+                });
+                
+                updatedSamples.push(sampleData);
+            });
+            
+            return updatedSamples;
+        }
+        
+        function downloadWaterData() {
+            if (waterSamples.length === 0) {
+                alert('⚠️ No water samples to download. Please add at least one sample first.');
+                return;
+            }
+            
+            // Collect current data from forms
+            const currentSamples = collectCurrentWaterSampleData();
+            
+            const exportData = {
+                tool: "Water Quality Assessment",
+                version: "2.0",
+                user: currentUser,
+                exportDate: new Date().toISOString(),
+                exportDateReadable: new Date().toLocaleString(),
+                sampleCount: currentSamples.length,
+                samples: currentSamples,
+                sampleCounter: waterSampleCounter
+            };
+            
+            // Create and download file
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `water-samples-${currentUser}-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            alert(`✅ Downloaded ${currentSamples.length} water sample(s) successfully!\n\nFile: water-samples-${currentUser}-${new Date().toISOString().split('T')[0]}.json`);
+        }
+        
+        function uploadWaterData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        // Validate it's water tool data
+                        if (!data.tool || !data.tool.includes('Water')) {
+                            alert('⚠️ Invalid file! This does not appear to be a water quality data file.');
+                            return;
+                        }
+                        
+                        if (!data.samples || data.samples.length === 0) {
+                            alert('⚠️ No sample data found in this file.');
+                            return;
+                        }
+                        
+                        // Confirm before overwriting
+                        if (waterSamples.length > 0) {
+                            if (!confirm(`⚠️ You currently have ${waterSamples.length} sample(s).\n\nUploading this file will REPLACE your current samples with ${data.sampleCount} sample(s) from ${data.exportDateReadable || data.exportDate}.\n\nContinue?`)) {
+                                return;
+                            }
+                        }
+                        
+                        // Clear current samples
+                        waterSamples = [];
+                        waterSampleCounter = data.sampleCounter || 0;
+                        
+                        // Restore samples from file
+                        data.samples.forEach((sampleData, index) => {
+                            waterSampleCounter++;
+                            const sampleId = `water_sample_${waterSampleCounter}`;
+                            
+                            // Extract parameter keys from uploaded data
+                            const parameterKeys = sampleData.parameters && sampleData.parameters.length > 0 
+                                ? sampleData.parameters.map(p => p.name) 
+                                : [];
+                            
+                            console.log('Uploading water sample:', sampleId, 'with parameters:', parameterKeys);
+                            
+                            // Create sample object for tracking
+                            waterSamples.push({
+                                id: sampleId,
+                                number: sampleData.number || (index + 1),
+                                parameters: parameterKeys
+                            });
+                            
+                            // Add sample to UI
+                            const container = document.getElementById('waterSamplesContainer');
+                            const emptyState = container.querySelector('.empty-state');
+                            if (emptyState) emptyState.remove();
+                            
+                            // Create sample HTML (simplified for upload)
+                            const sampleHTML = createUploadedWaterSample(sampleId, sampleData);
+                            container.insertAdjacentHTML('beforeend', sampleHTML);
+                        });
+                        
+                        alert(`✅ Successfully uploaded ${data.sampleCount} water sample(s)!\n\nFrom: ${data.exportDateReadable || data.exportDate}\nUser: ${data.user}`);
+                        
+                    } catch (err) {
+                        alert('⚠️ Failed to load file. Please ensure it is a valid JSON file from this tool.');
+                        console.error('Upload error:', err);
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+        
+        function createUploadedWaterSample(sampleId, sampleData) {
+            const number = sampleData.number;
+            const info = sampleData.sampleInfo || {};
+            
+            let parametersHTML = '';
+            if (sampleData.parameters && sampleData.parameters.length > 0) {
+                sampleData.parameters.forEach(param => {
+                    const paramDef = waterParameterDefinitions[param.name];
+                    const paramLabel = paramDef ? paramDef.name : formatParameterName(param.name);
+                    parametersHTML += `
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #2c3e50;">${paramLabel}</label>
+                            <input type="number" id="${sampleId}_${param.name}" value="${param.value}" 
+                                   step="${paramDef ? paramDef.step : '0.001'}"
+                                   style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem;">
+                        </div>
+                    `;
+                });
+            }
+            
+            return `
+                <div data-sample-id="${sampleId}" style="background: white; border: 2px solid #3498db; border-radius: 15px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);">
+                    <div style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); padding: 20px 25px; border-bottom: 2px solid #3498db; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 1.4rem; font-weight: 600; color: #2c3e50; margin: 0;">Water Sample ${number}</h3>
+                        <button onclick="removeWaterSample('${sampleId}')" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
+                            🗑️ Remove Sample
+                        </button>
+                    </div>
+                    <div style="padding: 30px;">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
+                            <h4 style="color: #2c3e50; margin-bottom: 15px;">📋 Sample Information</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #2c3e50;">Sample ID</label>
+                                    <input type="text" id="${sampleId}_id" value="${info.id || ''}" style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #2c3e50;">Water Body</label>
+                                    <input type="text" id="${sampleId}_waterbody" value="${info.source || ''}" style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #2c3e50;">GPS Coordinates</label>
+                                    <input type="text" id="${sampleId}_gps" value="${info.gps || ''}" style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px;">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #e8f5e9, #f1f8e9); padding: 20px; border-radius: 10px; border: 2px solid #4caf50;">
+                            <h4 style="color: #2e7d32; margin-bottom: 20px;">📊 Water Quality Parameters</h4>
+                            ${parametersHTML || '<p style="color: #666;">No parameters found in uploaded data</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function formatParameterName(paramKey) {
+            // Convert parameter key to readable label
+            const paramLabels = {
+                'ph': 'pH',
+                'temperature': 'Temperature (°C)',
+                'ec': 'Electrical Conductivity (mS/m)',
+                'tds': 'Total Dissolved Solids (mg/L)',
+                'turbidity': 'Turbidity (NTU)',
+                'chloride': 'Chloride (mg/L)',
+                'sulphate': 'Sulphate (mg/L)',
+                'fluoride': 'Fluoride (mg/L)',
+                'nitrate': 'Nitrate (mg N/L)',
+                'nitrite': 'Nitrite (mg N/L)',
+                'ammonia_unionized': 'Ammonia (NH₃) Unionized (mg N/L)',
+                'phosphate': 'Phosphate (mg P/L)',
+                'aluminium': 'Aluminium (mg/L)',
+                'iron': 'Iron (mg/L)',
+                'manganese': 'Manganese (mg/L)',
+                'copper': 'Copper (mg/L)',
+                'zinc': 'Zinc (mg/L)',
+                'chromium': 'Chromium (mg/L)',
+                'lead': 'Lead (mg/L)',
+                'cadmium': 'Cadmium (mg/L)',
+                'mercury': 'Mercury (mg/L)',
+                'arsenic': 'Arsenic (mg/L)',
+                'cyanide': 'Cyanide (mg/L)'
+            };
+            
+            return paramLabels[paramKey] || paramKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
         function performWaterAnalysis() {
             if (waterSamples.length === 0) {
                 alert('Please add at least one water sample before running analysis');
@@ -2422,8 +2976,12 @@
 
         function analyzeWaterCompliance() {
             const allResults = [];
+            
+            console.log('Starting water analysis with', waterSamples.length, 'samples');
 
             waterSamples.forEach(sample => {
+                console.log('Analyzing sample:', sample.id, 'with parameters:', sample.parameters);
+                
                 const sampleResults = {
                     sampleId: sample.id,
                     sampleNumber: sample.number,
@@ -2437,7 +2995,14 @@
 
                 sample.parameters.forEach(parameterKey => {
                     const inputElement = document.getElementById(`${sample.id}_${parameterKey}`);
+                    
+                    if (!inputElement) {
+                        console.warn(`Input element not found for ${sample.id}_${parameterKey}`);
+                        return;
+                    }
+                    
                     const value = parseFloat(inputElement.value);
+                    console.log(`Reading ${parameterKey}: ${value} from element ${sample.id}_${parameterKey}`);
 
                     if (!isNaN(value) && waterStandards[parameterKey]) {
                         const standard = waterStandards[parameterKey];
@@ -3048,13 +3613,42 @@
 
                     <div class="info-box" style="margin-top: 25px;">
                         <strong>💾 Saving Settings:</strong><br>
-                        Your baseline settings are automatically saved in browser storage and will persist between sessions. 
-                        For sharing between devices, note down your custom values or use the export feature.
+                        Click "Save Configuration" to store your baseline settings in browser storage - they will persist between sessions. 
+                        To share configurations with colleagues or transfer between devices, use the "Download Config File" button below to create a shareable JSON file.
                     </div>
 
-                    <div style="text-align: center; margin-top: 20px;">
-                        <button class="btn-primary" onclick="saveBaselines()">💾 Save Baselines</button>
-                        <button class="btn-secondary" onclick="exportBaselines()">📤 Export Settings</button>
+                    <!-- Configuration Management Section -->
+                    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 2px solid #e0e0e0;">
+                        <h4 style="margin-top: 0; color: #2c5aa0;">⚙️ Configuration Management</h4>
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 20px;">
+                            Save your custom baseline values, share configurations with colleagues, or revert to factory defaults.
+                        </p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <button class="btn-primary" onclick="saveBaselines()">
+                                💾 Save Configuration
+                            </button>
+                            <button class="btn-secondary" onclick="downloadConfiguration()">
+                                📥 Download Config File
+                            </button>
+                            <button class="btn-secondary" onclick="document.getElementById('configUploadInput').click()">
+                                📤 Upload Config File
+                            </button>
+                            <button class="btn-secondary" onclick="revertToFactoryDefaults()" style="background: #dc3545; border-color: #dc3545;">
+                                🔄 Revert to Factory Defaults
+                            </button>
+                        </div>
+                        
+                        <!-- Hidden file input for upload -->
+                        <input type="file" id="configUploadInput" accept=".json" style="display: none;" onchange="uploadConfiguration(event)">
+                        
+                        <div class="info-box" style="margin-top: 15px; font-size: 0.85rem;">
+                            <strong>📝 How it works:</strong><br>
+                            • <strong>Save:</strong> Stores current values in your browser<br>
+                            • <strong>Download:</strong> Creates a JSON file with ALL regional configurations for sharing<br>
+                            • <strong>Upload:</strong> Loads a configuration file from a colleague<br>
+                            • <strong>Revert:</strong> Resets ALL regions back to original factory values
+                        </div>
                     </div>
 
                     <div style="text-align: center; margin-top: 30px;">
@@ -3108,6 +3702,22 @@
                         <button class="btn-primary" onclick="runAllMarineAssessments()" id="runAllBtn" style="display: none;">
                             🔬 Run All Assessments
                         </button>
+                    </div>
+                    
+                    <!-- Download/Upload Controls -->
+                    <div style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); padding: 25px; border-radius: 15px; margin: 30px 0; border: 2px solid #4caf50;">
+                        <h3 style="color: #2e7d32; margin-bottom: 15px; font-size: 1.3rem;">💾 Save & Load Marine Data</h3>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                            <button class="btn-secondary" onclick="downloadMarineData()" style="background: linear-gradient(135deg, #66bb6a, #43a047); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                                📥 Download Current Samples
+                            </button>
+                            <button class="btn-primary" onclick="uploadMarineData()" style="background: linear-gradient(135deg, #ab47bc, #8e24aa); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                                📤 Upload Saved Samples
+                            </button>
+                        </div>
+                        <p style="text-align: center; margin-top: 15px; color: #558b2f; font-size: 0.95rem;">
+                            💡 <strong>Tip:</strong> Download to save your marine samples as a JSON file, then upload later to restore them.
+                        </p>
                     </div>
 
                     <!-- Sample Template (hidden, used for cloning) -->
@@ -3730,6 +4340,234 @@
             link.click();
         }
 
+        // New Configuration Management Functions
+        
+        /**
+         * Download Configuration - Downloads ALL regional baseline configurations
+         * Includes both modified and default values for all regions
+         */
+        function downloadConfiguration() {
+            try {
+                // Get all saved baselines from localStorage
+                const allSavedBaselines = JSON.parse(localStorage.getItem('saMarineBaselines') || '{}');
+                
+                // Create a complete configuration object with ALL regions
+                const fullConfiguration = {
+                    metadata: {
+                        exportDate: new Date().toISOString(),
+                        exportDateFormatted: new Date().toLocaleString(),
+                        version: "1.0",
+                        description: "South African Marine & Estuarine Regional Baseline Configuration"
+                    },
+                    regions: {}
+                };
+                
+                // Get all region keys from regionalDefaults
+                const allRegionKeys = Object.keys(regionalDefaults);
+                
+                // For each region, include either saved custom values or factory defaults
+                allRegionKeys.forEach(regionKey => {
+                    if (allSavedBaselines[regionKey]) {
+                        // Use saved custom values
+                        fullConfiguration.regions[regionKey] = {
+                            ...allSavedBaselines[regionKey],
+                            isModified: true
+                        };
+                    } else {
+                        // Use factory defaults
+                        fullConfiguration.regions[regionKey] = {
+                            ...regionalDefaults[regionKey],
+                            isModified: false
+                        };
+                    }
+                });
+                
+                // Create and download the file
+                const dataStr = JSON.stringify(fullConfiguration, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                const dateStr = new Date().toISOString().split('T')[0];
+                link.download = `marine-baseline-config-${dateStr}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                alert(`✅ Configuration downloaded successfully!\n\n` +
+                      `File: marine-baseline-config-${dateStr}.json\n` +
+                      `Contains: All ${allRegionKeys.length} regional configurations\n\n` +
+                      `You can now share this file with colleagues or use it as a backup.`);
+                
+            } catch (error) {
+                console.error('Error downloading configuration:', error);
+                alert(`❌ Error downloading configuration:\n${error.message}\n\nPlease try again.`);
+            }
+        }
+        
+        /**
+         * Upload Configuration - Uploads a configuration file and applies it
+         * Warns user about overwriting current values
+         */
+        function uploadConfiguration(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Confirm before overwriting
+            const userConfirmed = confirm(
+                `⚠️ Upload Configuration File?\n\n` +
+                `This will OVERWRITE your current regional baseline values with the values from this file.\n\n` +
+                `File: ${file.name}\n` +
+                `Current saved configurations will be replaced.\n\n` +
+                `Do you want to continue?`
+            );
+            
+            if (!userConfirmed) {
+                // Reset the file input
+                event.target.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const configData = JSON.parse(e.target.result);
+                    
+                    // Validate the file structure
+                    if (!configData.regions || typeof configData.regions !== 'object') {
+                        throw new Error('Invalid configuration file format: missing or invalid "regions" data');
+                    }
+                    
+                    // Check if regions data is empty
+                    if (Object.keys(configData.regions).length === 0) {
+                        throw new Error('Configuration file contains no region data');
+                    }
+                    
+                    // Validate each region has required structure
+                    const requiredFields = ['name', 'temperature', 'salinity', 'pH', 'dissolvedOxygen', 
+                                           'suspendedSolids', 'turbidity', 'nutrients'];
+                    
+                    let validRegions = 0;
+                    for (const [regionKey, regionData] of Object.entries(configData.regions)) {
+                        // Check if this region has all required fields
+                        const hasAllFields = requiredFields.every(field => 
+                            regionData.hasOwnProperty(field)
+                        );
+                        
+                        if (hasAllFields) {
+                            validRegions++;
+                        } else {
+                            console.warn(`Region ${regionKey} is missing some required fields`);
+                        }
+                    }
+                    
+                    if (validRegions === 0) {
+                        throw new Error('No valid regions found in configuration file');
+                    }
+                    
+                    // Apply the configuration
+                    // Save the entire regions object to localStorage
+                    localStorage.setItem('saMarineBaselines', JSON.stringify(configData.regions));
+                    
+                    // If we're currently viewing one of the uploaded regions, refresh the display
+                    const currentRegionKey = document.getElementById('regionSelect').value;
+                    if (configData.regions[currentRegionKey]) {
+                        loadRegionalDefaults();
+                    }
+                    
+                    // Show success message
+                    const uploadDate = configData.metadata?.exportDateFormatted || 'Unknown date';
+                    alert(
+                        `✅ Configuration uploaded successfully!\n\n` +
+                        `Loaded ${validRegions} regional configuration(s)\n` +
+                        `Original export date: ${uploadDate}\n\n` +
+                        `All regional baseline values have been updated.\n` +
+                        `Select a region from the dropdown to view the new values.`
+                    );
+                    
+                } catch (error) {
+                    console.error('Error uploading configuration:', error);
+                    alert(
+                        `❌ Error uploading configuration file:\n\n` +
+                        `${error.message}\n\n` +
+                        `Please ensure you're uploading a valid marine baseline configuration file.`
+                    );
+                }
+                
+                // Reset the file input so the same file can be uploaded again if needed
+                event.target.value = '';
+            };
+            
+            reader.onerror = function() {
+                alert(`❌ Error reading file. Please try again.`);
+                event.target.value = '';
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        /**
+         * Revert to Factory Defaults - Resets ALL regional baselines to original values
+         * Clears all saved configurations from localStorage
+         */
+        function revertToFactoryDefaults() {
+            // Show confirmation dialog
+            const userConfirmed = confirm(
+                `⚠️ REVERT TO FACTORY DEFAULTS?\n\n` +
+                `This will permanently reset ALL regional baseline configurations back to their original factory values.\n\n` +
+                `This action will:\n` +
+                `• Delete all saved custom baseline values\n` +
+                `• Reset all regions to factory defaults\n` +
+                `• Clear browser storage for baselines\n\n` +
+                `This CANNOT be undone!\n\n` +
+                `Are you sure you want to continue?`
+            );
+            
+            if (!userConfirmed) {
+                return;
+            }
+            
+            // Double confirmation for safety
+            const doubleConfirm = confirm(
+                `🔴 FINAL CONFIRMATION\n\n` +
+                `You are about to delete ALL custom baseline configurations.\n\n` +
+                `Click OK to proceed with factory reset.`
+            );
+            
+            if (!doubleConfirm) {
+                return;
+            }
+            
+            try {
+                // Clear the localStorage for baselines
+                localStorage.removeItem('saMarineBaselines');
+                
+                // Reset the UI to show Cape West factory defaults
+                document.getElementById('regionSelect').value = 'capeWest';
+                loadRegionalDefaults();
+                
+                alert(
+                    `✅ Factory Reset Complete!\n\n` +
+                    `All regional baseline configurations have been reset to factory defaults.\n\n` +
+                    `• All custom values have been cleared\n` +
+                    `• Browser storage has been reset\n` +
+                    `• Currently displaying: Cape Town / West Coast defaults\n\n` +
+                    `You can now configure new baseline values as needed.`
+                );
+                
+            } catch (error) {
+                console.error('Error reverting to factory defaults:', error);
+                alert(
+                    `❌ Error during factory reset:\n\n` +
+                    `${error.message}\n\n` +
+                    `Please refresh the page and try again.`
+                );
+            }
+        }
+
+
         // Regional context updating
         function updateRegionalContext() {
             const regionSelect = document.getElementById('samplingRegion');
@@ -3858,6 +4696,169 @@
         // Multi-Sample Management Functions
         let sampleCounter = 0;
 
+        function collectCurrentMarineSampleData() {
+            // Collect data from all visible marine sample forms
+            const sampleCards = document.querySelectorAll('.sample-card');
+            const samples = [];
+            
+            sampleCards.forEach((card, index) => {
+                const sampleId = index + 1;
+                const sampleData = {
+                    number: sampleId,
+                    sampleInfo: {},
+                    parameters: {}
+                };
+                
+                // Get all input fields in this sample card
+                const inputs = card.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    if (input.value && input.value.trim() !== '') {
+                        // Extract the parameter name from the input ID
+                        const paramName = input.id.replace('_' + sampleId, '');
+                        
+                        // Categorize as sample info or parameter
+                        if (['sampleId', 'location', 'samplingRegion', 'sampleDate', 'samplingDepth'].includes(paramName)) {
+                            sampleData.sampleInfo[paramName] = input.value;
+                        } else {
+                            sampleData.parameters[paramName] = input.value;
+                        }
+                    }
+                });
+                
+                samples.push(sampleData);
+            });
+            
+            return samples;
+        }
+        
+        function downloadMarineData() {
+            const sampleCards = document.querySelectorAll('.sample-card');
+            if (sampleCards.length === 0) {
+                alert('⚠️ No marine samples to download. Please add at least one sample first.');
+                return;
+            }
+            
+            // Collect current data from forms
+            const currentSamples = collectCurrentMarineSampleData();
+            
+            const exportData = {
+                tool: "Marine & Estuarine Water Quality Assessment",
+                version: "1.0",
+                user: currentUser,
+                exportDate: new Date().toISOString(),
+                exportDateReadable: new Date().toLocaleString(),
+                sampleCount: currentSamples.length,
+                samples: currentSamples,
+                sampleCounter: sampleCounter
+            };
+            
+            // Create and download file
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `marine-samples-${currentUser}-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            alert(`✅ Downloaded ${currentSamples.length} marine sample(s) successfully!\n\nFile: marine-samples-${currentUser}-${new Date().toISOString().split('T')[0]}.json`);
+        }
+        
+        function uploadMarineData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        // Validate it's marine tool data
+                        if (!data.tool || !data.tool.includes('Marine')) {
+                            alert('⚠️ Invalid file! This does not appear to be a marine quality data file.');
+                            return;
+                        }
+                        
+                        if (!data.samples || data.samples.length === 0) {
+                            alert('⚠️ No sample data found in this file.');
+                            return;
+                        }
+                        
+                        // Get current sample count
+                        const currentSampleCards = document.querySelectorAll('.sample-card');
+                        
+                        // Confirm before overwriting
+                        if (currentSampleCards.length > 0) {
+                            if (!confirm(`⚠️ You currently have ${currentSampleCards.length} sample(s).\n\nUploading this file will REPLACE your current samples with ${data.sampleCount} sample(s) from ${data.exportDateReadable || data.exportDate}.\n\nContinue?`)) {
+                                return;
+                            }
+                        }
+                        
+                        // Clear current samples
+                        const container = document.getElementById('samplesContainer');
+                        container.innerHTML = '';
+                        sampleCounter = 0;
+                        
+                        // Restore samples from file
+                        data.samples.forEach((sampleData) => {
+                            sampleCounter++;
+                            
+                            // Add a new sample card
+                            const template = document.getElementById('marineSampleTemplate');
+                            const clone = template.content.cloneNode(true);
+                            
+                            // Set sample number
+                            clone.querySelector('.sample-number').textContent = sampleCounter;
+                            
+                            // Add unique IDs to all inputs
+                            const sampleDiv = clone.querySelector('.sample-card');
+                            sampleDiv.setAttribute('data-sample-id', sampleCounter);
+                            
+                            const inputs = clone.querySelectorAll('input, select');
+                            inputs.forEach(input => {
+                                if (input.id) {
+                                    const newId = input.id + '_' + sampleCounter;
+                                    input.id = newId;
+                                    
+                                    // Extract parameter name
+                                    const paramName = input.id.replace('_' + sampleCounter, '');
+                                    
+                                    // Populate value from uploaded data
+                                    if (sampleData.sampleInfo && sampleData.sampleInfo[paramName]) {
+                                        input.value = sampleData.sampleInfo[paramName];
+                                    } else if (sampleData.parameters && sampleData.parameters[paramName]) {
+                                        input.value = sampleData.parameters[paramName];
+                                    }
+                                }
+                            });
+                            
+                            container.appendChild(clone);
+                        });
+                        
+                        // Show Run All button
+                        document.getElementById('runAllBtn').style.display = 'inline-block';
+                        
+                        alert(`✅ Successfully uploaded ${data.sampleCount} marine sample(s)!\n\nFrom: ${data.exportDateReadable || data.exportDate}\nUser: ${data.user}`);
+                        
+                    } catch (err) {
+                        alert('⚠️ Failed to load file. Please ensure it is a valid JSON file from this tool.');
+                        console.error('Upload error:', err);
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+        
         function addMarineSample() {
             sampleCounter++;
             const container = document.getElementById('samplesContainer');
@@ -4829,6 +5830,401 @@
                     input.value = '';
                 }
             });
+        }
+
+        // FIELD DATA COLLECTION TOOL
+        function loadFieldTool() {
+            const container = document.getElementById('fieldToolContainer');
+            container.innerHTML = `
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; margin: -30px -30px 0 -30px; text-align: center;">
+                    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">📍 Field Data Collection Tool</h1>
+                    <p style="font-size: 1.1rem; opacity: 0.9;">Manual GPS Entry - Collect site data with coordinates, parameters, photos, and notes</p>
+                    <div style="background: rgba(255, 255, 255, 0.2); padding: 10px 20px; border-radius: 8px; display: inline-block; margin-top: 10px;">
+                        <strong>Sites Collected: <span id="fieldSiteCount">0</span></strong>
+                    </div>
+                </div>
+
+                <div style="padding: 30px;">
+                    <div style="background: #e3f2fd; border-left: 4px solid #2196f3; color: #1565c0; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <strong>💡 How to Use:</strong><br>
+                        • Manually enter GPS coordinates from your device or Maps app<br>
+                        • Add field parameters as you measure them<br>
+                        • Attach photos from your camera or gallery<br>
+                        • Download your data to save, upload later to restore
+                    </div>
+
+                    <div style="background: #e8f5e9; border-left: 4px solid #4caf50; color: #2e7d32; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <strong>📍 Getting GPS Coordinates:</strong><br>
+                        <strong>Method 1:</strong> Use your phone's Maps app - long-press to drop a pin, copy coordinates<br>
+                        <strong>Method 2:</strong> Use a handheld GPS device and enter the readings<br>
+                        <strong>Tip:</strong> Coordinates in decimal degrees format work best (e.g., -25.746111, 28.188056)
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center;">
+                        <button onclick="addFieldSite()" style="padding: 12px 25px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; color: white; background: linear-gradient(135deg, #56ab2f, #a8e063);">
+                            ➕ Add New Site
+                        </button>
+                        <button onclick="downloadFieldData()" style="padding: 12px 25px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; color: white; background: linear-gradient(135deg, #00d2ff, #3a7bd5);">
+                            📥 Download Data
+                        </button>
+                        <button onclick="uploadFieldData()" style="padding: 12px 25px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; color: white; background: linear-gradient(135deg, #f093fb, #f5576c);">
+                            📤 Upload Data
+                        </button>
+                    </div>
+
+                    <div id="fieldSitesContainer">
+                        <div style="text-align: center; padding: 60px 20px; color: #999;">
+                            <div style="font-size: 4rem; margin-bottom: 20px;">🗺️</div>
+                            <h3>No sites added yet</h3>
+                            <p>Click "Add New Site" to start collecting field data</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Initialize field tool with one site
+            setTimeout(() => addFieldSite(), 100);
+        }
+
+        // Field tool variables
+        let fieldSiteCounter = 0;
+        const fieldParameters = {
+            ph: { name: 'pH', unit: 'pH units', step: '0.01' },
+            ec: { name: 'Electrical Conductivity', unit: 'mS/m', step: '0.1' },
+            do: { name: 'Dissolved Oxygen', unit: 'mg/L', step: '0.1' },
+            temp: { name: 'Temperature', unit: '°C', step: '0.1' },
+            turbidity: { name: 'Turbidity', unit: 'NTU', step: '0.1' },
+            depth: { name: 'Water Depth', unit: 'm', step: '0.01' },
+            width: { name: 'Stream Width', unit: 'm', step: '0.1' },
+            velocity: { name: 'Flow Velocity', unit: 'm/s', step: '0.01' },
+            tds: { name: 'Total Dissolved Solids', unit: 'mg/L', step: '1' },
+            salinity: { name: 'Salinity', unit: 'ppt', step: '0.1' },
+            secchi: { name: 'Secchi Depth', unit: 'm', step: '0.1' },
+            height: { name: 'Water Level/Height', unit: 'cm', step: '1' },
+            chlorophyll: { name: 'Chlorophyll-a', unit: 'µg/L', step: '0.1' }
+        };
+
+        function getFieldDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
+        function addFieldSite() {
+            fieldSiteCounter++;
+            const siteId = `field_site_${fieldSiteCounter}`;
+
+            const siteCard = document.createElement('div');
+            siteCard.className = 'field-site-card';
+            siteCard.id = siteId;
+            siteCard.style.cssText = 'background: white; border: 2px solid #e0e0e0; border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);';
+
+            siteCard.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #667eea;">
+                    <h3 style="color: #667eea; font-size: 1.5rem;">📍 Site ${fieldSiteCounter}</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="clearFieldSite('${siteId}')" style="padding: 6px 12px; font-size: 0.9rem; background: #ff9800; color: white; border: none; border-radius: 5px; cursor: pointer;">🗑️ Clear</button>
+                        <button onclick="removeFieldSite('${siteId}')" style="padding: 6px 12px; font-size: 0.9rem; background: #ff5252; color: white; border: none; border-radius: 5px; cursor: pointer;">✖ Remove</button>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #e0f7fa, #b2ebf2); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #00695c;">📡 GPS Coordinates (Decimal Degrees)</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #00695c;">Latitude (°)</label>
+                            <input type="number" step="0.000001" id="${siteId}_lat" placeholder="e.g., -25.746111" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                            <small style="color: #666; font-size: 0.85rem;">Negative for South, positive for North</small>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #00695c;">Longitude (°)</label>
+                            <input type="number" step="0.000001" id="${siteId}_long" placeholder="e.g., 28.188056" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                            <small style="color: #666; font-size: 0.85rem;">Negative for West, positive for East</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Site Name / ID</label>
+                    <input type="text" id="${siteId}_name" placeholder="e.g., Mooi River Site 1" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Date & Time</label>
+                    <input type="datetime-local" id="${siteId}_datetime" value="${getFieldDateTime()}" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Field Notes</label>
+                    <textarea id="${siteId}_notes" placeholder="Weather conditions, observations..." style="width: 100%; min-height: 80px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; resize: vertical;"></textarea>
+                </div>
+
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #667eea;">📊 Field Parameters</h4>
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <select id="${siteId}_paramSelect" style="flex: 1; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                            <option value="">-- Select parameter --</option>
+                            ${Object.entries(fieldParameters).map(([key, param]) => 
+                                `<option value="${key}">${param.name} (${param.unit})</option>`
+                            ).join('')}
+                        </select>
+                        <button onclick="addFieldParameter('${siteId}')" style="padding: 12px 25px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">➕ Add</button>
+                    </div>
+                    <div id="${siteId}_parameters" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;"></div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #fff3e0, #ffe0b2); padding: 20px; border-radius: 10px;">
+                    <h4 style="margin-bottom: 15px; color: #e65100;">📸 Site Photos</h4>
+                    <input type="file" id="${siteId}_photoInput" accept="image/*" multiple style="display: none;" onchange="handleFieldPhotos('${siteId}', event)">
+                    <button onclick="document.getElementById('${siteId}_photoInput').click()" style="padding: 12px 25px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 15px;">📷 Add Photos</button>
+                    <div id="${siteId}_photos" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;"></div>
+                </div>
+            `;
+
+            const container = document.getElementById('fieldSitesContainer');
+            const emptyState = container.querySelector('div[style*="text-align: center"]');
+            if (emptyState) emptyState.remove();
+
+            container.appendChild(siteCard);
+            updateFieldSiteCount();
+        }
+
+        function addFieldParameter(siteId) {
+            const select = document.getElementById(`${siteId}_paramSelect`);
+            const paramKey = select.value;
+            if (!paramKey) return alert('Please select a parameter');
+
+            const param = fieldParameters[paramKey];
+            const container = document.getElementById(`${siteId}_parameters`);
+            if (document.getElementById(`${siteId}_param_${paramKey}`)) {
+                return alert('This parameter has already been added');
+            }
+
+            const paramItem = document.createElement('div');
+            paramItem.id = `${siteId}_param_${paramKey}`;
+            paramItem.style.cssText = 'background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;';
+            paramItem.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="font-weight: 600; color: #667eea;">${param.name}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" style="background: #ff5252; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">✖</button>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="number" step="${param.step}" id="${siteId}_value_${paramKey}" placeholder="Enter value" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <span style="color: #666; font-size: 0.9rem;">${param.unit}</span>
+                </div>
+                <input type="text" id="${siteId}_note_${paramKey}" placeholder="Notes (optional)" style="width: 100%; padding: 5px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; margin-top: 5px;">
+            `;
+            container.appendChild(paramItem);
+            select.value = '';
+        }
+
+        function handleFieldPhotos(siteId, event) {
+            const files = event.target.files;
+            const container = document.getElementById(`${siteId}_photos`);
+
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const photoId = `${siteId}_photo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                        const photoItem = document.createElement('div');
+                        photoItem.id = photoId;
+                        photoItem.style.cssText = 'position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);';
+                        photoItem.innerHTML = `
+                            <img src="${e.target.result}" style="width: 100%; height: 150px; object-fit: cover;">
+                            <button onclick="document.getElementById('${photoId}').remove()" style="position: absolute; top: 5px; right: 5px; background: rgba(255,82,82,0.9); color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-weight: bold;">✖</button>
+                        `;
+                        container.appendChild(photoItem);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            event.target.value = '';
+        }
+
+        function clearFieldSite(siteId) {
+            if (!confirm('Clear all data for this site?')) return;
+            document.getElementById(`${siteId}_lat`).value = '';
+            document.getElementById(`${siteId}_long`).value = '';
+            document.getElementById(`${siteId}_name`).value = '';
+            document.getElementById(`${siteId}_datetime`).value = getFieldDateTime();
+            document.getElementById(`${siteId}_notes`).value = '';
+            document.getElementById(`${siteId}_parameters`).innerHTML = '';
+            document.getElementById(`${siteId}_photos`).innerHTML = '';
+        }
+
+        function removeFieldSite(siteId) {
+            if (!confirm('Remove this site completely?')) return;
+            document.getElementById(siteId).remove();
+            updateFieldSiteCount();
+
+            const container = document.getElementById('fieldSitesContainer');
+            if (!container.querySelector('.field-site-card')) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; color: #999;">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">🗺️</div>
+                        <h3>No sites added yet</h3>
+                        <p>Click "Add New Site" to start collecting field data</p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateFieldSiteCount() {
+            const count = document.querySelectorAll('.field-site-card').length;
+            const countEl = document.getElementById('fieldSiteCount');
+            if (countEl) countEl.textContent = count;
+        }
+
+        function collectFieldData() {
+            const siteCards = document.querySelectorAll('.field-site-card');
+            const data = [];
+
+            siteCards.forEach((card, index) => {
+                const siteId = card.id;
+                const siteData = {
+                    siteNumber: index + 1,
+                    gps: {
+                        latitude: document.getElementById(`${siteId}_lat`).value || '',
+                        longitude: document.getElementById(`${siteId}_long`).value || ''
+                    },
+                    siteName: document.getElementById(`${siteId}_name`).value,
+                    datetime: document.getElementById(`${siteId}_datetime`).value,
+                    fieldNotes: document.getElementById(`${siteId}_notes`).value,
+                    parameters: [],
+                    photos: []
+                };
+
+                const paramItems = card.querySelectorAll('[id$="_parameters"] > div');
+                paramItems.forEach(item => {
+                    const paramId = item.id.split('_param_')[1];
+                    const valueInput = document.getElementById(`${siteId}_value_${paramId}`);
+                    const noteInput = document.getElementById(`${siteId}_note_${paramId}`);
+                    
+                    if (valueInput && valueInput.value) {
+                        siteData.parameters.push({
+                            parameter: paramId,
+                            name: fieldParameters[paramId].name,
+                            value: valueInput.value,
+                            unit: fieldParameters[paramId].unit,
+                            note: noteInput ? noteInput.value : ''
+                        });
+                    }
+                });
+
+                const photoItems = card.querySelectorAll('[id$="_photos"] img');
+                photoItems.forEach(img => siteData.photos.push(img.src));
+
+                data.push(siteData);
+            });
+
+            return data;
+        }
+
+        function downloadFieldData() {
+            const siteCards = document.querySelectorAll('.field-site-card');
+            if (siteCards.length === 0) {
+                return alert('⚠️ No sites to download. Please add at least one site first.');
+            }
+
+            const allData = collectFieldData();
+            const exportData = {
+                tool: 'Field Data Collection Tool v2',
+                version: '2.0',
+                exportDate: new Date().toISOString(),
+                exportDateReadable: new Date().toLocaleString(),
+                siteCount: allData.length,
+                sites: allData
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `field-data-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+
+            alert(`✅ Downloaded ${allData.length} site(s) successfully!`);
+        }
+
+        function uploadFieldData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (!data.tool || !data.tool.includes('Field Data')) {
+                            return alert('⚠️ Invalid file! This does not appear to be a field data file.');
+                        }
+                        if (!data.sites || data.sites.length === 0) {
+                            return alert('⚠️ No site data found in this file.');
+                        }
+
+                        const currentSites = document.querySelectorAll('.field-site-card').length;
+                        if (currentSites > 0) {
+                            if (!confirm(`⚠️ You currently have ${currentSites} site(s).\n\nUploading will REPLACE them with ${data.siteCount} site(s).\n\nContinue?`)) {
+                                return;
+                            }
+                        }
+
+                        const container = document.getElementById('fieldSitesContainer');
+                        container.innerHTML = '';
+                        fieldSiteCounter = 0;
+
+                        data.sites.forEach(siteData => {
+                            addFieldSite();
+                            const siteId = `field_site_${fieldSiteCounter}`;
+
+                            if (siteData.gps.latitude) document.getElementById(`${siteId}_lat`).value = siteData.gps.latitude;
+                            if (siteData.gps.longitude) document.getElementById(`${siteId}_long`).value = siteData.gps.longitude;
+                            document.getElementById(`${siteId}_name`).value = siteData.siteName || '';
+                            document.getElementById(`${siteId}_datetime`).value = siteData.datetime || getFieldDateTime();
+                            document.getElementById(`${siteId}_notes`).value = siteData.fieldNotes || '';
+
+                            siteData.parameters.forEach(param => {
+                                const select = document.getElementById(`${siteId}_paramSelect`);
+                                select.value = param.parameter;
+                                addFieldParameter(siteId);
+                                document.getElementById(`${siteId}_value_${param.parameter}`).value = param.value;
+                                if (param.note) document.getElementById(`${siteId}_note_${param.parameter}`).value = param.note;
+                            });
+
+                            siteData.photos.forEach((photoSrc, index) => {
+                                const photoId = `${siteId}_photo_restored_${index}`;
+                                const container = document.getElementById(`${siteId}_photos`);
+                                const photoItem = document.createElement('div');
+                                photoItem.id = photoId;
+                                photoItem.style.cssText = 'position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);';
+                                photoItem.innerHTML = `
+                                    <img src="${photoSrc}" style="width: 100%; height: 150px; object-fit: cover;">
+                                    <button onclick="document.getElementById('${photoId}').remove()" style="position: absolute; top: 5px; right: 5px; background: rgba(255,82,82,0.9); color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-weight: bold;">✖</button>
+                                `;
+                                container.appendChild(photoItem);
+                            });
+                        });
+
+                        alert(`✅ Successfully uploaded ${data.siteCount} site(s)!`);
+                    } catch (err) {
+                        alert('⚠️ Failed to load file. Please ensure it is a valid JSON file.');
+                        console.error('Upload error:', err);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
         }
 
         // Initialize app when page loads
