@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Green Scorpions Environmental Compliance Portal</title>
+    
+    <!-- Chart.js for monitoring graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -644,6 +650,90 @@
             border-color: #1a7d9f;
         }
 
+        /* Water Tool Navigation Buttons */
+        .water-nav-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            border-bottom: 3px solid #2980b9;
+        }
+
+        .water-nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .water-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .water-nav-btn.active {
+            background: #2980b9;
+            border-color: #2980b9;
+        }
+
+        .water-section {
+            display: none;
+        }
+
+        .water-section.active {
+            display: block;
+        }
+
+        /* Sediment Tool Navigation Buttons */
+        .sediment-nav-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            border-bottom: 3px solid #8B4513;
+        }
+
+        .sediment-nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sediment-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .sediment-nav-btn.active {
+            background: #A0522D;
+            border-color: #A0522D;
+        }
+
+        .sediment-section {
+            display: none;
+        }
+
+        .sediment-section.active {
+            display: block;
+        }
+
         .input-group {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1085,6 +1175,16 @@
                     <button type="submit" class="btn-login">
                         🔒 Access Compliance Tools
                     </button>
+                    
+                    <!-- Visitor Counter -->
+                    <div style="text-align: center; margin-top: 20px; padding: 10px;">
+                        <p style="margin: 0 0 8px 0; font-size: 0.9rem; color: #666;">
+                            <strong>Visitors:</strong>
+                        </p>
+                        <a href="https://www.hitwebcounter.com/" target="_blank">
+                            <img src="https://hitwebcounter.com/counter/counter.php?page=21454354&style=0006&nbdigits=3&type=page&initCount=5" title="Portal Visitors" Alt="Visitor Counter" border="0" />
+                        </a>
+                    </div>
                 </form>
             </div>
 
@@ -1511,49 +1611,173 @@
         function loadSedimentTool() {
             const container = document.getElementById('sedimentToolContainer');
             container.innerHTML = `
-                <div style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 20px; margin: -30px -30px 30px -30px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 20px; margin: -30px -30px 0px -30px; text-align: center;">
                     <h1 style="font-size: 2rem; margin-bottom: 10px;">🏔️ Sediment Quality Compliance Tool</h1>
                     <p>Multi-site sediment quality assessment against South African soil screening values</p>
                 </div>
-                
-                <div class="samples-header">
-                    <h2 style="color: #8B4513;">Sediment Samples</h2>
-                    <button class="btn-add-sample" style="background: linear-gradient(135deg, #228B22, #32CD32); box-shadow: 0 5px 15px rgba(34, 139, 34, 0.3);" onclick="addSedimentSample()">
-                        ➕ Add Sediment Sample
-                    </button>
+
+                <div class="sediment-nav-bar" style="margin: 0 -30px;">
+                    <button class="sediment-nav-btn active" onclick="showSedimentSection('assessment')">🧪 Assessment</button>
+                    <button class="sediment-nav-btn" onclick="showSedimentSection('monitoring')">📊 Time & Compliance Monitoring</button>
                 </div>
 
-                <div id="sedimentSamplesContainer">
-                    <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #8B4513; font-size: 1.1rem; background: #F5DEB3; border: 2px dashed #D2691E; border-radius: 15px; margin: 30px 0;">
-                        <p style="margin-bottom: 20px;">🌾 No sediment samples added yet</p>
-                        <p>Click "Add Sediment Sample" to get started with your soil quality assessment</p>
+                <div id="sedimentContentArea" style="margin-top: 20px;">
+                    <!-- Assessment Section -->
+                    <div id="sediment-assessment" class="sediment-section active">
+                        <div class="samples-header">
+                            <h2 style="color: #8B4513;">Sediment Samples</h2>
+                            <button class="btn-add-sample" style="background: linear-gradient(135deg, #228B22, #32CD32); box-shadow: 0 5px 15px rgba(34, 139, 34, 0.3);" onclick="addSedimentSample()">
+                                ➕ Add Sediment Sample
+                            </button>
+                        </div>
+
+                        <div id="sedimentSamplesContainer">
+                            <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #8B4513; font-size: 1.1rem; background: #F5DEB3; border: 2px dashed #D2691E; border-radius: 15px; margin: 30px 0;">
+                                <p style="margin-bottom: 20px;">🌾 No sediment samples added yet</p>
+                                <p>Click "Add Sediment Sample" to get started with your soil quality assessment</p>
+                            </div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; border-radius: 15px; padding: 25px; margin: 30px 0;">
+                            <h4 style="color: #2c5530; margin: 0 0 15px 0; font-size: 1.1rem;">💾 Data Management</h4>
+                            <p style="color: #555; margin-bottom: 20px; font-size: 0.95rem;">Save your sediment sample data as a file to continue later or transfer to another device</p>
+                            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                <button class="btn-primary" onclick="downloadSedimentData()" style="background: linear-gradient(135deg, #8B4513, #A0522D); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                                    📥 Download Data File
+                                </button>
+                                <button class="btn-primary" onclick="uploadSedimentData()" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                                    📤 Upload Previous Data
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="analyze-section" style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #F5DEB3, #DEB887); border-radius: 15px; border: 2px solid #D2691E;">
+                            <button class="btn-analyze" style="background: linear-gradient(135deg, #DC143C, #B22222); color: white; padding: 18px 40px; border: none; border-radius: 12px; cursor: pointer; font-size: 1.2rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(220, 20, 60, 0.3); text-transform: uppercase; letter-spacing: 1px;" onclick="performSedimentAnalysis()">
+                                🔬 Analyze Sediment Quality Compliance
+                            </button>
+                        </div>
+
+                        <div id="sedimentResults" class="results hidden" style="margin-top: 40px;">
+                            <div class="sample-results">
+                                <h3>📊 Compliance Analysis Results</h3>
+                                <div id="sedimentResultsContainer"></div>
+                                <div id="sedimentComplianceStatement" style="background: linear-gradient(135deg, #F5F5DC, #F0E68C); border: 2px solid #D2691E; border-radius: 15px; padding: 25px; margin-top: 25px; font-family: 'Georgia', serif; line-height: 1.8;"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; border-radius: 15px; padding: 25px; margin: 30px 0;">
-                    <h4 style="color: #2c5530; margin: 0 0 15px 0; font-size: 1.1rem;">💾 Data Management</h4>
-                    <p style="color: #555; margin-bottom: 20px; font-size: 0.95rem;">Save your sediment sample data as a file to continue later or transfer to another device</p>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <button class="btn-primary" onclick="downloadSedimentData()" style="background: linear-gradient(135deg, #8B4513, #A0522D); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
-                            📥 Download Data File
-                        </button>
-                        <button class="btn-primary" onclick="uploadSedimentData()" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
-                            📤 Upload Previous Data
-                        </button>
-                    </div>
-                </div>
+                    <!-- Monitoring Tool Section -->
+                    <div id="sediment-monitoring" class="sediment-section">
+                        <div class="card">
+                            <h3>📊 Time & Compliance Monitoring Tool</h3>
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                Track sediment quality parameters over time at a single monitoring location. Visualize trends and compare measurements against South African Soil Screening Values (SSV1, Informal, Standard, Commercial, Ecosystem).
+                            </p>
 
-                <div class="analyze-section" style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #F5DEB3, #DEB887); border-radius: 15px; border: 2px solid #D2691E;">
-                    <button class="btn-analyze" style="background: linear-gradient(135deg, #DC143C, #B22222); color: white; padding: 18px 40px; border: none; border-radius: 12px; cursor: pointer; font-size: 1.2rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(220, 20, 60, 0.3); text-transform: uppercase; letter-spacing: 1px;" onclick="performSedimentAnalysis()">
-                        🔬 Analyze Sediment Quality Compliance
-                    </button>
-                </div>
+                            <div class="info-box">
+                                <strong>📌 How to use:</strong><br>
+                                1. Select a sediment quality parameter to monitor<br>
+                                2. Enter the number of sampling events<br>
+                                3. Input date and concentration for each sample<br>
+                                4. Generate the monitoring graph with threshold lines<br>
+                                5. Download the graph with automated interpretation
+                            </div>
 
-                <div id="sedimentResults" class="results hidden" style="margin-top: 40px;">
-                    <div class="sample-results">
-                        <h3>📊 Compliance Analysis Results</h3>
-                        <div id="sedimentResultsContainer"></div>
-                        <div id="sedimentComplianceStatement" style="background: linear-gradient(135deg, #F5F5DC, #F0E68C); border: 2px solid #D2691E; border-radius: 15px; padding: 25px; margin-top: 25px; font-family: 'Georgia', serif; line-height: 1.8;"></div>
+                            <div style="margin-top: 30px;">
+                                <h4>⚙️ Configure Monitoring</h4>
+                                
+                                <div class="input-group" style="margin-top: 20px;">
+                                    <div class="input-field">
+                                        <label for="sedimentMonitoringParameter"><strong>Select Parameter:</strong></label>
+                                        <select id="sedimentMonitoringParameter" onchange="updateSedimentMonitoringParameterInfo()" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                                            <option value="">-- Choose a parameter --</option>
+                                            <optgroup label="Metals and Metalloids">
+                                                <option value="arsenic">Arsenic (As) - mg/kg</option>
+                                                <option value="cadmium">Cadmium (Cd) - mg/kg</option>
+                                                <option value="chromium_iii">Chromium (III) - mg/kg</option>
+                                                <option value="chromium_vi">Chromium (VI) - mg/kg</option>
+                                                <option value="cobalt">Cobalt (Co) - mg/kg</option>
+                                                <option value="copper">Copper (Cu) - mg/kg</option>
+                                                <option value="lead">Lead (Pb) - mg/kg</option>
+                                                <option value="manganese">Manganese (Mn) - mg/kg</option>
+                                                <option value="mercury">Mercury (Hg) - mg/kg</option>
+                                                <option value="nickel">Nickel (Ni) - mg/kg</option>
+                                                <option value="vanadium">Vanadium (V) - mg/kg</option>
+                                                <option value="zinc">Zinc (Zn) - mg/kg</option>
+                                            </optgroup>
+                                            <optgroup label="Petroleum Organics">
+                                                <option value="c7_c9">Alkanes C7-C9 - mg/kg</option>
+                                                <option value="c10_c14">Alkanes C10-C14 - mg/kg</option>
+                                                <option value="c15_c36">Alkanes C15-C36 - mg/kg</option>
+                                                <option value="benzene">Benzene - mg/kg</option>
+                                                <option value="toluene">Toluene - mg/kg</option>
+                                                <option value="ethylbenzene">Ethylbenzene - mg/kg</option>
+                                                <option value="xylenes">Xylenes - mg/kg</option>
+                                                <option value="naphthalene">Naphthalene - mg/kg</option>
+                                                <option value="pyrene">Pyrene - mg/kg</option>
+                                                <option value="benzo_a_pyrene">Benzo(a)pyrene - mg/kg</option>
+                                            </optgroup>
+                                            <optgroup label="Other Organics">
+                                                <option value="mtbe">MTBE - mg/kg</option>
+                                                <option value="carbon_tetrachloride">Carbon Tetrachloride - mg/kg</option>
+                                                <option value="chlorobenzene">Chlorobenzene - mg/kg</option>
+                                                <option value="chloroform">Chloroform - mg/kg</option>
+                                                <option value="pcbs">PCBs - mg/kg</option>
+                                                <option value="cyanide">Cyanide - mg/kg</option>
+                                            </optgroup>
+                                            <optgroup label="Anions">
+                                                <option value="chlorides">Chlorides - mg/kg</option>
+                                                <option value="fluorides">Fluorides - mg/kg</option>
+                                                <option value="nitrates_nitrite">Nitrates-Nitrite - mg/kg</option>
+                                                <option value="sulphates">Sulphates - mg/kg</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+
+                                    <div class="input-field">
+                                        <label for="numSedimentSamplingEvents"><strong>Number of Sampling Events:</strong></label>
+                                        <input type="number" id="numSedimentSamplingEvents" min="2" max="20" placeholder="e.g., 3" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                                    </div>
+                                </div>
+
+                                <div id="sedimentMonitoringParameterInfo" style="margin-top: 15px; padding: 15px; background: #fef5e7; border-left: 4px solid #8B4513; border-radius: 5px; display: none;">
+                                    <strong>📖 South African Soil Screening Values (National Norms and Standards):</strong><br>
+                                    <div style="margin: 10px 0; padding: 10px; background: #fff; border-radius: 5px; font-size: 0.9rem;">
+                                        <strong>SSV1:</strong> All land-uses, protective of water resource (most protective baseline)<br>
+                                        <strong>SSV2:</strong> Land-use specific thresholds (Informal Residential, Standard Residential, Commercial/Industrial, Ecosystem Protection)
+                                    </div>
+                                    <strong>Parameter-Specific Thresholds:</strong><br>
+                                    <span id="sedimentParameterThresholds"></span>
+                                </div>
+
+                                <div style="text-align: center; margin: 25px 0;">
+                                    <button class="btn-primary" onclick="generateSedimentSampleInputs()" style="padding: 15px 30px; font-size: 1.1rem; background: linear-gradient(135deg, #228B22, #32CD32);">
+                                        📝 Generate Sample Input Form
+                                    </button>
+                                </div>
+
+                                <div id="sedimentSampleInputsContainer" style="margin-top: 30px;"></div>
+
+                                <div id="sedimentMonitoringGraphContainer" style="margin-top: 40px; display: none;">
+                                    <h4>📈 Monitoring Graph</h4>
+                                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                        <canvas id="sedimentMonitoringChart" style="max-height: 500px;"></canvas>
+                                    </div>
+                                    
+                                    <div id="sedimentMonitoringInterpretation" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #8B4513;">
+                                    </div>
+
+                                    <div style="text-align: center; margin-top: 25px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                        <button class="btn-secondary" onclick="downloadSedimentMonitoringGraph('png')" style="padding: 12px 25px;">
+                                            📥 Download as PNG
+                                        </button>
+                                        <button class="btn-secondary" onclick="downloadSedimentMonitoringGraph('pdf')" style="padding: 12px 25px;">
+                                            📥 Download as PDF
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -2175,6 +2399,18 @@
             }
 
             let html = '';
+            
+            // Add explanatory note at the top
+            html += `
+                <div style="background: linear-gradient(135deg, #fef5e7, #fdebd0); border: 2px solid #f39c12; border-radius: 10px; padding: 20px; margin-bottom: 25px;">
+                    <h4 style="color: #8B4513; margin: 0 0 10px 0;">📖 Understanding Soil Screening Values (SSV)</h4>
+                    <div style="line-height: 1.6;">
+                        <strong>SSV1:</strong> Baseline threshold for all land-uses, protective of water resource (most protective)<br>
+                        <strong>SSV2:</strong> Land-use specific thresholds (Informal Residential, Standard Residential, Commercial/Industrial, Protection of Ecosystem Health)<br>
+                        <em style="font-size: 0.9rem; color: #666;">Note: SSV2 thresholds are only shown when exceeded</em>
+                    </div>
+                </div>
+            `;
 
             sedimentResults.forEach(sample => {
                 html += `<div style="margin-bottom: 30px;">`;
@@ -2190,9 +2426,9 @@
                         <tr>
                             <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Parameter</th>
                             <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Category</th>
-                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Measured<br>(mg/kg)</th>
-                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">SSV1<br>(mg/kg)</th>
-                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Ecosystem<br>(mg/kg)</th>
+                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Measured<br>(mg/kg)</th>
+                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">SSV1<br>(mg/kg)</th>
+                            <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Violated SSV2 Thresholds</th>
                             <th style="background: linear-gradient(135deg, #8B4513, #A0522D); color: white; padding: 12px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.8rem;">Compliance Status</th>
                         </tr>
                     </thead>
@@ -2202,22 +2438,54 @@
                 sample.results.forEach(result => {
                     let statusDisplay = '';
                     let statusClass = '';
+                    let violatedThresholds = '';
+
+                    // Build list of violated SSV2 thresholds
+                    let violations = [];
+                    if (result.exceedsEcosystem) {
+                        violations.push(`Ecosystem: ${result.ecosystem} mg/kg`);
+                    }
+                    if (result.exceedsCommercial) {
+                        violations.push(`Commercial: ${result.commercial} mg/kg`);
+                    }
+                    if (result.exceedsStandard) {
+                        violations.push(`Standard Res: ${result.standard_res} mg/kg`);
+                    }
+                    if (result.exceedsInformal) {
+                        violations.push(`Informal Res: ${result.informal} mg/kg`);
+                    }
+                    
+                    if (violations.length > 0) {
+                        violatedThresholds = violations.join('<br>');
+                    } else if (result.exceedsSSV1) {
+                        violatedThresholds = '<span style="color: #666; font-style: italic;">None (SSV1 only)</span>';
+                    } else {
+                        violatedThresholds = '<span style="color: #27ae60; font-weight: 600;">✓ None</span>';
+                    }
+
+                    // SSV1 status indicator
+                    let ssv1Display = result.ssv1;
+                    if (result.exceedsSSV1) {
+                        ssv1Display = `<span style="color: #e74c3c; font-weight: 600;">${result.ssv1} ❌</span>`;
+                    } else {
+                        ssv1Display = `<span style="color: #27ae60; font-weight: 600;">${result.ssv1} ✓</span>`;
+                    }
 
                     if (result.highestExceeded) {
                         statusClass = 'background: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.8rem;';
-                        statusDisplay = `Exceeds ${result.highestExceeded} by ${result.exceedanceFactor.toFixed(1)}×`;
+                        statusDisplay = `⚠️ Exceeds ${result.highestExceeded}<br><span style="font-size: 0.75rem;">(${result.exceedanceFactor.toFixed(1)}× threshold)</span>`;
                     } else {
                         statusClass = 'background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.8rem;';
-                        statusDisplay = 'Within All Limits';
+                        statusDisplay = '✅ Within All Limits';
                     }
 
                     html += `
                         <tr style="border-bottom: 1px solid #e0e6ed;">
                             <td style="padding: 12px;"><strong>${result.parameter}</strong></td>
-                            <td style="padding: 12px;">${result.category}</td>
-                            <td style="padding: 12px;">${result.value.toFixed(2)}</td>
-                            <td style="padding: 12px;">${result.ssv1}</td>
-                            <td style="padding: 12px;">${result.ecosystem || 'N/A'}</td>
+                            <td style="padding: 12px; color: #666;">${result.category}</td>
+                            <td style="padding: 12px; text-align: center; font-weight: 600; font-size: 1rem;">${result.value.toFixed(2)}</td>
+                            <td style="padding: 12px; text-align: center;">${ssv1Display}</td>
+                            <td style="padding: 12px; font-size: 0.85rem; line-height: 1.5;">${violatedThresholds}</td>
                             <td style="padding: 12px;"><span style="${statusClass}">${statusDisplay}</span></td>
                         </tr>
                     `;
@@ -2291,49 +2559,145 @@
         function loadWaterTool() {
             const container = document.getElementById('waterToolContainer');
             container.innerHTML = `
-                <div style="background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 20px; margin: -30px -30px 30px -30px; text-align: center;">
+                <div style="background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 20px; margin: -30px -30px 0px -30px; text-align: center;">
                     <h1 style="font-size: 2rem; margin-bottom: 10px;">💧 Water Quality Compliance Tool</h1>
                     <p>Multi-site water quality assessment and compliance checking</p>
                 </div>
-                
-                <div class="samples-header">
-                    <h2 style="color: #2c3e50;">Water Samples</h2>
-                    <button class="btn-add-sample" style="background: linear-gradient(135deg, #27ae60, #2ecc71); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);" onclick="addWaterSample()">
-                        ➕ Add Water Sample
-                    </button>
+
+                <div class="water-nav-bar" style="margin: 0 -30px;">
+                    <button class="water-nav-btn active" onclick="showWaterSection('assessment')">🧪 Assessment</button>
+                    <button class="water-nav-btn" onclick="showWaterSection('monitoring')">📊 Time & Compliance Monitoring</button>
                 </div>
 
-                <div id="waterSamplesContainer">
-                    <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #6c757d; font-size: 1.1rem; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 15px; margin: 30px 0;">
-                        <p style="margin-bottom: 20px;">🌊 No water samples added yet</p>
-                        <p>Click "Add Water Sample" to get started with your water quality assessment</p>
+                <div id="waterContentArea" style="margin-top: 20px;">
+                    <!-- Assessment Section -->
+                    <div id="water-assessment" class="water-section active">
+                        <div class="samples-header">
+                            <h2 style="color: #2c3e50;">Water Samples</h2>
+                            <button class="btn-add-sample" style="background: linear-gradient(135deg, #27ae60, #2ecc71); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);" onclick="addWaterSample()">
+                                ➕ Add Water Sample
+                            </button>
+                        </div>
+
+                        <div id="waterSamplesContainer">
+                            <div class="empty-state" style="text-align: center; padding: 60px 20px; color: #6c757d; font-size: 1.1rem; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 15px; margin: 30px 0;">
+                                <p style="margin-bottom: 20px;">🌊 No water samples added yet</p>
+                                <p>Click "Add Water Sample" to get started with your water quality assessment</p>
+                            </div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; border-radius: 15px; padding: 25px; margin: 30px 0;">
+                            <h4 style="color: #2c5530; margin: 0 0 15px 0; font-size: 1.1rem;">💾 Data Management</h4>
+                            <p style="color: #555; margin-bottom: 20px; font-size: 0.95rem;">Save your sample data as a file to continue later or transfer to another device</p>
+                            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                <button class="btn-primary" onclick="downloadWaterData()" style="background: linear-gradient(135deg, #3498db, #2980b9); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                                    📥 Download Data File
+                                </button>
+                                <button class="btn-primary" onclick="uploadWaterData()" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
+                                    📤 Upload Previous Data
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px;">
+                            <button style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 18px 40px; border: none; border-radius: 12px; cursor: pointer; font-size: 1.2rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3); text-transform: uppercase; letter-spacing: 1px;" onclick="performWaterAnalysis()" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(231, 76, 60, 0.4)'" onmouseout="this.style.transform='translateY(0px)'; this.style.boxShadow='0 8px 20px rgba(231, 76, 60, 0.3)'">
+                                🔬 Analyze Water Quality Compliance
+                            </button>
+                        </div>
+
+                        <div id="waterResults" class="results hidden" style="margin-top: 40px;">
+                            <div class="sample-results">
+                                <h3>📊 Compliance Analysis Results</h3>
+                                <div id="waterResultsContainer"></div>
+                                <div id="waterComplianceStatement" class="statement-box"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; border-radius: 15px; padding: 25px; margin: 30px 0;">
-                    <h4 style="color: #2c5530; margin: 0 0 15px 0; font-size: 1.1rem;">💾 Data Management</h4>
-                    <p style="color: #555; margin-bottom: 20px; font-size: 0.95rem;">Save your sample data as a file to continue later or transfer to another device</p>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <button class="btn-primary" onclick="downloadWaterData()" style="background: linear-gradient(135deg, #3498db, #2980b9); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
-                            📥 Download Data File
-                        </button>
-                        <button class="btn-primary" onclick="uploadWaterData()" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); flex: 1; min-width: 200px; padding: 15px 25px; font-size: 1rem;">
-                            📤 Upload Previous Data
-                        </button>
-                    </div>
-                </div>
+                    <!-- Monitoring Tool Section -->
+                    <div id="water-monitoring" class="water-section">
+                        <div class="card">
+                            <h3>📊 Time & Compliance Monitoring Tool</h3>
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                Track water quality parameters over time at a single monitoring location. Visualize trends and compare measurements against South African water quality guidelines (TWQR, CEV, AEV).
+                            </p>
 
-                <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 15px;">
-                    <button style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 18px 40px; border: none; border-radius: 12px; cursor: pointer; font-size: 1.2rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3); text-transform: uppercase; letter-spacing: 1px;" onclick="performWaterAnalysis()" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(231, 76, 60, 0.4)'" onmouseout="this.style.transform='translateY(0px)'; this.style.boxShadow='0 8px 20px rgba(231, 76, 60, 0.3)'">
-                        🔬 Analyze Water Quality Compliance
-                    </button>
-                </div>
+                            <div class="info-box">
+                                <strong>📌 How to use:</strong><br>
+                                1. Select a water quality parameter to monitor<br>
+                                2. Enter the number of sampling events<br>
+                                3. Input date and concentration for each sample<br>
+                                4. Generate the monitoring graph with threshold lines<br>
+                                5. Download the graph with automated interpretation
+                            </div>
 
-                <div id="waterResults" class="results hidden" style="margin-top: 40px;">
-                    <div class="sample-results">
-                        <h3>📊 Compliance Analysis Results</h3>
-                        <div id="waterResultsContainer"></div>
-                        <div id="waterComplianceStatement" class="statement-box"></div>
+                            <div style="margin-top: 30px;">
+                                <h4>⚙️ Configure Monitoring</h4>
+                                
+                                <div class="input-group" style="margin-top: 20px;">
+                                    <div class="input-field">
+                                        <label for="monitoringParameter"><strong>Select Parameter:</strong></label>
+                                        <select id="monitoringParameter" onchange="updateMonitoringParameterInfo()" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                                            <option value="">-- Choose a parameter --</option>
+                                            <option value="aluminum">Aluminum (Al) - mg/L</option>
+                                            <option value="arsenic">Arsenic (As) - mg/L</option>
+                                            <option value="cadmium">Cadmium (Cd) - mg/L</option>
+                                            <option value="chromium_total">Chromium Total (Cr) - mg/L</option>
+                                            <option value="cobalt">Cobalt (Co) - mg/L</option>
+                                            <option value="copper">Copper (Cu) - mg/L</option>
+                                            <option value="iron">Iron (Fe) - mg/L</option>
+                                            <option value="lead">Lead (Pb) - mg/L</option>
+                                            <option value="manganese">Manganese (Mn) - mg/L</option>
+                                            <option value="mercury">Mercury (Hg) - mg/L</option>
+                                            <option value="nickel">Nickel (Ni) - mg/L</option>
+                                            <option value="vanadium">Vanadium (V) - mg/L</option>
+                                            <option value="zinc">Zinc (Zn) - mg/L</option>
+                                            <option value="sulfate">Sulfate (SO₄) - mg/L</option>
+                                            <option value="ammonium">Ammonium (NH₄⁺) - mg N/L</option>
+                                            <option value="nitrate">Nitrate (NO₃⁻) - mg N/L</option>
+                                            <option value="nitrite">Nitrite (NO₂⁻) - mg N/L</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="input-field">
+                                        <label for="numSamplingEvents"><strong>Number of Sampling Events:</strong></label>
+                                        <input type="number" id="numSamplingEvents" min="2" max="20" placeholder="e.g., 3" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                                    </div>
+                                </div>
+
+                                <div id="monitoringParameterInfo" style="margin-top: 15px; padding: 15px; background: #f0f8ff; border-left: 4px solid #3498db; border-radius: 5px; display: none;">
+                                    <strong>Guideline Thresholds:</strong><br>
+                                    <span id="parameterThresholds"></span>
+                                </div>
+
+                                <div style="text-align: center; margin: 25px 0;">
+                                    <button class="btn-primary" onclick="generateSampleInputs()" style="padding: 15px 30px; font-size: 1.1rem;">
+                                        📝 Generate Sample Input Form
+                                    </button>
+                                </div>
+
+                                <div id="sampleInputsContainer" style="margin-top: 30px;"></div>
+
+                                <div id="monitoringGraphContainer" style="margin-top: 40px; display: none;">
+                                    <h4>📈 Monitoring Graph</h4>
+                                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                        <canvas id="monitoringChart" style="max-height: 500px;"></canvas>
+                                    </div>
+                                    
+                                    <div id="monitoringInterpretation" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #3498db;">
+                                    </div>
+
+                                    <div style="text-align: center; margin-top: 25px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                        <button class="btn-secondary" onclick="downloadMonitoringGraph('png')" style="padding: 12px 25px;">
+                                            📥 Download as PNG
+                                        </button>
+                                        <button class="btn-secondary" onclick="downloadMonitoringGraph('pdf')" style="padding: 12px 25px;">
+                                            📥 Download as PDF
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -3238,6 +3602,1170 @@
 
             container.innerHTML = statement;
         }
+
+        // WATER QUALITY MONITORING TOOL FUNCTIONS
+        
+        let monitoringChart = null;
+        let monitoringData = [];
+
+        function showWaterSection(sectionId) {
+            // Hide all water sections
+            document.querySelectorAll('.water-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.water-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById('water-' + sectionId).classList.add('active');
+            
+            // Activate corresponding button
+            event.target.classList.add('active');
+        }
+
+        function updateMonitoringParameterInfo() {
+            const parameter = document.getElementById('monitoringParameter').value;
+            const infoDiv = document.getElementById('monitoringParameterInfo');
+            const thresholdsSpan = document.getElementById('parameterThresholds');
+            
+            if (!parameter) {
+                infoDiv.style.display = 'none';
+                return;
+            }
+            
+            const standards = waterStandards[parameter];
+            const paramDef = waterParameterDefinitions[parameter];
+            
+            if (standards && paramDef) {
+                let thresholdText = '';
+                if (standards.twqr !== undefined) {
+                    thresholdText += `<span style="color: #27ae60;">● TWQR: ${standards.twqr} ${paramDef.unit}</span> | `;
+                }
+                if (standards.cev !== undefined) {
+                    thresholdText += `<span style="color: #f39c12;">● CEV: ${standards.cev} ${paramDef.unit}</span> | `;
+                }
+                if (standards.aev !== undefined) {
+                    thresholdText += `<span style="color: #e74c3c;">● AEV: ${standards.aev} ${paramDef.unit}</span>`;
+                }
+                thresholdsSpan.innerHTML = thresholdText;
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
+
+        function generateSampleInputs() {
+            const parameter = document.getElementById('monitoringParameter').value;
+            const numEvents = parseInt(document.getElementById('numSamplingEvents').value);
+            
+            if (!parameter) {
+                alert('⚠️ Please select a parameter to monitor');
+                return;
+            }
+            
+            if (!numEvents || numEvents < 2 || numEvents > 20) {
+                alert('⚠️ Please enter a valid number of sampling events (2-20)');
+                return;
+            }
+            
+            const container = document.getElementById('sampleInputsContainer');
+            const paramDef = waterParameterDefinitions[parameter];
+            
+            let html = '<div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">';
+            html += `<h4 style="margin-bottom: 20px;">📝 Enter Sample Data for ${paramDef.name}</h4>`;
+            html += '<div style="display: grid; gap: 20px;">';
+            
+            for (let i = 1; i <= numEvents; i++) {
+                html += `
+                    <div style="padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #3498db;">
+                        <h5 style="margin-bottom: 10px; color: #2c3e50;">Sample ${i}</h5>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Date (DD/MM/YY):</label>
+                                <input type="text" id="sample${i}_date" placeholder="e.g., 15/01/25" 
+                                       style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Concentration (${paramDef.unit}):</label>
+                                <input type="number" step="${paramDef.step}" id="sample${i}_conc" placeholder="e.g., ${paramDef.placeholder}" 
+                                       style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 6px;">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            html += `
+                <div style="text-align: center; margin-top: 25px;">
+                    <button class="btn-primary" onclick="generateMonitoringGraph()" 
+                            style="padding: 15px 35px; font-size: 1.1rem; background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                        📊 Generate Monitoring Graph
+                    </button>
+                </div>
+            `;
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        function generateMonitoringGraph() {
+            const parameter = document.getElementById('monitoringParameter').value;
+            const numEvents = parseInt(document.getElementById('numSamplingEvents').value);
+            const paramDef = waterParameterDefinitions[parameter];
+            const standards = waterStandards[parameter];
+            
+            // Collect and validate data
+            monitoringData = [];
+            let hasErrors = false;
+            
+            for (let i = 1; i <= numEvents; i++) {
+                const dateInput = document.getElementById(`sample${i}_date`).value.trim();
+                const concInput = document.getElementById(`sample${i}_conc`).value.trim();
+                
+                if (!dateInput || !concInput) {
+                    alert(`⚠️ Please fill in both date and concentration for Sample ${i}`);
+                    hasErrors = true;
+                    break;
+                }
+                
+                const concentration = parseFloat(concInput);
+                if (isNaN(concentration) || concentration < 0) {
+                    alert(`⚠️ Please enter a valid concentration value for Sample ${i}`);
+                    hasErrors = true;
+                    break;
+                }
+                
+                monitoringData.push({
+                    date: dateInput,
+                    concentration: concentration
+                });
+            }
+            
+            if (hasErrors) return;
+            
+            // Sort data by date (simple sort, assumes DD/MM/YY format)
+            monitoringData.sort((a, b) => {
+                const [d1, m1, y1] = a.date.split('/').map(Number);
+                const [d2, m2, y2] = b.date.split('/').map(Number);
+                return new Date(2000 + y1, m1 - 1, d1) - new Date(2000 + y2, m2 - 1, d1);
+            });
+            
+            // Prepare chart data
+            const labels = monitoringData.map(d => d.date);
+            const concentrations = monitoringData.map(d => d.concentration);
+            
+            // Destroy existing chart if it exists
+            if (monitoringChart) {
+                monitoringChart.destroy();
+            }
+            
+            // Show graph container
+            document.getElementById('monitoringGraphContainer').style.display = 'block';
+            
+            // Create datasets
+            const datasets = [{
+                label: 'Measured Concentration',
+                data: concentrations,
+                borderColor: '#000000',
+                backgroundColor: '#000000',
+                borderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                fill: false,
+                tension: 0.1
+            }];
+            
+            // Add threshold lines
+            const maxConc = Math.max(...concentrations);
+            const minConc = Math.min(...concentrations);
+            const range = maxConc - minConc;
+            const chartMax = maxConc + (range * 0.2);
+            
+            if (standards) {
+                if (standards.twqr !== undefined && standards.twqr <= chartMax) {
+                    datasets.push({
+                        label: 'TWQR (Target Water Quality Range)',
+                        data: Array(labels.length).fill(standards.twqr),
+                        borderColor: '#27ae60',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        fill: false
+                    });
+                }
+                
+                if (standards.cev !== undefined && standards.cev <= chartMax) {
+                    datasets.push({
+                        label: 'CEV (Chronic Effect Value)',
+                        data: Array(labels.length).fill(standards.cev),
+                        borderColor: '#f39c12',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        fill: false
+                    });
+                }
+                
+                if (standards.aev !== undefined && standards.aev <= chartMax) {
+                    datasets.push({
+                        label: 'AEV (Acute Effect Value)',
+                        data: Array(labels.length).fill(standards.aev),
+                        borderColor: '#e74c3c',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        fill: false
+                    });
+                }
+            }
+            
+            // Create chart
+            const ctx = document.getElementById('monitoringChart').getContext('2d');
+            monitoringChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `${paramDef.name} - Time Series Monitoring`,
+                            font: { size: 18, weight: 'bold' },
+                            color: '#000000'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: { 
+                                padding: 15, 
+                                font: { size: 12 },
+                                color: '#000000'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: `${paramDef.name} (${paramDef.unit})`,
+                                font: { size: 14, weight: 'bold' },
+                                color: '#000000'
+                            },
+                            ticks: {
+                                color: '#000000'
+                            },
+                            grid: {
+                                color: '#e0e0e0'
+                            },
+                            border: {
+                                color: '#000000',
+                                width: 2
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Sampling Date',
+                                font: { size: 14, weight: 'bold' },
+                                color: '#000000'
+                            },
+                            ticks: {
+                                color: '#000000'
+                            },
+                            grid: {
+                                color: '#e0e0e0'
+                            },
+                            border: {
+                                color: '#000000',
+                                width: 2
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Generate interpretation
+            generateMonitoringInterpretation(parameter, paramDef, standards);
+            
+            // Scroll to graph
+            document.getElementById('monitoringGraphContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function generateMonitoringInterpretation(parameter, paramDef, standards) {
+            const container = document.getElementById('monitoringInterpretation');
+            
+            // Analyze the data
+            let exceedancesTWQR = 0;
+            let exceedancesCEV = 0;
+            let exceedancesAEV = 0;
+            let exceedanceDates = [];
+            
+            monitoringData.forEach(sample => {
+                if (standards) {
+                    if (standards.aev !== undefined && sample.concentration > standards.aev) {
+                        exceedancesAEV++;
+                        exceedanceDates.push(`${sample.date} (AEV: ${sample.concentration} > ${standards.aev} ${paramDef.unit})`);
+                    } else if (standards.cev !== undefined && sample.concentration > standards.cev) {
+                        exceedancesCEV++;
+                        exceedanceDates.push(`${sample.date} (CEV: ${sample.concentration} > ${standards.cev} ${paramDef.unit})`);
+                    } else if (standards.twqr !== undefined && sample.concentration > standards.twqr) {
+                        exceedancesTWQR++;
+                        exceedanceDates.push(`${sample.date} (TWQR: ${sample.concentration} > ${standards.twqr} ${paramDef.unit})`);
+                    }
+                }
+            });
+            
+            // Trend analysis
+            const firstConc = monitoringData[0].concentration;
+            const lastConc = monitoringData[monitoringData.length - 1].concentration;
+            const percentChange = ((lastConc - firstConc) / firstConc) * 100;
+            
+            let trendText = '';
+            if (Math.abs(percentChange) < 10) {
+                trendText = 'relatively stable';
+            } else if (percentChange > 0) {
+                trendText = `increasing (${percentChange.toFixed(1)}% increase)`;
+            } else {
+                trendText = `decreasing (${Math.abs(percentChange).toFixed(1)}% decrease)`;
+            }
+            
+            // Build clean text version first (for export)
+            let cleanText = `Automated Interpretation: `;
+            cleanText += `The monitoring data for ${paramDef.name} shows `;
+            cleanText += `${monitoringData.length} sampling events from ${monitoringData[0].date} to ${monitoringData[monitoringData.length - 1].date}. `;
+            
+            if (exceedancesAEV > 0) {
+                cleanText += `Critical concern: ${exceedancesAEV} of ${monitoringData.length} samples exceeded the Acute Effect Value (AEV), indicating immediate risk to aquatic life. `;
+                cleanText += `Immediate action is required to identify and remediate the source of contamination. `;
+                cleanText += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else if (exceedancesCEV > 0) {
+                cleanText += `Significant concern: ${exceedancesCEV} of ${monitoringData.length} samples exceeded the Chronic Effect Value (CEV), suggesting potential long-term impacts on aquatic ecosystems. `;
+                cleanText += `Corrective action is recommended to prevent chronic effects. `;
+                cleanText += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else if (exceedancesTWQR > 0) {
+                cleanText += `Elevated levels detected: ${exceedancesTWQR} of ${monitoringData.length} samples exceeded the Target Water Quality Range (TWQR). `;
+                cleanText += `While not at critical levels, increased monitoring and investigation of potential sources is advised. `;
+                cleanText += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else {
+                cleanText += `Compliance achieved: All ${monitoringData.length} samples are within acceptable water quality guidelines. `;
+                cleanText += `No exceedances of TWQR, CEV, or AEV thresholds were detected. `;
+            }
+            
+            cleanText += `The concentration trend is ${trendText} over the monitoring period. `;
+            
+            if (percentChange > 20) {
+                cleanText += `The significant increasing trend warrants further investigation to identify potential pollution sources and implement mitigation measures. `;
+            } else if (percentChange < -20) {
+                cleanText += `The decreasing trend is positive and may indicate successful pollution control measures or natural attenuation. `;
+            } else {
+                cleanText += `The stable trend suggests consistent water quality conditions at this location. `;
+            }
+            
+            cleanText += `Recommendation: Continue regular monitoring to track water quality trends and ensure ongoing compliance with South African water quality guidelines.`;
+            
+            // Store clean text for export
+            window.monitoringInterpretationText = cleanText;
+            
+            // Generate styled HTML interpretation paragraph
+            let interpretation = `<h4 style="margin-bottom: 15px;">📋 Automated Interpretation</h4>`;
+            interpretation += `<p style="line-height: 1.8; text-align: justify;">`;
+            
+            interpretation += `The monitoring data for <strong>${paramDef.name}</strong> shows `;
+            interpretation += `${monitoringData.length} sampling events from ${monitoringData[0].date} to ${monitoringData[monitoringData.length - 1].date}. `;
+            
+            if (exceedancesAEV > 0) {
+                interpretation += `<strong style="color: #e74c3c;">Critical concern:</strong> ${exceedancesAEV} of ${monitoringData.length} samples exceeded the Acute Effect Value (AEV), indicating immediate risk to aquatic life. `;
+                interpretation += `<strong>Immediate action is required</strong> to identify and remediate the source of contamination. `;
+                interpretation += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else if (exceedancesCEV > 0) {
+                interpretation += `<strong style="color: #f39c12;">Significant concern:</strong> ${exceedancesCEV} of ${monitoringData.length} samples exceeded the Chronic Effect Value (CEV), suggesting potential long-term impacts on aquatic ecosystems. `;
+                interpretation += `<strong>Corrective action is recommended</strong> to prevent chronic effects. `;
+                interpretation += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else if (exceedancesTWQR > 0) {
+                interpretation += `<strong style="color: #f39c12;">Elevated levels detected:</strong> ${exceedancesTWQR} of ${monitoringData.length} samples exceeded the Target Water Quality Range (TWQR). `;
+                interpretation += `While not at critical levels, <strong>increased monitoring and investigation</strong> of potential sources is advised. `;
+                interpretation += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else {
+                interpretation += `<strong style="color: #27ae60;">Compliance achieved:</strong> All ${monitoringData.length} samples are within acceptable water quality guidelines. `;
+                interpretation += `No exceedances of TWQR, CEV, or AEV thresholds were detected. `;
+            }
+            
+            interpretation += `The concentration trend is <strong>${trendText}</strong> over the monitoring period. `;
+            
+            if (percentChange > 20) {
+                interpretation += `The significant increasing trend warrants further investigation to identify potential pollution sources and implement mitigation measures. `;
+            } else if (percentChange < -20) {
+                interpretation += `The decreasing trend is positive and may indicate successful pollution control measures or natural attenuation. `;
+            } else {
+                interpretation += `The stable trend suggests consistent water quality conditions at this location. `;
+            }
+            
+            interpretation += `<strong>Recommendation:</strong> Continue regular monitoring to track water quality trends and ensure ongoing compliance with South African water quality guidelines.`;
+            interpretation += `</p>`;
+            
+            container.innerHTML = interpretation;
+        }
+
+        // Helper function to load logo image
+        let cachedLogoImage = null;
+        async function loadLogoImage() {
+            if (cachedLogoImage) return cachedLogoImage;
+            
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                // Don't set crossOrigin for local files - causes CORS issues
+                img.onload = () => {
+                    cachedLogoImage = img;
+                    console.log('Logo loaded successfully');
+                    resolve(img);
+                };
+                img.onerror = () => {
+                    console.warn('Logo not found at logo.jpg, proceeding without logo');
+                    resolve(null);
+                };
+                img.src = 'logo.jpg';
+            });
+        }
+
+        async function downloadMonitoringGraph(format) {
+            const parameter = document.getElementById('monitoringParameter').value;
+            const paramDef = waterParameterDefinitions[parameter];
+            const canvas = document.getElementById('monitoringChart');
+            const interpretation = window.monitoringInterpretationText || 'No interpretation available';
+            
+            if (format === 'png') {
+                // Load logo
+                const logoImg = await loadLogoImage();
+                
+                // Create a new canvas with white background and interpretation text
+                const exportCanvas = document.createElement('canvas');
+                const ctx = exportCanvas.getContext('2d');
+                
+                // Set canvas size (larger to accommodate logo and text)
+                exportCanvas.width = canvas.width;
+                exportCanvas.height = canvas.height + 510; // Extra space for logo, header, description and interpretation
+                
+                // Fill white background
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+                
+                // Add logo if available
+                let headerStartY = 40;
+                if (logoImg) {
+                    const logoHeight = 60;
+                    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+                    const logoX = (exportCanvas.width - logoWidth) / 2;
+                    ctx.drawImage(logoImg, logoX, 20, logoWidth, logoHeight);
+                    headerStartY = 95;
+                }
+                
+                // Add header
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Green Scorpions Environmental Compliance Portal', exportCanvas.width / 2, headerStartY);
+                
+                ctx.font = '18px Arial';
+                ctx.fillText('Water Quality Monitoring Tool', exportCanvas.width / 2, headerStartY + 30);
+                
+                ctx.font = '14px Arial';
+                ctx.fillText('Developed by Dr. Jonathan Levin', exportCanvas.width / 2, headerStartY + 55);
+                
+                // Add description
+                ctx.font = 'italic 12px Arial';
+                ctx.fillStyle = '#555555';
+                ctx.fillText('This graph presents temporal trends of water quality parameters compared against South African regulatory thresholds.', exportCanvas.width / 2, headerStartY + 75);
+                
+                // Draw the chart
+                const chartY = headerStartY + 95;
+                ctx.drawImage(canvas, 0, chartY);
+                
+                // Add interpretation text
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'left';
+                
+                const interpretLines = wrapText(ctx, interpretation, exportCanvas.width - 60, 12);
+                let yPos = chartY + canvas.height + 30;
+                interpretLines.forEach(line => {
+                    ctx.fillText(line, 30, yPos);
+                    yPos += 18;
+                });
+                
+                // Download
+                const link = document.createElement('a');
+                link.download = `water-monitoring-${parameter}-${Date.now()}.png`;
+                link.href = exportCanvas.toDataURL('image/png');
+                link.click();
+                
+            } else if (format === 'pdf') {
+                // Load logo for PDF
+                const logoImg = await loadLogoImage();
+                
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // Add logo if available
+                let headerStartY = 20;
+                if (logoImg) {
+                    const logoHeight = 20;
+                    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+                    const logoX = (210 - logoWidth) / 2; // A4 width is 210mm
+                    
+                    // Convert image to base64 for PDF
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = logoImg.width;
+                    tempCanvas.height = logoImg.height;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(logoImg, 0, 0);
+                    const logoDataUrl = tempCanvas.toDataURL('image/jpeg');
+                    
+                    pdf.addImage(logoDataUrl, 'JPEG', logoX, 10, logoWidth, logoHeight);
+                    headerStartY = 35;
+                }
+                
+                // Add header
+                pdf.setFontSize(18);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('Green Scorpions Environmental Compliance Portal', 105, headerStartY, { align: 'center' });
+                
+                pdf.setFontSize(14);
+                pdf.text('Water Quality Monitoring Tool', 105, headerStartY + 10, { align: 'center' });
+                
+                pdf.setFontSize(10);
+                pdf.setFont(undefined, 'normal');
+                pdf.text('Developed by Dr. Jonathan Levin', 105, headerStartY + 18, { align: 'center' });
+                
+                // Add description
+                pdf.setFontSize(9);
+                pdf.setFont(undefined, 'italic');
+                pdf.text('This graph presents temporal trends of water quality parameters compared against South African regulatory thresholds.', 105, headerStartY + 26, { align: 'center' });
+                
+                // Add chart as image
+                const imgData = canvas.toDataURL('image/png');
+                pdf.addImage(imgData, 'PNG', 15, headerStartY + 32, 180, 100);
+                
+                // Add interpretation
+                pdf.setFontSize(12);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('Automated Interpretation:', 15, headerStartY + 142);
+                
+                pdf.setFontSize(10);
+                pdf.setFont(undefined, 'normal');
+                const splitText = pdf.splitTextToSize(interpretation, 180);
+                pdf.text(splitText, 15, headerStartY + 152);
+                
+                // Save PDF
+                pdf.save(`water-monitoring-${parameter}-${Date.now()}.pdf`);
+            }
+            
+            alert(`✅ Graph downloaded successfully as ${format.toUpperCase()}!`);
+        }
+
+        // Helper function to wrap text for canvas
+        function wrapText(context, text, maxWidth, fontSize) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = '';
+            
+            words.forEach(word => {
+                const testLine = currentLine + word + ' ';
+                const metrics = context.measureText(testLine);
+                if (metrics.width > maxWidth && currentLine !== '') {
+                    lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                } else {
+                    currentLine = testLine;
+                }
+            });
+            if (currentLine.trim() !== '') {
+                lines.push(currentLine.trim());
+            }
+            
+            return lines.slice(0, 15); // Limit to 15 lines to fit in canvas
+        }
+    
+        // SEDIMENT QUALITY MONITORING TOOL FUNCTIONS
+        
+        let sedimentMonitoringChart = null;
+        let sedimentMonitoringData = [];
+
+        function showSedimentSection(sectionId) {
+            // Hide all sediment sections
+            document.querySelectorAll('.sediment-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.sediment-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById('sediment-' + sectionId).classList.add('active');
+            
+            // Activate corresponding button
+            event.target.classList.add('active');
+        }
+
+        // Helper function to get parameter definition from categories
+        function getSedimentParameterDef(paramKey) {
+            for (const category in sedimentParameterCategories) {
+                const params = sedimentParameterCategories[category].parameters;
+                if (params[paramKey]) {
+                    return params[paramKey];
+                }
+            }
+            return null;
+        }
+
+        function updateSedimentMonitoringParameterInfo() {
+            const parameter = document.getElementById('sedimentMonitoringParameter').value;
+            const infoDiv = document.getElementById('sedimentMonitoringParameterInfo');
+            const thresholdsSpan = document.getElementById('sedimentParameterThresholds');
+            
+            if (!parameter) {
+                infoDiv.style.display = 'none';
+                return;
+            }
+            
+            const standards = sedimentStandards[parameter];
+            const paramDef = getSedimentParameterDef(parameter);
+            
+            if (standards && paramDef) {
+                let thresholdText = '';
+                if (standards.ssv1 !== null) {
+                    thresholdText += `<span style="color: #27ae60;"><strong>● SSV1:</strong> ${standards.ssv1} ${paramDef.unit} (All land-uses, protective of water)</span><br>`;
+                }
+                if (standards.informal !== null) {
+                    thresholdText += `<span style="color: #3498db;"><strong>● SSV2 - Informal:</strong> ${standards.informal} ${paramDef.unit} (Informal Residential)</span><br>`;
+                }
+                if (standards.standard !== null) {
+                    thresholdText += `<span style="color: #f39c12;"><strong>● SSV2 - Standard:</strong> ${standards.standard} ${paramDef.unit} (Standard Residential)</span><br>`;
+                }
+                if (standards.commercial !== null) {
+                    thresholdText += `<span style="color: #e67e22;"><strong>● SSV2 - Commercial:</strong> ${standards.commercial} ${paramDef.unit} (Commercial/Industrial)</span><br>`;
+                }
+                if (standards.ecosystem !== null) {
+                    thresholdText += `<span style="color: #e74c3c;"><strong>● SSV2 - Ecosystem:</strong> ${standards.ecosystem} ${paramDef.unit} (Protection of Ecosystem Health)</span>`;
+                }
+                thresholdsSpan.innerHTML = thresholdText;
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
+
+        function generateSedimentSampleInputs() {
+            const parameter = document.getElementById('sedimentMonitoringParameter').value;
+            const numEvents = parseInt(document.getElementById('numSedimentSamplingEvents').value);
+            
+            if (!parameter) {
+                alert('⚠️ Please select a parameter to monitor');
+                return;
+            }
+            
+            if (!numEvents || numEvents < 2 || numEvents > 20) {
+                alert('⚠️ Please enter a valid number of sampling events (2-20)');
+                return;
+            }
+            
+            const container = document.getElementById('sedimentSampleInputsContainer');
+            const paramDef = getSedimentParameterDef(parameter);
+            
+            let html = '<div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">';
+            html += `<h4 style="margin-bottom: 20px;">📝 Enter Sample Data for ${paramDef.name}</h4>`;
+            html += '<div style="display: grid; gap: 20px;">';
+            
+            for (let i = 1; i <= numEvents; i++) {
+                html += `
+                    <div style="padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #8B4513;">
+                        <h5 style="margin-bottom: 10px; color: #2c3e50;">Sample ${i}</h5>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Date (DD/MM/YY):</label>
+                                <input type="text" id="sedimentSample${i}_date" placeholder="e.g., 15/01/25" 
+                                       style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Concentration (${paramDef.unit}):</label>
+                                <input type="number" step="${paramDef.step}" id="sedimentSample${i}_conc" placeholder="e.g., ${paramDef.placeholder}" 
+                                       style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 6px;">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            html += `
+                <div style="text-align: center; margin-top: 25px;">
+                    <button class="btn-primary" onclick="generateSedimentMonitoringGraph()" 
+                            style="padding: 15px 35px; font-size: 1.1rem; background: linear-gradient(135deg, #8B4513, #A0522D);">
+                        📊 Generate Monitoring Graph
+                    </button>
+                </div>
+            `;
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        function generateSedimentMonitoringGraph() {
+            const parameter = document.getElementById('sedimentMonitoringParameter').value;
+            const numEvents = parseInt(document.getElementById('numSedimentSamplingEvents').value);
+            const paramDef = getSedimentParameterDef(parameter);
+            const standards = sedimentStandards[parameter];
+            
+            // Collect and validate data
+            sedimentMonitoringData = [];
+            let hasErrors = false;
+            
+            for (let i = 1; i <= numEvents; i++) {
+                const dateInput = document.getElementById(`sedimentSample${i}_date`).value.trim();
+                const concInput = document.getElementById(`sedimentSample${i}_conc`).value.trim();
+                
+                if (!dateInput || !concInput) {
+                    alert(`⚠️ Please fill in both date and concentration for Sample ${i}`);
+                    hasErrors = true;
+                    break;
+                }
+                
+                const concentration = parseFloat(concInput);
+                if (isNaN(concentration) || concentration < 0) {
+                    alert(`⚠️ Please enter a valid concentration value for Sample ${i}`);
+                    hasErrors = true;
+                    break;
+                }
+                
+                sedimentMonitoringData.push({
+                    date: dateInput,
+                    concentration: concentration
+                });
+            }
+            
+            if (hasErrors) return;
+            
+            // Sort data by date
+            sedimentMonitoringData.sort((a, b) => {
+                const [d1, m1, y1] = a.date.split('/').map(Number);
+                const [d2, m2, y2] = b.date.split('/').map(Number);
+                return new Date(2000 + y1, m1 - 1, d1) - new Date(2000 + y2, m2 - 1, d2);
+            });
+            
+            // Prepare chart data
+            const labels = sedimentMonitoringData.map(d => d.date);
+            const concentrations = sedimentMonitoringData.map(d => d.concentration);
+            
+            // Destroy existing chart if it exists
+            if (sedimentMonitoringChart) {
+                sedimentMonitoringChart.destroy();
+            }
+            
+            // Show graph container
+            document.getElementById('sedimentMonitoringGraphContainer').style.display = 'block';
+            
+            // Create datasets
+            const datasets = [{
+                label: 'Measured Concentration',
+                data: concentrations,
+                borderColor: '#000000',
+                backgroundColor: '#000000',
+                borderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                fill: false,
+                tension: 0.1
+            }];
+            
+            // Add threshold lines
+            const maxConc = Math.max(...concentrations);
+            const minConc = Math.min(...concentrations);
+            const range = maxConc - minConc;
+            const chartMax = maxConc + (range * 0.2);
+            
+            if (standards) {
+                if (standards.ssv1 !== null && standards.ssv1 <= chartMax) {
+                    datasets.push({
+                        label: 'SSV1 - All land-uses, protective of water',
+                        data: Array(labels.length).fill(standards.ssv1),
+                        borderColor: '#27ae60',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        fill: false
+                    });
+                }
+                
+                if (standards.informal !== null && standards.informal <= chartMax) {
+                    datasets.push({
+                        label: 'SSV2 - Informal Residential',
+                        data: Array(labels.length).fill(standards.informal),
+                        borderColor: '#3498db',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        fill: false
+                    });
+                }
+                
+                if (standards.standard !== null && standards.standard <= chartMax) {
+                    datasets.push({
+                        label: 'SSV2 - Standard Residential',
+                        data: Array(labels.length).fill(standards.standard),
+                        borderColor: '#f39c12',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        fill: false
+                    });
+                }
+                
+                if (standards.commercial !== null && standards.commercial <= chartMax) {
+                    datasets.push({
+                        label: 'SSV2 - Commercial/Industrial',
+                        data: Array(labels.length).fill(standards.commercial),
+                        borderColor: '#e67e22',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        fill: false
+                    });
+                }
+                
+                if (standards.ecosystem !== null && standards.ecosystem <= chartMax) {
+                    datasets.push({
+                        label: 'SSV2 - Protection of Ecosystem Health',
+                        data: Array(labels.length).fill(standards.ecosystem),
+                        borderColor: '#e74c3c',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        fill: false
+                    });
+                }
+            }
+            
+            // Create chart
+            const ctx = document.getElementById('sedimentMonitoringChart').getContext('2d');
+            sedimentMonitoringChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `${paramDef.name} - Time Series Monitoring`,
+                            font: { size: 18, weight: 'bold' },
+                            color: '#000000'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: { 
+                                padding: 15, 
+                                font: { size: 12 },
+                                color: '#000000'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: `${paramDef.name} (${paramDef.unit})`,
+                                font: { size: 14, weight: 'bold' },
+                                color: '#000000'
+                            },
+                            ticks: {
+                                color: '#000000'
+                            },
+                            grid: {
+                                color: '#e0e0e0'
+                            },
+                            border: {
+                                color: '#000000',
+                                width: 2
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Sampling Date',
+                                font: { size: 14, weight: 'bold' },
+                                color: '#000000'
+                            },
+                            ticks: {
+                                color: '#000000'
+                            },
+                            grid: {
+                                color: '#e0e0e0'
+                            },
+                            border: {
+                                color: '#000000',
+                                width: 2
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Generate interpretation
+            generateSedimentMonitoringInterpretation(parameter, paramDef, standards);
+            
+            // Scroll to graph
+            document.getElementById('sedimentMonitoringGraphContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function generateSedimentMonitoringInterpretation(parameter, paramDef, standards) {
+            const container = document.getElementById('sedimentMonitoringInterpretation');
+            
+            // Analyze the data
+            let exceedancesSSV1 = 0;
+            let exceedancesInformal = 0;
+            let exceedancesStandard = 0;
+            let exceedancesCommercial = 0;
+            let exceedancesEcosystem = 0;
+            let exceedanceDates = [];
+            
+            sedimentMonitoringData.forEach(sample => {
+                if (standards) {
+                    if (standards.ecosystem !== null && sample.concentration > standards.ecosystem) {
+                        exceedancesEcosystem++;
+                        exceedanceDates.push(`${sample.date} (Ecosystem: ${sample.concentration} > ${standards.ecosystem} ${paramDef.unit})`);
+                    } else if (standards.commercial !== null && sample.concentration > standards.commercial) {
+                        exceedancesCommercial++;
+                        exceedanceDates.push(`${sample.date} (Commercial: ${sample.concentration} > ${standards.commercial} ${paramDef.unit})`);
+                    } else if (standards.standard !== null && sample.concentration > standards.standard) {
+                        exceedancesStandard++;
+                        exceedanceDates.push(`${sample.date} (Standard: ${sample.concentration} > ${standards.standard} ${paramDef.unit})`);
+                    } else if (standards.informal !== null && sample.concentration > standards.informal) {
+                        exceedancesInformal++;
+                        exceedanceDates.push(`${sample.date} (Informal: ${sample.concentration} > ${standards.informal} ${paramDef.unit})`);
+                    } else if (standards.ssv1 !== null && sample.concentration > standards.ssv1) {
+                        exceedancesSSV1++;
+                        exceedanceDates.push(`${sample.date} (SSV1: ${sample.concentration} > ${standards.ssv1} ${paramDef.unit})`);
+                    }
+                }
+            });
+            
+            // Trend analysis
+            const firstConc = sedimentMonitoringData[0].concentration;
+            const lastConc = sedimentMonitoringData[sedimentMonitoringData.length - 1].concentration;
+            const percentChange = ((lastConc - firstConc) / firstConc) * 100;
+            
+            let trendText = '';
+            if (Math.abs(percentChange) < 10) {
+                trendText = 'relatively stable';
+            } else if (percentChange > 0) {
+                trendText = `increasing (${percentChange.toFixed(1)}% increase)`;
+            } else {
+                trendText = `decreasing (${Math.abs(percentChange).toFixed(1)}% decrease)`;
+            }
+            
+            // Build clean text version (for export)
+            let cleanText = `Automated Interpretation: `;
+            cleanText += `The monitoring data for ${paramDef.name} shows `;
+            cleanText += `${sedimentMonitoringData.length} sampling events from ${sedimentMonitoringData[0].date} to ${sedimentMonitoringData[sedimentMonitoringData.length - 1].date}. `;
+            cleanText += `Thresholds assessed against South African National Norms and Standards: SSV1 (all land-uses, protective of water) and SSV2 (land-use specific). `;
+            
+            if (exceedancesEcosystem > 0) {
+                cleanText += `Critical concern: ${exceedancesEcosystem} of ${sedimentMonitoringData.length} samples exceeded SSV2 - Protection of Ecosystem Health, indicating severe risk to ecological receptors. `;
+                cleanText += `Immediate remediation action is required to protect environmental health. `;
+                cleanText += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else if (exceedancesCommercial > 0) {
+                cleanText += `Significant concern: ${exceedancesCommercial} of ${sedimentMonitoringData.length} samples exceeded SSV2 - Commercial/Industrial threshold. `;
+                cleanText += `The site may be unsuitable for sensitive land uses without remediation. `;
+                cleanText += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else if (exceedancesStandard > 0) {
+                cleanText += `Elevated contamination: ${exceedancesStandard} of ${sedimentMonitoringData.length} samples exceeded SSV2 - Standard Residential threshold. `;
+                cleanText += `Site assessment and potential remediation measures are recommended before residential development. `;
+                cleanText += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else if (exceedancesInformal > 0) {
+                cleanText += `Moderate concern: ${exceedancesInformal} of ${sedimentMonitoringData.length} samples exceeded SSV2 - Informal Residential threshold. `;
+                cleanText += `Further investigation and risk assessment are advised. `;
+                cleanText += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else if (exceedancesSSV1 > 0) {
+                cleanText += `Initial screening level exceeded: ${exceedancesSSV1} of ${sedimentMonitoringData.length} samples exceeded SSV1 (all land-uses, protective of water resource). `;
+                cleanText += `Tier 2 site-specific risk assessment may be required to determine appropriate action under NEMA: Waste Act. `;
+                cleanText += `The exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+            } else {
+                cleanText += `Compliance achieved: All ${sedimentMonitoringData.length} samples are within applicable South African Soil Screening Values (SSV1 and SSV2 thresholds). `;
+                cleanText += `No exceedances were detected. `;
+            }
+            
+            cleanText += `The concentration trend is ${trendText} over the monitoring period. `;
+            
+            if (percentChange > 20) {
+                cleanText += `The significant increasing trend warrants investigation to identify potential contamination sources and implement control measures. `;
+            } else if (percentChange < -20) {
+                cleanText += `The decreasing trend is positive and may indicate successful remediation or natural attenuation processes. `;
+            } else {
+                cleanText += `The stable trend suggests consistent sediment quality conditions at this location. `;
+            }
+            
+            cleanText += `Recommendation: Continue regular monitoring to track sediment quality trends and ensure ongoing compliance with South African soil quality standards in accordance with NEMA: Waste Act requirements.`;
+            
+            // Store clean text for export
+            window.sedimentMonitoringInterpretationText = cleanText;
+            
+            // Generate styled HTML interpretation
+            let interpretation = `<h4 style="margin-bottom: 15px;">📋 Automated Interpretation</h4>`;
+            interpretation += `<p style="line-height: 1.8; text-align: justify;">`;
+            interpretation += cleanText.replace('Automated Interpretation: ', '');
+            interpretation += `</p>`;
+            
+            container.innerHTML = interpretation;
+        }
+
+        async function downloadSedimentMonitoringGraph(format) {
+            const parameter = document.getElementById('sedimentMonitoringParameter').value;
+            const paramDef = getSedimentParameterDef(parameter);
+            const canvas = document.getElementById('sedimentMonitoringChart');
+            const interpretation = window.sedimentMonitoringInterpretationText || 'No interpretation available';
+            
+            if (format === 'png') {
+                // Load logo
+                const logoImg = await loadLogoImage();
+                
+                // Create export canvas
+                const exportCanvas = document.createElement('canvas');
+                const ctx = exportCanvas.getContext('2d');
+                
+                exportCanvas.width = canvas.width;
+                exportCanvas.height = canvas.height + 510; // Extra space for logo
+                
+                // White background
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+                
+                // Add logo if available
+                let headerStartY = 40;
+                if (logoImg) {
+                    const logoHeight = 60;
+                    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+                    const logoX = (exportCanvas.width - logoWidth) / 2;
+                    ctx.drawImage(logoImg, logoX, 20, logoWidth, logoHeight);
+                    headerStartY = 95;
+                }
+                
+                // Add header
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Green Scorpions Environmental Compliance Portal', exportCanvas.width / 2, headerStartY);
+                
+                ctx.font = '18px Arial';
+                ctx.fillText('Sediment Quality Monitoring Tool', exportCanvas.width / 2, headerStartY + 30);
+                
+                ctx.font = '14px Arial';
+                ctx.fillText('Developed by Dr. Jonathan Levin', exportCanvas.width / 2, headerStartY + 55);
+                
+                // Add description
+                ctx.font = 'italic 12px Arial';
+                ctx.fillStyle = '#555555';
+                ctx.fillText('This graph presents temporal trends of sediment quality parameters compared against South African Soil Screening Values.', exportCanvas.width / 2, headerStartY + 75);
+                
+                // Draw chart
+                const chartY = headerStartY + 95;
+                ctx.drawImage(canvas, 0, chartY);
+                
+                // Add interpretation
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'left';
+                
+                const interpretLines = wrapText(ctx, interpretation, exportCanvas.width - 60, 12);
+                let yPos = chartY + canvas.height + 30;
+                interpretLines.forEach(line => {
+                    ctx.fillText(line, 30, yPos);
+                    yPos += 18;
+                });
+                
+                // Download
+                const link = document.createElement('a');
+                link.download = `sediment-monitoring-${parameter}-${Date.now()}.png`;
+                link.href = exportCanvas.toDataURL('image/png');
+                link.click();
+                
+            } else if (format === 'pdf') {
+                // Load logo for PDF
+                const logoImg = await loadLogoImage();
+                
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // Add logo if available
+                let headerStartY = 20;
+                if (logoImg) {
+                    const logoHeight = 20;
+                    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+                    const logoX = (210 - logoWidth) / 2; // A4 width is 210mm
+                    
+                    // Convert image to base64 for PDF
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = logoImg.width;
+                    tempCanvas.height = logoImg.height;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(logoImg, 0, 0);
+                    const logoDataUrl = tempCanvas.toDataURL('image/jpeg');
+                    
+                    pdf.addImage(logoDataUrl, 'JPEG', logoX, 10, logoWidth, logoHeight);
+                    headerStartY = 35;
+                }
+                
+                // Add header
+                pdf.setFontSize(18);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('Green Scorpions Environmental Compliance Portal', 105, headerStartY, { align: 'center' });
+                
+                pdf.setFontSize(14);
+                pdf.text('Sediment Quality Monitoring Tool', 105, headerStartY + 10, { align: 'center' });
+                
+                pdf.setFontSize(10);
+                pdf.setFont(undefined, 'normal');
+                pdf.text('Developed by Dr. Jonathan Levin', 105, headerStartY + 18, { align: 'center' });
+                
+                // Add description
+                pdf.setFontSize(9);
+                pdf.setFont(undefined, 'italic');
+                pdf.text('This graph presents temporal trends of sediment quality parameters compared against South African Soil Screening Values.', 105, headerStartY + 26, { align: 'center' });
+                
+                // Add chart
+                const imgData = canvas.toDataURL('image/png');
+                pdf.addImage(imgData, 'PNG', 15, headerStartY + 32, 180, 100);
+                
+                // Add interpretation
+                pdf.setFontSize(12);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('Automated Interpretation:', 15, headerStartY + 142);
+                
+                pdf.setFontSize(10);
+                pdf.setFont(undefined, 'normal');
+                const splitText = pdf.splitTextToSize(interpretation, 180);
+                pdf.text(splitText, 15, headerStartY + 152);
+                
+                // Save PDF
+                pdf.save(`sediment-monitoring-${parameter}-${Date.now()}.pdf`);
+            }
+            
+            alert(`✅ Graph downloaded successfully as ${format.toUpperCase()}!`);
+        }
     
         // MARINE & ESTUARINE TOOL FUNCTIONS
         function loadMarineTool() {
@@ -3253,7 +4781,8 @@
                     <button class="marine-nav-btn active" onclick="showMarineSection('userguide')">🏠 User Guide</button>
                     <button class="marine-nav-btn" onclick="showMarineSection('baselines')">📍 Regional Baselines</button>
                     <button class="marine-nav-btn" onclick="showMarineSection('assessment')">🧪 Assessment</button>
-                    <button class="marine-nav-btn" onclick="showMarineSection('results')" id="marineResultsTab" style="display: none;">📊 Results</button>
+                    <button class="marine-nav-btn" onclick="showMarineSection('monitoring')">📊 Time & Compliance Monitoring</button>
+                    <button class="marine-nav-btn" onclick="showMarineSection('results')" id="marineResultsTab" style="display: none;">📋 Results</button>
                 </div>
 
                 <div id="marineContentArea" style="margin-top: 20px;">
@@ -3945,6 +5474,118 @@
                             </div>
                         </div>
                     </template>
+                </div>
+            </div>
+
+            <!-- Monitoring Section -->
+            <div id="marine-monitoring" class="marine-section">
+                <div class="card">
+                    <h3>📊 Time & Compliance Monitoring Tool</h3>
+                    <p style="line-height: 1.6; margin-bottom: 20px;">
+                        Track marine and estuarine water quality parameters over time at a single monitoring location. 
+                        Visualize trends against regional baseline ranges (20th-80th percentiles) customized for South African coastal waters.
+                    </p>
+
+                    <div class="info-box">
+                        <strong>📌 How to use:</strong><br>
+                        1. Select your coastal region (uses your configured regional baselines)<br>
+                        2. Select environment type (Estuarine or Marine) for nutrient parameters<br>
+                        3. Select a water quality parameter to monitor<br>
+                        4. Enter the number of sampling events<br>
+                        5. Input date and concentration for each sample<br>
+                        6. Generate the monitoring graph with acceptable range zone<br>
+                        7. Download the graph with automated interpretation
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <h4>⚙️ Configure Monitoring</h4>
+                        
+                        <div class="input-group" style="margin-top: 20px;">
+                            <div class="input-field">
+                                <label for="marineMonitoringRegion"><strong>Select Coastal Region:</strong></label>
+                                <select id="marineMonitoringRegion" onchange="updateMarineMonitoringInfo()" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                                    <option value="">-- Choose a region --</option>
+                                    <option value="capeWest">Cape Town / West Coast</option>
+                                    <option value="durbanEast">Durban / KZN Coast</option>
+                                    <option value="portElizabeth">Port Elizabeth / Algoa Bay</option>
+                                    <option value="gardenRoute">Garden Route</option>
+                                    <option value="eastLondon">East London / Wild Coast</option>
+                                </select>
+                            </div>
+
+                            <div class="input-field">
+                                <label for="marineMonitoringParameter"><strong>Select Parameter:</strong></label>
+                                <select id="marineMonitoringParameter" onchange="updateMarineMonitoringInfo()" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                                    <option value="">-- Choose a parameter --</option>
+                                    <optgroup label="Physicochemical Properties">
+                                        <option value="temperature">Temperature (°C)</option>
+                                        <option value="salinity">Salinity (ppt)</option>
+                                        <option value="pH">pH</option>
+                                        <option value="dissolvedOxygen">Dissolved Oxygen (mg/L)</option>
+                                        <option value="suspendedSolids">Suspended Solids (mg/L)</option>
+                                        <option value="turbidity">Turbidity (NTU)</option>
+                                    </optgroup>
+                                    <optgroup label="Nutrients (Gradient-Sensitive)" id="marineNutrientsGroup">
+                                        <option value="ammonia">Ammonia as N (µg/L)</option>
+                                        <option value="nitrate">Nitrate as N (µg/L)</option>
+                                        <option value="nitrite">Nitrite as N (µg/L)</option>
+                                        <option value="phosphorus">Phosphorus as P (µg/L)</option>
+                                        <option value="silicon">Silicon as Si (µg/L)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 15px;" id="marineGradientSelector" style="display: none;">
+                            <div class="input-field">
+                                <label for="marineMonitoringGradient"><strong>Environment Type (for nutrients):</strong></label>
+                                <select id="marineMonitoringGradient" onchange="updateMarineMonitoringInfo()" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                                    <option value="est">Estuarine (0.5-30 ppt salinity)</option>
+                                    <option value="mar">Marine (>30 ppt salinity)</option>
+                                </select>
+                            </div>
+
+                            <div class="input-field">
+                                <label for="numMarineSamplingEvents"><strong>Number of Sampling Events:</strong></label>
+                                <input type="number" id="numMarineSamplingEvents" min="2" max="20" placeholder="e.g., 3" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                            </div>
+                        </div>
+
+                        <div id="marineMonitoringParameterInfo" style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-left: 4px solid #1a7d9f; border-radius: 5px; display: none;">
+                            <strong>📊 Regional Baseline Ranges (20th-80th Percentile):</strong><br>
+                            <span id="marineParameterRanges"></span>
+                            <div style="margin-top: 10px; font-size: 0.9rem; color: #555;">
+                                <em>These values come from your configured Regional Baselines and represent the acceptable natural variability for this region.</em>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin: 25px 0;">
+                            <button class="btn-primary" onclick="generateMarineSampleInputs()" style="padding: 15px 30px; font-size: 1.1rem; background: linear-gradient(135deg, #1a7d9f, #0a4e68);">
+                                📝 Generate Sample Input Form
+                            </button>
+                        </div>
+
+                        <div id="marineSampleInputsContainer" style="margin-top: 30px;"></div>
+
+                        <div id="marineMonitoringGraphContainer" style="margin-top: 40px; display: none;">
+                            <h4>📈 Monitoring Graph</h4>
+                            <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                <canvas id="marineMonitoringChart" style="max-height: 500px;"></canvas>
+                            </div>
+                            
+                            <div id="marineMonitoringInterpretation" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #1a7d9f;">
+                            </div>
+
+                            <div style="text-align: center; margin-top: 25px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <button class="btn-secondary" onclick="downloadMarineMonitoringGraph('png')" style="padding: 12px 25px;">
+                                    📥 Download as PNG
+                                </button>
+                                <button class="btn-secondary" onclick="downloadMarineMonitoringGraph('pdf')" style="padding: 12px 25px;">
+                                    📥 Download as PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -5830,6 +7471,571 @@
                     input.value = '';
                 }
             });
+        }
+
+        // MARINE & ESTUARINE MONITORING TOOL FUNCTIONS
+        
+        let marineMonitoringChart = null;
+        let marineMonitoringData = [];
+
+        function updateMarineMonitoringInfo() {
+            const region = document.getElementById('marineMonitoringRegion').value;
+            const parameter = document.getElementById('marineMonitoringParameter').value;
+            const infoDiv = document.getElementById('marineMonitoringParameterInfo');
+            const rangesSpan = document.getElementById('marineParameterRanges');
+            const gradientSelector = document.getElementById('marineGradientSelector');
+            
+            // Show/hide gradient selector for nutrients
+            const isNutrient = ['ammonia', 'nitrate', 'nitrite', 'phosphorus', 'silicon'].includes(parameter);
+            if (isNutrient) {
+                gradientSelector.style.display = 'grid';
+            } else {
+                gradientSelector.style.display = 'none';
+            }
+            
+            if (!region || !parameter) {
+                infoDiv.style.display = 'none';
+                return;
+            }
+            
+            // Get regional baselines (check for custom saved values first)
+            const savedBaselines = JSON.parse(localStorage.getItem('saMarineBaselines') || '{}');
+            const baselines = savedBaselines[region] || regionalDefaults[region];
+            
+            if (!baselines) {
+                infoDiv.style.display = 'none';
+                return;
+            }
+            
+            let rangeText = `<strong>Region:</strong> ${baselines.name}<br>`;
+            
+            if (isNutrient) {
+                const gradient = document.getElementById('marineMonitoringGradient').value;
+                const nutrientKey = parameter + '_' + gradient;
+                if (baselines.nutrients && baselines.nutrients[nutrientKey]) {
+                    rangeText += `<strong>Acceptable Range:</strong> ${baselines.nutrients[nutrientKey]}<br>`;
+                    rangeText += `<span style="color: #27ae60;">● Lower Limit (20th percentile)</span> | `;
+                    rangeText += `<span style="color: #3498db;">● Median</span> | `;
+                    rangeText += `<span style="color: #e74c3c;">● Upper Limit (80th percentile)</span>`;
+                }
+            } else {
+                if (baselines[parameter]) {
+                    rangeText += `<strong>Acceptable Range:</strong> ${baselines[parameter].p20} - ${baselines[parameter].p80}<br>`;
+                    rangeText += `<strong>Median:</strong> ${baselines[parameter].median}<br>`;
+                    rangeText += `<span style="color: #27ae60;">● 20th Percentile (Lower Limit): ${baselines[parameter].p20}</span><br>`;
+                    rangeText += `<span style="color: #3498db;">● Median (Reference): ${baselines[parameter].median}</span><br>`;
+                    rangeText += `<span style="color: #e74c3c;">● 80th Percentile (Upper Limit): ${baselines[parameter].p80}</span>`;
+                }
+            }
+            
+            rangesSpan.innerHTML = rangeText;
+            infoDiv.style.display = 'block';
+        }
+
+        function generateMarineSampleInputs() {
+            const region = document.getElementById('marineMonitoringRegion').value;
+            const parameter = document.getElementById('marineMonitoringParameter').value;
+            const numEvents = parseInt(document.getElementById('numMarineSamplingEvents').value);
+            
+            if (!region) {
+                alert('⚠️ Please select a coastal region');
+                return;
+            }
+            
+            if (!parameter) {
+                alert('⚠️ Please select a parameter to monitor');
+                return;
+            }
+            
+            if (!numEvents || numEvents < 2 || numEvents > 20) {
+                alert('⚠️ Please enter a valid number of sampling events (2-20)');
+                return;
+            }
+            
+            const container = document.getElementById('marineSampleInputsContainer');
+            const savedBaselines = JSON.parse(localStorage.getItem('saMarineBaselines') || '{}');
+            const baselines = savedBaselines[region] || regionalDefaults[region];
+            
+            const paramNames = {
+                temperature: 'Temperature (°C)',
+                salinity: 'Salinity (ppt)',
+                pH: 'pH',
+                dissolvedOxygen: 'Dissolved Oxygen (mg/L)',
+                suspendedSolids: 'Suspended Solids (mg/L)',
+                turbidity: 'Turbidity (NTU)',
+                ammonia: 'Ammonia as N (µg/L)',
+                nitrate: 'Nitrate as N (µg/L)',
+                nitrite: 'Nitrite as N (µg/L)',
+                phosphorus: 'Phosphorus as P (µg/L)',
+                silicon: 'Silicon as Si (µg/L)'
+            };
+            
+            const paramName = paramNames[parameter];
+            
+            let html = '<div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">';
+            html += `<h4 style="margin-bottom: 20px;">📝 Enter Sample Data for ${paramName}</h4>`;
+            html += `<p style="margin-bottom: 15px; color: #666;"><strong>Region:</strong> ${baselines.name}</p>`;
+            html += '<div style="display: grid; gap: 20px;">';
+            
+            for (let i = 1; i <= numEvents; i++) {
+                html += `
+                    <div style="padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #1a7d9f;">
+                        <h5 style="margin-bottom: 10px; color: #2c3e50;">Sample ${i}</h5>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Date (DD/MM/YY):</label>
+                                <input type="text" id="marineSample${i}_date" placeholder="e.g., 15/01/25" 
+                                       style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Concentration:</label>
+                                <input type="number" step="0.01" id="marineSample${i}_conc" placeholder="e.g., 17.5" 
+                                       style="width: 100%; padding: 10px; border: 2px solid #e0e6ed; border-radius: 6px;">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            html += `
+                <div style="text-align: center; margin-top: 25px;">
+                    <button class="btn-primary" onclick="generateMarineMonitoringGraph()" 
+                            style="padding: 15px 35px; font-size: 1.1rem; background: linear-gradient(135deg, #1a7d9f, #0a4e68);">
+                        📊 Generate Monitoring Graph
+                    </button>
+                </div>
+            `;
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        function generateMarineMonitoringGraph() {
+            const region = document.getElementById('marineMonitoringRegion').value;
+            const parameter = document.getElementById('marineMonitoringParameter').value;
+            const numEvents = parseInt(document.getElementById('numMarineSamplingEvents').value);
+            
+            const savedBaselines = JSON.parse(localStorage.getItem('saMarineBaselines') || '{}');
+            const baselines = savedBaselines[region] || regionalDefaults[region];
+            
+            // Collect and validate data
+            marineMonitoringData = [];
+            let hasErrors = false;
+            
+            for (let i = 1; i <= numEvents; i++) {
+                const dateInput = document.getElementById(`marineSample${i}_date`).value.trim();
+                const concInput = document.getElementById(`marineSample${i}_conc`).value.trim();
+                
+                if (!dateInput || !concInput) {
+                    alert(`⚠️ Please fill in both date and concentration for Sample ${i}`);
+                    hasErrors = true;
+                    break;
+                }
+                
+                const concentration = parseFloat(concInput);
+                if (isNaN(concentration) || concentration < 0) {
+                    alert(`⚠️ Please enter a valid concentration value for Sample ${i}`);
+                    hasErrors = true;
+                    break;
+                }
+                
+                marineMonitoringData.push({
+                    date: dateInput,
+                    concentration: concentration
+                });
+            }
+            
+            if (hasErrors) return;
+            
+            // Sort data by date
+            marineMonitoringData.sort((a, b) => {
+                const [d1, m1, y1] = a.date.split('/').map(Number);
+                const [d2, m2, y2] = b.date.split('/').map(Number);
+                return new Date(2000 + y1, m1 - 1, d1) - new Date(2000 + y2, m2 - 1, d2);
+            });
+            
+            // Get baseline ranges
+            const isNutrient = ['ammonia', 'nitrate', 'nitrite', 'phosphorus', 'silicon'].includes(parameter);
+            let p20, median, p80;
+            
+            if (isNutrient) {
+                const gradient = document.getElementById('marineMonitoringGradient').value;
+                const nutrientKey = parameter + '_' + gradient;
+                const rangeStr = baselines.nutrients[nutrientKey];
+                const [lower, upper] = rangeStr.split('-').map(Number);
+                p20 = lower;
+                p80 = upper;
+                median = (lower + upper) / 2; // Approximate median
+            } else {
+                p20 = baselines[parameter].p20;
+                median = baselines[parameter].median;
+                p80 = baselines[parameter].p80;
+            }
+            
+            // Prepare chart data
+            const labels = marineMonitoringData.map(d => d.date);
+            const concentrations = marineMonitoringData.map(d => d.concentration);
+            
+            // Destroy existing chart
+            if (marineMonitoringChart) {
+                marineMonitoringChart.destroy();
+            }
+            
+            document.getElementById('marineMonitoringGraphContainer').style.display = 'block';
+            
+            // Create datasets with acceptable range
+            const datasets = [{
+                label: 'Measured Concentration',
+                data: concentrations,
+                borderColor: '#000000',
+                backgroundColor: '#000000',
+                borderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                fill: false,
+                tension: 0.1,
+                order: 1
+            }];
+            
+            // Add acceptable range as filled area
+            datasets.push({
+                label: 'Acceptable Range (20th-80th Percentile)',
+                data: Array(labels.length).fill(p80),
+                borderColor: 'rgba(39, 174, 96, 0.3)',
+                backgroundColor: 'rgba(39, 174, 96, 0.15)',
+                borderWidth: 1,
+                borderDash: [5, 5],
+                pointRadius: 0,
+                fill: '+1',
+                order: 3
+            });
+            
+            datasets.push({
+                label: '',
+                data: Array(labels.length).fill(p20),
+                borderColor: 'rgba(39, 174, 96, 0.3)',
+                backgroundColor: 'rgba(39, 174, 96, 0.15)',
+                borderWidth: 1,
+                borderDash: [5, 5],
+                pointRadius: 0,
+                fill: false,
+                order: 3
+            });
+            
+            // Add median line
+            datasets.push({
+                label: 'Median (Reference)',
+                data: Array(labels.length).fill(median),
+                borderColor: '#3498db',
+                borderWidth: 2,
+                borderDash: [10, 5],
+                pointRadius: 0,
+                fill: false,
+                order: 2
+            });
+            
+            const paramNames = {
+                temperature: 'Temperature (°C)',
+                salinity: 'Salinity (ppt)',
+                pH: 'pH',
+                dissolvedOxygen: 'Dissolved Oxygen (mg/L)',
+                suspendedSolids: 'Suspended Solids (mg/L)',
+                turbidity: 'Turbidity (NTU)',
+                ammonia: 'Ammonia as N (µg/L)',
+                nitrate: 'Nitrate as N (µg/L)',
+                nitrite: 'Nitrite as N (µg/L)',
+                phosphorus: 'Phosphorus as P (µg/L)',
+                silicon: 'Silicon as Si (µg/L)'
+            };
+            
+            // Create chart
+            const ctx = document.getElementById('marineMonitoringChart').getContext('2d');
+            marineMonitoringChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `${paramNames[parameter]} - Time Series Monitoring (${baselines.name})`,
+                            font: { size: 18, weight: 'bold' },
+                            color: '#000000'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: { 
+                                padding: 15, 
+                                font: { size: 12 },
+                                color: '#000000',
+                                filter: function(item) {
+                                    return item.text !== ''; // Hide empty labels
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: paramNames[parameter],
+                                font: { size: 14, weight: 'bold' },
+                                color: '#000000'
+                            },
+                            ticks: {
+                                color: '#000000'
+                            },
+                            grid: {
+                                color: '#e0e0e0'
+                            },
+                            border: {
+                                color: '#000000',
+                                width: 2
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Sampling Date',
+                                font: { size: 14, weight: 'bold' },
+                                color: '#000000'
+                            },
+                            ticks: {
+                                color: '#000000'
+                            },
+                            grid: {
+                                color: '#e0e0e0'
+                            },
+                            border: {
+                                color: '#000000',
+                                width: 2
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Generate interpretation
+            generateMarineMonitoringInterpretation(parameter, baselines, p20, median, p80);
+            
+            document.getElementById('marineMonitoringGraphContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function generateMarineMonitoringInterpretation(parameter, baselines, p20, median, p80) {
+            const container = document.getElementById('marineMonitoringInterpretation');
+            
+            // Analyze exceedances
+            let belowRange = 0;
+            let withinRange = 0;
+            let aboveRange = 0;
+            let exceedanceDates = [];
+            
+            marineMonitoringData.forEach(sample => {
+                if (sample.concentration < p20) {
+                    belowRange++;
+                    exceedanceDates.push(`${sample.date} (Below range: ${sample.concentration})`);
+                } else if (sample.concentration > p80) {
+                    aboveRange++;
+                    exceedanceDates.push(`${sample.date} (Above range: ${sample.concentration})`);
+                } else {
+                    withinRange++;
+                }
+            });
+            
+            // Trend analysis
+            const firstConc = marineMonitoringData[0].concentration;
+            const lastConc = marineMonitoringData[marineMonitoringData.length - 1].concentration;
+            const percentChange = ((lastConc - firstConc) / firstConc) * 100;
+            
+            let trendText = '';
+            if (Math.abs(percentChange) < 10) {
+                trendText = 'relatively stable';
+            } else if (percentChange > 0) {
+                trendText = `increasing (${percentChange.toFixed(1)}% increase)`;
+            } else {
+                trendText = `decreasing (${Math.abs(percentChange).toFixed(1)}% decrease)`;
+            }
+            
+            const paramNames = {
+                temperature: 'Temperature',
+                salinity: 'Salinity',
+                pH: 'pH',
+                dissolvedOxygen: 'Dissolved Oxygen',
+                suspendedSolids: 'Suspended Solids',
+                turbidity: 'Turbidity',
+                ammonia: 'Ammonia',
+                nitrate: 'Nitrate',
+                nitrite: 'Nitrite',
+                phosphorus: 'Phosphorus',
+                silicon: 'Silicon'
+            };
+            
+            // Build clean text
+            let cleanText = `Automated Interpretation: `;
+            cleanText += `The monitoring data for ${paramNames[parameter]} shows ${marineMonitoringData.length} sampling events from ${marineMonitoringData[0].date} to ${marineMonitoringData[marineMonitoringData.length - 1].date} at ${baselines.name}. `;
+            cleanText += `Regional baselines represent acceptable natural variability (20th-80th percentile ranges) for this coastal area. `;
+            
+            if (aboveRange > 0 || belowRange > 0) {
+                cleanText += `Variability detected: ${withinRange} of ${marineMonitoringData.length} samples within acceptable range, ${aboveRange} above range, ${belowRange} below range. `;
+                if (exceedanceDates.length > 0) {
+                    cleanText += `Exceedances occurred on: ${exceedanceDates.join('; ')}. `;
+                }
+                cleanText += `Values outside the 20th-80th percentile range indicate conditions that deviate from typical regional variability and warrant investigation. `;
+            } else {
+                cleanText += `Compliance achieved: All ${marineMonitoringData.length} samples fall within the acceptable regional baseline range (${p20} - ${p80}), indicating typical natural variability for this coastal region. `;
+            }
+            
+            cleanText += `The concentration trend is ${trendText} over the monitoring period. `;
+            
+            if (Math.abs(percentChange) > 20) {
+                cleanText += `The significant trend warrants continued monitoring to determine if this represents natural seasonal variation or anthropogenic influence. `;
+            } else {
+                cleanText += `The trend suggests stable water quality conditions consistent with regional expectations. `;
+            }
+            
+            cleanText += `Recommendation: Continue regular monitoring to track marine water quality trends and ensure ongoing compliance with South African coastal water quality guidelines. ** Future versions will include assessment type selection (Natural Environment vs Mariculture) and enhanced nutrient gradient analysis.`;
+            
+            window.marineMonitoringInterpretationText = cleanText;
+            
+            let interpretation = `<h4 style="margin-bottom: 15px;">📋 Automated Interpretation</h4>`;
+            interpretation += `<p style="line-height: 1.8; text-align: justify;">`;
+            interpretation += cleanText.replace('Automated Interpretation: ', '');
+            interpretation += `</p>`;
+            
+            container.innerHTML = interpretation;
+        }
+
+        async function downloadMarineMonitoringGraph(format) {
+            const region = document.getElementById('marineMonitoringRegion').value;
+            const parameter = document.getElementById('marineMonitoringParameter').value;
+            const canvas = document.getElementById('marineMonitoringChart');
+            const interpretation = window.marineMonitoringInterpretationText || 'No interpretation available';
+            
+            const savedBaselines = JSON.parse(localStorage.getItem('saMarineBaselines') || '{}');
+            const baselines = savedBaselines[region] || regionalDefaults[region];
+            
+            if (format === 'png') {
+                // Load logo
+                const logoImg = await loadLogoImage();
+                
+                const exportCanvas = document.createElement('canvas');
+                const ctx = exportCanvas.getContext('2d');
+                
+                exportCanvas.width = canvas.width;
+                exportCanvas.height = canvas.height + 510; // Extra space for logo
+                
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+                
+                // Add logo if available
+                let headerStartY = 40;
+                if (logoImg) {
+                    const logoHeight = 60;
+                    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+                    const logoX = (exportCanvas.width - logoWidth) / 2;
+                    ctx.drawImage(logoImg, logoX, 20, logoWidth, logoHeight);
+                    headerStartY = 95;
+                }
+                
+                // Header
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Green Scorpions Environmental Compliance Portal', exportCanvas.width / 2, headerStartY);
+                
+                ctx.font = '18px Arial';
+                ctx.fillText('Marine & Estuarine Water Quality Monitoring Tool', exportCanvas.width / 2, headerStartY + 30);
+                
+                ctx.font = '14px Arial';
+                ctx.fillText('Developed by Dr. Jonathan Levin', exportCanvas.width / 2, headerStartY + 55);
+                
+                ctx.font = 'italic 12px Arial';
+                ctx.fillStyle = '#555555';
+                ctx.fillText('This graph presents temporal trends of marine parameters against regional baseline ranges for South African coastal waters.', exportCanvas.width / 2, headerStartY + 75);
+                
+                const chartY = headerStartY + 95;
+                ctx.drawImage(canvas, 0, chartY);
+                
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'left';
+                
+                const interpretLines = wrapText(ctx, interpretation, exportCanvas.width - 60, 12);
+                let yPos = chartY + canvas.height + 30;
+                interpretLines.forEach(line => {
+                    ctx.fillText(line, 30, yPos);
+                    yPos += 18;
+                });
+                
+                const link = document.createElement('a');
+                link.download = `marine-monitoring-${parameter}-${region}-${Date.now()}.png`;
+                link.href = exportCanvas.toDataURL('image/png');
+                link.click();
+                
+            } else if (format === 'pdf') {
+                // Load logo for PDF
+                const logoImg = await loadLogoImage();
+                
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // Add logo if available
+                let headerStartY = 20;
+                if (logoImg) {
+                    const logoHeight = 20;
+                    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+                    const logoX = (210 - logoWidth) / 2; // A4 width is 210mm
+                    
+                    // Convert image to base64 for PDF
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = logoImg.width;
+                    tempCanvas.height = logoImg.height;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(logoImg, 0, 0);
+                    const logoDataUrl = tempCanvas.toDataURL('image/jpeg');
+                    
+                    pdf.addImage(logoDataUrl, 'JPEG', logoX, 10, logoWidth, logoHeight);
+                    headerStartY = 35;
+                }
+                
+                pdf.setFontSize(18);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('Green Scorpions Environmental Compliance Portal', 105, headerStartY, { align: 'center' });
+                
+                pdf.setFontSize(14);
+                pdf.text('Marine & Estuarine Water Quality Monitoring Tool', 105, headerStartY + 10, { align: 'center' });
+                
+                pdf.setFontSize(10);
+                pdf.setFont(undefined, 'normal');
+                pdf.text('Developed by Dr. Jonathan Levin', 105, headerStartY + 18, { align: 'center' });
+                
+                pdf.setFontSize(9);
+                pdf.setFont(undefined, 'italic');
+                pdf.text('This graph presents temporal trends of marine parameters against regional baseline ranges for South African coastal waters.', 105, headerStartY + 26, { align: 'center' });
+                
+                const imgData = canvas.toDataURL('image/png');
+                pdf.addImage(imgData, 'PNG', 15, headerStartY + 32, 180, 100);
+                
+                pdf.setFontSize(12);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('Automated Interpretation:', 15, headerStartY + 142);
+                
+                pdf.setFontSize(10);
+                pdf.setFont(undefined, 'normal');
+                const splitText = pdf.splitTextToSize(interpretation, 180);
+                pdf.text(splitText, 15, headerStartY + 152);
+                
+                pdf.save(`marine-monitoring-${parameter}-${region}-${Date.now()}.pdf`);
+            }
+            
+            alert(`✅ Graph downloaded successfully as ${format.toUpperCase()}!`);
         }
 
         // FIELD DATA COLLECTION TOOL
