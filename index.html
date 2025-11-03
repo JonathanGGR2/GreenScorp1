@@ -2741,36 +2741,41 @@
                                 <div style="margin-top: 15px; padding: 12px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 5px;">
                                     <strong>💡 Data Requirements for Trend Lines:</strong>
                                     <p style="margin: 8px 0 5px 0; font-size: 0.85rem; color: #856404;">
-                                        <em>Minimum points = total measurements across all sites (e.g., 5 sites × 2 samples each = 10 points)</em>
+                                        <em>Total data points = number of sites × samples per site (replicates)</em>
                                     </p>
-                                    <table style="width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 0.9rem;">
+                                    <table style="width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 0.85rem;">
                                         <thead>
                                             <tr style="background: #f8f9fa;">
                                                 <th style="padding: 8px; text-align: left; border-bottom: 2px solid #dee2e6;">Trend Line Type</th>
-                                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #dee2e6;">Minimum Total Data Points</th>
+                                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #dee2e6;">Minimum Total Points</th>
+                                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #dee2e6;">Example Combinations (Sites × Replicates)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">LOWESS Smoothing</td>
-                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">10+ recommended</td>
+                                                <td style="padding: 8px; text-align: center; border-bottom: 1px solid #dee2e6;">10+</td>
+                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">5 sites × 2 samples, 3 sites × 4 samples, 10 sites × 1 sample</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">3-Point Moving Average</td>
-                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">3+</td>
+                                                <td style="padding: 8px; text-align: center; border-bottom: 1px solid #dee2e6;">3+</td>
+                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">3 sites × 1 sample, 2 sites × 2 samples</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Linear Regression</td>
-                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">2+ (but 5+ better)</td>
+                                                <td style="padding: 8px; text-align: center; border-bottom: 1px solid #dee2e6;">2+ (5+ better)</td>
+                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">2 sites × 1 sample (minimum), 3 sites × 2 samples (better)</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding: 8px;">Polynomial Fit (2nd degree)</td>
-                                                <td style="padding: 8px;">3+</td>
+                                                <td style="padding: 8px; text-align: center;">3+</td>
+                                                <td style="padding: 8px;">3 sites × 1 sample, 2 sites × 2 samples</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     <p style="margin: 10px 0 0 0; font-size: 0.85rem; color: #856404;">
-                                        <strong>Example:</strong> 5 sites with 4 samples each = 20 total points → all trend lines work well
+                                        <strong>💡 Tip:</strong> More data points = smoother, more reliable trend lines. Aim for 15-20 total points for best results.
                                     </p>
                                 </div>
                             </div>
