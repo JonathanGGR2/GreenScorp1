@@ -1141,18 +1141,38 @@
                         <li>National Estuarine Management Protocol (2013)</li>
                     </ul>
                     
-                    <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 10px; border-left: 4px solid #4caf50;">
-                        <p style="margin: 0; color: #2c5530;"><strong>🔄 Version 2.1</strong> <span style="font-size: 0.85rem; opacity: 0.8;">(Updated: 31 October 2025)</span></p>
+                    <!-- Version 3.0 - Latest -->
+                    <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 10px; border-left: 4px solid #2196F3;">
+                        <p style="margin: 0; color: #1565c0;"><strong>🔄 Version 3.0</strong> <span style="font-size: 0.85rem; opacity: 0.8;">(Updated: 03 November 2025)</span></p>
                         <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #495057;">
-                            <strong>Recent Updates:</strong>
+                            <strong>Latest Updates:</strong>
                         </p>
                         <ul style="margin: 8px 0 0 0; padding-left: 20px; font-size: 0.9rem; color: #495057; line-height: 1.6;">
-                            <li>Added comprehensive Marine & Estuarine Water Quality Assessment capability with support for both Natural Environment (ecosystem health protection) and Mariculture (aquaculture operations) assessments, featuring multi-sample batch processing and regional baseline integration for South African coastal waters.</li>
-                            <li>Enhanced data persistence: Download all sample input sheets without losing your data - input samples, download the file, perform assessments, logout, login, upload the file, and continue exactly where you left off.</li>
-                            <li>Marine & Estuarine baseline configuration management: Save custom regional baseline values, download configuration files to share with colleagues, upload configuration files from team members, and revert to factory defaults when needed.</li>
-                            <li><strong>Beta:</strong> Field data collection tool - download your field data in one standardized digital format for seamless data management.</li>
+                            <li><strong>⭐ NEW: Temporal Compliance Monitoring Tools</strong>
+                                <ul style="margin-top: 5px; padding-left: 20px;">
+                                    <li><strong>Single Site Monitoring:</strong> Water Quality, Sediment Quality, and Marine/Estuarine tools now feature temporal monitoring capabilities. Track parameter concentrations over time at individual monitoring locations and compare against South African regulatory thresholds (Water: TWQR/CEV/AEV; Sediment: SSV1/SSV2; Marine: Regional Baselines) with automated trend analysis, exceedance detection, and professional report generation (PNG/PDF with Green Scorpions branding).</li>
+                                    <li><strong>River Continuum Monitoring (Water Quality):</strong> Advanced spatio-temporal assessment tool for tracking water quality across multiple sites along river systems. Features distance-based spatial analysis, year-based temporal differentiation (color/shape coding), multiple trend line options, threshold compliance visualization, and automated gradient analysis with professional reporting.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Professional branding:</strong> All monitoring reports now include Green Scorpions logo and standardized headers for official documentation.</li>
+                            <li>Visitor counter: Track portal usage statistics on login page.</li>
                         </ul>
                     </div>
+
+                    <!-- Version 2.1 - Previous Release -->
+                    <details style="margin-top: 15px; cursor: pointer;">
+                        <summary style="padding: 10px; background: linear-gradient(135deg, #f5f5f5, #e0e0e0); border-radius: 8px; border-left: 4px solid #9e9e9e; font-weight: 600; color: #424242;">
+                            📋 Version 2.1 (31 October 2025) - Click to view previous updates
+                        </summary>
+                        <div style="margin-top: 10px; padding: 15px; background: #fafafa; border-radius: 8px; border-left: 4px solid #9e9e9e;">
+                            <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem; color: #666; line-height: 1.6;">
+                                <li>Added comprehensive Marine & Estuarine Water Quality Assessment capability with support for both Natural Environment (ecosystem health protection) and Mariculture (aquaculture operations) assessments, featuring multi-sample batch processing and regional baseline integration for South African coastal waters.</li>
+                                <li>Enhanced data persistence: Download all sample input sheets without losing your data - input samples, download the file, perform assessments, logout, login, upload the file, and continue exactly where you left off.</li>
+                                <li>Marine & Estuarine baseline configuration management: Save custom regional baseline values, download configuration files to share with colleagues, upload configuration files from team members, and revert to factory defaults when needed.</li>
+                                <li><strong>Beta:</strong> Field data collection tool - download your field data in one standardized digital format for seamless data management.</li>
+                            </ul>
+                        </div>
+                    </details>
                 </div>
 
                 <h2 class="section-title">Secure Access Portal</h2>
@@ -2566,7 +2586,8 @@
 
                 <div class="water-nav-bar" style="margin: 0 -30px;">
                     <button class="water-nav-btn active" onclick="showWaterSection('assessment')">🧪 Assessment</button>
-                    <button class="water-nav-btn" onclick="showWaterSection('monitoring')">📊 Time & Compliance Monitoring</button>
+                    <button class="water-nav-btn" onclick="showWaterSection('monitoring')">📍 Single Site Monitoring</button>
+                    <button class="water-nav-btn" onclick="showWaterSection('river-continuum')">🗺️ River Continuum Monitoring</button>
                 </div>
 
                 <div id="waterContentArea" style="margin-top: 20px;">
@@ -2614,10 +2635,10 @@
                         </div>
                     </div>
 
-                    <!-- Monitoring Tool Section -->
+                    <!-- Single Site Monitoring Tool Section -->
                     <div id="water-monitoring" class="water-section">
                         <div class="card">
-                            <h3>📊 Time & Compliance Monitoring Tool</h3>
+                            <h3>📍 Single Site Monitoring Tool</h3>
                             <p style="line-height: 1.6; margin-bottom: 20px;">
                                 Track water quality parameters over time at a single monitoring location. Visualize trends and compare measurements against South African water quality guidelines (TWQR, CEV, AEV).
                             </p>
@@ -2692,6 +2713,123 @@
                                             📥 Download as PNG
                                         </button>
                                         <button class="btn-secondary" onclick="downloadMonitoringGraph('pdf')" style="padding: 12px 25px;">
+                                            📥 Download as PDF
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- River Continuum Monitoring Tool Section -->
+                    <div id="water-river-continuum" class="water-section">
+                        <div class="card">
+                            <h3>🗺️ River Continuum Monitoring Tool</h3>
+                            <p style="line-height: 1.6; margin-bottom: 20px;">
+                                Track water quality parameters across multiple sites along a river system over time. Visualize spatio-temporal trends and compare measurements against South African water quality guidelines (TWQR, CEV, AEV).
+                            </p>
+
+                            <div class="info-box">
+                                <strong>📌 How to use:</strong><br>
+                                1. Select a water quality parameter to monitor<br>
+                                2. Enter the number of monitoring sites along the river<br>
+                                3. For each site, specify distance from source (km) and add samples with dates<br>
+                                4. Select a trend line visualization method<br>
+                                5. Generate the river continuum graph with threshold lines<br>
+                                6. Download the graph with automated interpretation
+                                
+                                <div style="margin-top: 15px; padding: 12px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 5px;">
+                                    <strong>💡 Data Requirements for Trend Lines:</strong>
+                                    <table style="width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 0.9rem;">
+                                        <thead>
+                                            <tr style="background: #f8f9fa;">
+                                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #dee2e6;">Trend Line Type</th>
+                                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #dee2e6;">Minimum Points Needed</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">LOWESS Smoothing</td>
+                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">10+ recommended</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">3-Point Moving Average</td>
+                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">3+</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">Linear Regression</td>
+                                                <td style="padding: 8px; border-bottom: 1px solid #dee2e6;">2+ (but 5+ better)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 8px;">Polynomial Fit (2nd degree)</td>
+                                                <td style="padding: 8px;">3+</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 30px;">
+                                <h4>⚙️ Configure River Monitoring</h4>
+                                
+                                <div class="input-group" style="margin-top: 20px;">
+                                    <div class="input-field">
+                                        <label for="riverMonitoringParameter"><strong>Select Parameter:</strong></label>
+                                        <select id="riverMonitoringParameter" onchange="updateRiverMonitoringParameterInfo()" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                                            <option value="">-- Choose a parameter --</option>
+                                            <option value="aluminum">Aluminum (Al) - mg/L</option>
+                                            <option value="arsenic">Arsenic (As) - mg/L</option>
+                                            <option value="cadmium">Cadmium (Cd) - mg/L</option>
+                                            <option value="chromium_total">Chromium Total (Cr) - mg/L</option>
+                                            <option value="cobalt">Cobalt (Co) - mg/L</option>
+                                            <option value="copper">Copper (Cu) - mg/L</option>
+                                            <option value="iron">Iron (Fe) - mg/L</option>
+                                            <option value="lead">Lead (Pb) - mg/L</option>
+                                            <option value="manganese">Manganese (Mn) - mg/L</option>
+                                            <option value="mercury">Mercury (Hg) - mg/L</option>
+                                            <option value="nickel">Nickel (Ni) - mg/L</option>
+                                            <option value="vanadium">Vanadium (V) - mg/L</option>
+                                            <option value="zinc">Zinc (Zn) - mg/L</option>
+                                            <option value="sulfate">Sulfate (SO₄) - mg/L</option>
+                                            <option value="ammonium">Ammonium (NH₄⁺) - mg N/L</option>
+                                            <option value="nitrate">Nitrate (NO₃⁻) - mg N/L</option>
+                                            <option value="nitrite">Nitrite (NO₂⁻) - mg N/L</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="input-field">
+                                        <label for="numRiverSites"><strong>Number of Monitoring Sites:</strong></label>
+                                        <input type="number" id="numRiverSites" min="2" max="15" placeholder="e.g., 5" style="padding: 12px; border: 2px solid #e0e6ed; border-radius: 8px; font-size: 1rem; width: 100%;">
+                                    </div>
+                                </div>
+
+                                <div id="riverMonitoringParameterInfo" style="margin-top: 15px; padding: 15px; background: #f0f8ff; border-left: 4px solid #3498db; border-radius: 5px; display: none;">
+                                    <strong>Guideline Thresholds:</strong><br>
+                                    <span id="riverParameterThresholds"></span>
+                                </div>
+
+                                <div style="text-align: center; margin: 25px 0;">
+                                    <button class="btn-primary" onclick="generateRiverSiteInputs()" style="padding: 15px 30px; font-size: 1.1rem;">
+                                        🗺️ Generate River Sites Form
+                                    </button>
+                                </div>
+
+                                <div id="riverSiteInputsContainer" style="margin-top: 30px;"></div>
+
+                                <div id="riverMonitoringGraphContainer" style="margin-top: 40px; display: none;">
+                                    <h4>📈 River Continuum Monitoring Graph</h4>
+                                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                        <canvas id="riverMonitoringChart" style="max-height: 600px;"></canvas>
+                                    </div>
+                                    
+                                    <div id="riverMonitoringInterpretation" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #3498db;">
+                                    </div>
+
+                                    <div style="text-align: center; margin-top: 25px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                        <button class="btn-secondary" onclick="downloadRiverMonitoringGraph('png')" style="padding: 12px 25px;">
+                                            📥 Download as PNG
+                                        </button>
+                                        <button class="btn-secondary" onclick="downloadRiverMonitoringGraph('pdf')" style="padding: 12px 25px;">
                                             📥 Download as PDF
                                         </button>
                                     </div>
@@ -4194,6 +4332,763 @@
             return lines.slice(0, 15); // Limit to 15 lines to fit in canvas
         }
     
+        // ========================================
+        // RIVER CONTINUUM MONITORING TOOL FUNCTIONS
+        // ========================================
+        
+        let riverMonitoringChart = null;
+        let riverMonitoringData = [];
+
+        function updateRiverMonitoringParameterInfo() {
+            const parameter = document.getElementById('riverMonitoringParameter').value;
+            const infoDiv = document.getElementById('riverMonitoringParameterInfo');
+            const thresholdsSpan = document.getElementById('riverParameterThresholds');
+            
+            if (!parameter) {
+                infoDiv.style.display = 'none';
+                return;
+            }
+            
+            const paramDef = waterParameterDefinitions[parameter];
+            const standards = waterStandards[parameter];
+            
+            let thresholdText = `<strong>${paramDef.name}:</strong><br>`;
+            thresholdText += `<div style="margin-top: 10px;">`;
+            
+            if (standards.twqr !== undefined) {
+                thresholdText += `<span style="color: #27ae60;">✓ TWQR: ${standards.twqr} ${paramDef.unit}</span><br>`;
+            }
+            if (standards.cev !== undefined && standards.cev !== null) {
+                thresholdText += `<span style="color: #f39c12;">⚠ CEV: ${standards.cev} ${paramDef.unit}</span><br>`;
+            }
+            if (standards.aev !== undefined && standards.aev !== null) {
+                thresholdText += `<span style="color: #e74c3c;">✖ AEV: ${standards.aev} ${paramDef.unit}</span>`;
+            }
+            thresholdText += `</div>`;
+            
+            thresholdsSpan.innerHTML = thresholdText;
+            infoDiv.style.display = 'block';
+        }
+
+        function generateRiverSiteInputs() {
+            const parameter = document.getElementById('riverMonitoringParameter').value;
+            const numSites = parseInt(document.getElementById('numRiverSites').value);
+            
+            if (!parameter) {
+                return alert('⚠️ Please select a parameter first!');
+            }
+            
+            if (!numSites || numSites < 2 || numSites > 15) {
+                return alert('⚠️ Please enter number of sites (2-15)!');
+            }
+            
+            const container = document.getElementById('riverSiteInputsContainer');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= numSites; i++) {
+                const siteHTML = `
+                    <div class="river-site-card" id="riverSite_${i}" style="background: white; border: 2px solid #3498db; border-radius: 15px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="background: linear-gradient(135deg, #3498db, #2980b9); padding: 20px; color: white;">
+                            <h4 style="margin: 0; font-size: 1.3rem;">📍 Site ${i}</h4>
+                        </div>
+                        
+                        <div style="padding: 25px;">
+                            <div class="input-group">
+                                <div class="input-field">
+                                    <label><strong>Site Name:</strong></label>
+                                    <input type="text" id="riverSite_${i}_name" placeholder="e.g., Upstream, Midstream, Downstream" style="padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px; width: 100%;">
+                                </div>
+                                
+                                <div class="input-field">
+                                    <label><strong>Distance from Source (km):</strong></label>
+                                    <input type="number" id="riverSite_${i}_distance" step="0.1" placeholder="e.g., 12.5" style="padding: 10px; border: 2px solid #e0e6ed; border-radius: 8px; width: 100%;">
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                    <h5 style="margin: 0; color: #2c3e50;">Sample Measurements</h5>
+                                    <button onclick="addRiverSample(${i})" style="background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                                        ➕ Add Sample
+                                    </button>
+                                </div>
+                                
+                                <div id="riverSite_${i}_samples" style="display: flex; flex-direction: column; gap: 10px;">
+                                    <!-- Samples will be added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', siteHTML);
+                
+                // Add initial sample
+                addRiverSample(i);
+            }
+            
+            // Add generate graph button with trend line selector
+            container.insertAdjacentHTML('beforeend', `
+                <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 15px; border: 2px solid #3498db;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                            <label for="riverTrendLineType" style="font-weight: 600; color: #2c3e50; margin-bottom: 8px; font-size: 0.95rem;">
+                                📈 Trend Line Visualization:
+                            </label>
+                            <select id="riverTrendLineType" style="padding: 12px 15px; border: 2px solid #3498db; border-radius: 8px; font-size: 1rem; min-width: 250px; background: white;">
+                                <option value="lowess">LOWESS Smoothing (Recommended)</option>
+                                <option value="moving-average">3-Point Moving Average</option>
+                                <option value="linear">Linear Regression</option>
+                                <option value="polynomial">Polynomial Fit (2nd degree)</option>
+                                <option value="none">No Trend Line (Points Only)</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn-primary" onclick="generateRiverMonitoringGraph()" style="padding: 15px 40px; font-size: 1.2rem; margin-top: 25px;">
+                            📊 Generate River Continuum Graph
+                        </button>
+                    </div>
+                </div>
+            `);
+        }
+
+        function addRiverSample(siteNum) {
+            const container = document.getElementById(`riverSite_${siteNum}_samples`);
+            const sampleCount = container.children.length + 1;
+            const sampleId = `riverSite_${siteNum}_sample_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            
+            const sampleHTML = `
+                <div id="${sampleId}" style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #3498db; display: flex; gap: 15px; align-items: center;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.9rem; color: #555; display: block; margin-bottom: 5px;">Sample Date:</label>
+                        <input type="date" id="${sampleId}_date" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 100%;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.9rem; color: #555; display: block; margin-bottom: 5px;">Concentration:</label>
+                        <input type="number" id="${sampleId}_value" step="0.0001" placeholder="Value" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 100%;">
+                    </div>
+                    <button onclick="document.getElementById('${sampleId}').remove()" style="background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; flex-shrink: 0;">
+                        🗑️
+                    </button>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', sampleHTML);
+        }
+
+        function generateRiverMonitoringGraph() {
+            try {
+                const parameter = document.getElementById('riverMonitoringParameter').value;
+                const numSites = document.querySelectorAll('.river-site-card').length;
+                const trendLineType = document.getElementById('riverTrendLineType').value;
+                
+                if (!parameter || numSites === 0) {
+                    return alert('⚠️ Please configure sites first!');
+                }
+                
+                const paramDef = waterParameterDefinitions[parameter];
+                const standards = waterStandards[parameter];
+                
+                if (!paramDef) {
+                    return alert('⚠️ Parameter definition not found!');
+                }
+                
+                if (!standards) {
+                    return alert('⚠️ Water quality standards not found for this parameter!');
+                }
+                
+                // Collect all data points
+                riverMonitoringData = [];
+                
+                for (let i = 1; i <= numSites; i++) {
+                    const siteName = document.getElementById(`riverSite_${i}_name`).value || `Site ${i}`;
+                    const distanceInput = document.getElementById(`riverSite_${i}_distance`);
+                    const distance = parseFloat(distanceInput.value);
+                    
+                    if (isNaN(distance)) {
+                        return alert(`⚠️ Please enter distance for ${siteName}!`);
+                    }
+                    
+                    const samplesContainer = document.getElementById(`riverSite_${i}_samples`);
+                    const sampleDivs = samplesContainer.querySelectorAll('[id*="_sample_"]');
+                    
+                    sampleDivs.forEach(sampleDiv => {
+                        const dateInput = sampleDiv.querySelector('[id$="_date"]');
+                        const valueInput = sampleDiv.querySelector('[id$="_value"]');
+                        
+                        if (dateInput && valueInput && dateInput.value && valueInput.value) {
+                            const date = new Date(dateInput.value);
+                            riverMonitoringData.push({
+                                site: i,
+                                siteName: siteName,
+                                distance: distance,
+                                date: date,
+                                dateStr: dateInput.value,
+                                year: date.getFullYear(),
+                                value: parseFloat(valueInput.value)
+                            });
+                        }
+                    });
+                }
+                
+                if (riverMonitoringData.length < 2) {
+                    return alert('⚠️ Please enter at least 2 measurements across all sites!');
+                }
+                
+                // Sort by distance
+                riverMonitoringData.sort((a, b) => a.distance - b.distance);
+                
+                // Prepare chart datasets
+                const datasets = [];
+                
+                // Group data by year for different colors/shapes
+                const yearGroups = {};
+                riverMonitoringData.forEach(point => {
+                    if (!yearGroups[point.year]) {
+                        yearGroups[point.year] = [];
+                    }
+                    yearGroups[point.year].push(point);
+                });
+                
+                // Color palette for years
+                const years = Object.keys(yearGroups).sort();
+                const yearColors = {
+                    [years[0]]: '#3498db',
+                    [years[1]]: '#9b59b6',
+                    [years[2]]: '#e74c3c',
+                    [years[3]]: '#f39c12',
+                    [years[4]]: '#1abc9c'
+                };
+                
+                // Point styles for years
+                const pointStyles = ['circle', 'rect', 'triangle', 'rectRot', 'star'];
+                
+                // Create dataset for each year
+                years.forEach((year, index) => {
+                    datasets.push({
+                        label: `${year}`,
+                        data: yearGroups[year].map(p => ({ x: p.distance, y: p.value })),
+                        backgroundColor: yearColors[year] || '#95a5a6',
+                        borderColor: yearColors[year] || '#95a5a6',
+                        pointStyle: pointStyles[index % pointStyles.length],
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        showLine: false
+                    });
+                });
+                
+                // Add trend line if selected
+                if (trendLineType !== 'none') {
+                    const trendData = calculateRiverTrendLine(riverMonitoringData, trendLineType);
+                    if (trendData && trendData.length > 0) {
+                        datasets.push({
+                            label: getTrendLineLabel(trendLineType),
+                            data: trendData,
+                            borderColor: '#2c3e50',
+                            backgroundColor: 'transparent',
+                            borderWidth: 3,
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            showLine: true,
+                            fill: false,
+                            tension: trendLineType === 'lowess' ? 0.4 : 0
+                        });
+                    }
+                }
+                
+                // Add threshold lines
+                const minDist = Math.min(...riverMonitoringData.map(d => d.distance));
+                const maxDist = Math.max(...riverMonitoringData.map(d => d.distance));
+                
+                if (standards.twqr !== undefined && standards.twqr !== null) {
+                    datasets.push({
+                        label: `TWQR (${standards.twqr} ${paramDef.unit})`,
+                        data: [
+                            { x: minDist, y: parseFloat(standards.twqr) },
+                            { x: maxDist, y: parseFloat(standards.twqr) }
+                        ],
+                        borderColor: '#27ae60',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        showLine: true,
+                        fill: false
+                    });
+                }
+                
+                if (standards.cev !== undefined && standards.cev !== null) {
+                    datasets.push({
+                        label: `CEV (${standards.cev} ${paramDef.unit})`,
+                        data: [
+                            { x: minDist, y: parseFloat(standards.cev) },
+                            { x: maxDist, y: parseFloat(standards.cev) }
+                        ],
+                        borderColor: '#f39c12',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        showLine: true,
+                        fill: false
+                    });
+                }
+                
+                if (standards.aev !== undefined && standards.aev !== null) {
+                    datasets.push({
+                        label: `AEV (${standards.aev} ${paramDef.unit})`,
+                        data: [
+                            { x: minDist, y: parseFloat(standards.aev) },
+                            { x: maxDist, y: parseFloat(standards.aev) }
+                        ],
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        showLine: true,
+                        fill: false
+                    });
+                }
+                
+                // Destroy existing chart
+                if (riverMonitoringChart) {
+                    riverMonitoringChart.destroy();
+                }
+                
+                // Check if Chart.js is loaded
+                if (typeof Chart === 'undefined') {
+                    return alert('⚠️ Chart.js library not loaded. Please refresh the page.');
+                }
+                
+                // Create chart
+                const canvas = document.getElementById('riverMonitoringChart');
+                if (!canvas) {
+                    return alert('⚠️ Chart canvas element not found!');
+                }
+                
+                const ctx = canvas.getContext('2d');
+                riverMonitoringChart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: { datasets: datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `${paramDef.name} - River Continuum Monitoring`,
+                                font: { size: 18, weight: 'bold' },
+                                padding: 20
+                            },
+                            legend: {
+                                display: true,
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 15,
+                                    padding: 10,
+                                    font: { size: 11 }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const dataPoint = riverMonitoringData.find(d => 
+                                            Math.abs(d.distance - context.parsed.x) < 0.01 && 
+                                            Math.abs(d.value - context.parsed.y) < 0.0001
+                                        );
+                                        if (dataPoint) {
+                                            return `${dataPoint.siteName}: ${context.parsed.y.toFixed(4)} ${paramDef.unit} (${dataPoint.dateStr})`;
+                                        }
+                                        return `${context.parsed.y.toFixed(4)} ${paramDef.unit}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                title: {
+                                    display: true,
+                                    text: 'Distance from Source (km)',
+                                    font: { size: 14, weight: 'bold' },
+                                    color: '#000000'
+                                },
+                                ticks: { 
+                                    font: { size: 11 },
+                                    color: '#000000'
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    lineWidth: 1
+                                },
+                                border: {
+                                    color: '#000000',
+                                    width: 2
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: `${paramDef.name} (${paramDef.unit})`,
+                                    font: { size: 14, weight: 'bold' },
+                                    color: '#000000'
+                                },
+                                ticks: { 
+                                    font: { size: 11 },
+                                    color: '#000000'
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    lineWidth: 1
+                                },
+                                border: {
+                                    color: '#000000',
+                                    width: 2
+                                },
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                });
+                
+                // Show graph container
+                document.getElementById('riverMonitoringGraphContainer').style.display = 'block';
+                document.getElementById('riverMonitoringGraphContainer').scrollIntoView({ behavior: 'smooth' });
+                
+                // Generate interpretation
+                generateRiverMonitoringInterpretation(parameter, paramDef, standards, trendLineType);
+                
+            } catch (error) {
+                console.error('Error generating river monitoring graph:', error);
+                alert('⚠️ Error generating graph: ' + error.message + '\n\nPlease check the browser console for details.');
+            }
+        }
+
+        function getTrendLineLabel(type) {
+            const labels = {
+                'lowess': 'LOWESS Trend',
+                'moving-average': '3-Point Moving Average',
+                'linear': 'Linear Trend',
+                'polynomial': 'Polynomial Trend (2nd degree)'
+            };
+            return labels[type] || 'Trend Line';
+        }
+
+        function calculateRiverTrendLine(data, type) {
+            // Sort data by distance
+            const sortedData = [...data].sort((a, b) => a.distance - b.distance);
+            
+            if (type === 'linear') {
+                return calculateLinearTrend(sortedData);
+            } else if (type === 'polynomial') {
+                return calculatePolynomialTrend(sortedData);
+            } else if (type === 'moving-average') {
+                return calculateMovingAverage(sortedData);
+            } else if (type === 'lowess') {
+                return calculateLOWESS(sortedData);
+            }
+            
+            return [];
+        }
+
+        function calculateLinearTrend(data) {
+            const n = data.length;
+            const sumX = data.reduce((sum, d) => sum + d.distance, 0);
+            const sumY = data.reduce((sum, d) => sum + d.value, 0);
+            const sumXY = data.reduce((sum, d) => sum + d.distance * d.value, 0);
+            const sumXX = data.reduce((sum, d) => sum + d.distance * d.distance, 0);
+            
+            const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+            
+            const minX = Math.min(...data.map(d => d.distance));
+            const maxX = Math.max(...data.map(d => d.distance));
+            
+            return [
+                { x: minX, y: slope * minX + intercept },
+                { x: maxX, y: slope * maxX + intercept }
+            ];
+        }
+
+        function calculatePolynomialTrend(data) {
+            // Simple 2nd degree polynomial fit
+            const n = data.length;
+            const x = data.map(d => d.distance);
+            const y = data.map(d => d.value);
+            
+            // Calculate sums for polynomial regression
+            let sumX = 0, sumX2 = 0, sumX3 = 0, sumX4 = 0;
+            let sumY = 0, sumXY = 0, sumX2Y = 0;
+            
+            for (let i = 0; i < n; i++) {
+                sumX += x[i];
+                sumX2 += x[i] * x[i];
+                sumX3 += x[i] * x[i] * x[i];
+                sumX4 += x[i] * x[i] * x[i] * x[i];
+                sumY += y[i];
+                sumXY += x[i] * y[i];
+                sumX2Y += x[i] * x[i] * y[i];
+            }
+            
+            // Solve matrix (simplified approach)
+            const denom = n * (sumX2 * sumX4 - sumX3 * sumX3) - sumX * (sumX * sumX4 - sumX2 * sumX3) + sumX2 * (sumX * sumX3 - sumX2 * sumX2);
+            
+            if (Math.abs(denom) < 0.0001) {
+                // Fallback to linear if determinant too small
+                return calculateLinearTrend(data);
+            }
+            
+            const a = ((sumY * (sumX2 * sumX4 - sumX3 * sumX3) - sumXY * (sumX * sumX4 - sumX2 * sumX3) + sumX2Y * (sumX * sumX3 - sumX2 * sumX2)) / denom);
+            const b = ((n * (sumXY * sumX4 - sumX2Y * sumX3) - sumX * (sumY * sumX4 - sumX2Y * sumX2) + sumX2 * (sumY * sumX3 - sumXY * sumX2)) / denom);
+            const c = ((n * (sumX2 * sumX2Y - sumX3 * sumXY) - sumX * (sumX * sumX2Y - sumX2 * sumXY) + sumX2 * (sumX * sumXY - sumX2 * sumY)) / denom);
+            
+            const minX = Math.min(...x);
+            const maxX = Math.max(...x);
+            const step = (maxX - minX) / 50;
+            
+            const trendPoints = [];
+            for (let xi = minX; xi <= maxX; xi += step) {
+                trendPoints.push({ x: xi, y: a + b * xi + c * xi * xi });
+            }
+            
+            return trendPoints;
+        }
+
+        function calculateMovingAverage(data) {
+            const windowSize = 3;
+            const result = [];
+            
+            for (let i = 0; i < data.length; i++) {
+                const start = Math.max(0, i - Math.floor(windowSize / 2));
+                const end = Math.min(data.length, i + Math.ceil(windowSize / 2));
+                const window = data.slice(start, end);
+                const avgValue = window.reduce((sum, d) => sum + d.value, 0) / window.length;
+                
+                result.push({ x: data[i].distance, y: avgValue });
+            }
+            
+            return result;
+        }
+
+        function calculateLOWESS(data) {
+            // Simplified LOWESS implementation
+            const bandwidth = 0.3; // Use 30% of data for local regression
+            const numPoints = 50;
+            const minX = Math.min(...data.map(d => d.distance));
+            const maxX = Math.max(...data.map(d => d.distance));
+            const step = (maxX - minX) / numPoints;
+            
+            const result = [];
+            
+            for (let xi = minX; xi <= maxX; xi += step) {
+                // Calculate distances and weights
+                const distances = data.map(d => Math.abs(d.distance - xi));
+                const maxDist = Math.max(...distances);
+                const weights = distances.map(dist => {
+                    const normalized = dist / (maxDist * bandwidth);
+                    return normalized < 1 ? Math.pow(1 - Math.pow(normalized, 3), 3) : 0;
+                });
+                
+                // Weighted linear regression
+                let sumW = 0, sumWX = 0, sumWY = 0, sumWXY = 0, sumWXX = 0;
+                
+                data.forEach((d, i) => {
+                    sumW += weights[i];
+                    sumWX += weights[i] * d.distance;
+                    sumWY += weights[i] * d.value;
+                    sumWXY += weights[i] * d.distance * d.value;
+                    sumWXX += weights[i] * d.distance * d.distance;
+                });
+                
+                if (sumW > 0) {
+                    const slope = (sumW * sumWXY - sumWX * sumWY) / (sumW * sumWXX - sumWX * sumWX);
+                    const intercept = (sumWY - slope * sumWX) / sumW;
+                    const yi = slope * xi + intercept;
+                    
+                    result.push({ x: xi, y: yi });
+                }
+            }
+            
+            return result;
+        }
+
+        function generateRiverMonitoringInterpretation(parameter, paramDef, standards, trendLineType) {
+            const interpretDiv = document.getElementById('riverMonitoringInterpretation');
+            
+            // Calculate statistics
+            const totalPoints = riverMonitoringData.length;
+            const sites = [...new Set(riverMonitoringData.map(d => d.site))].length;
+            const years = [...new Set(riverMonitoringData.map(d => d.year))].sort();
+            
+            // Check exceedances
+            let twqrExceed = 0, cevExceed = 0, aevExceed = 0;
+            
+            riverMonitoringData.forEach(point => {
+                if (standards.twqr !== undefined && standards.twqr !== null && point.value > parseFloat(standards.twqr)) twqrExceed++;
+                if (standards.cev !== undefined && standards.cev !== null && point.value > parseFloat(standards.cev)) cevExceed++;
+                if (standards.aev !== undefined && standards.aev !== null && point.value > parseFloat(standards.aev)) aevExceed++;
+            });
+            
+            // Identify spatial gradient
+            const firstSiteAvg = riverMonitoringData.filter(d => d.site === 1).reduce((sum, d) => sum + d.value, 0) / riverMonitoringData.filter(d => d.site === 1).length;
+            const lastSite = Math.max(...riverMonitoringData.map(d => d.site));
+            const lastSiteAvg = riverMonitoringData.filter(d => d.site === lastSite).reduce((sum, d) => sum + d.value, 0) / riverMonitoringData.filter(d => d.site === lastSite).length;
+            const gradient = ((lastSiteAvg - firstSiteAvg) / firstSiteAvg * 100).toFixed(1);
+            const gradientDirection = gradient > 0 ? 'increase' : 'decrease';
+            
+            let interpretation = `<h4 style="margin-bottom: 15px; color: #2c3e50;">📊 River Continuum Analysis</h4>`;
+            interpretation += `<p style="line-height: 1.8; color: #34495e;">`;
+            interpretation += `<strong>Dataset Overview:</strong> Analysis of ${totalPoints} measurements across ${sites} monitoring sites along the river continuum, spanning ${years.length > 1 ? years[0] + '-' + years[years.length-1] : years[0]}. `;
+            interpretation += `The ${getTrendLineLabel(trendLineType).toLowerCase()} shows the overall spatial trend of ${paramDef.name} concentrations along the river system.<br><br>`;
+            
+            interpretation += `<strong>Spatial Gradient:</strong> From upstream to downstream, ${paramDef.name} concentrations show a ${Math.abs(gradient)}% ${gradientDirection} `;
+            interpretation += `(from ${firstSiteAvg.toFixed(3)} to ${lastSiteAvg.toFixed(3)} ${paramDef.unit}). `;
+            
+            if (Math.abs(parseFloat(gradient)) > 50) {
+                interpretation += `This substantial gradient suggests significant pollution inputs or natural attenuation processes along the river continuum.<br><br>`;
+            } else if (Math.abs(parseFloat(gradient)) > 20) {
+                interpretation += `This moderate gradient indicates measurable changes in water quality along the river system.<br><br>`;
+            } else {
+                interpretation += `This relatively stable pattern suggests consistent water quality conditions along the monitored reach.<br><br>`;
+            }
+            
+            // Compliance assessment
+            if (twqrExceed === 0) {
+                interpretation += `<strong>✅ Compliance Status:</strong> All ${totalPoints} measurements comply with the TWQR (${standards.twqr} ${paramDef.unit}), indicating acceptable water quality throughout the monitored river continuum.`;
+            } else if (twqrExceed < totalPoints * 0.1) {
+                interpretation += `<strong>⚠️ Compliance Status:</strong> ${twqrExceed} of ${totalPoints} measurements (${(twqrExceed/totalPoints*100).toFixed(1)}%) exceed the TWQR. These isolated exceedances warrant investigation of localized pollution sources.`;
+            } else {
+                interpretation += `<strong>🚨 Compliance Status:</strong> ${twqrExceed} of ${totalPoints} measurements (${(twqrExceed/totalPoints*100).toFixed(1)}%) exceed the TWQR, indicating widespread water quality degradation. `;
+                
+                if (cevExceed > 0) {
+                    interpretation += `Furthermore, ${cevExceed} measurements exceed the CEV (${standards.cev} ${paramDef.unit}), requiring immediate investigation and remediation.`;
+                }
+                if (aevExceed > 0) {
+                    interpretation += ` Critically, ${aevExceed} measurements exceed the AEV (${standards.aev} ${paramDef.unit}), indicating acute environmental risk requiring urgent intervention.`;
+                }
+            }
+            
+            interpretation += `</p>`;
+            
+            // Store for download
+            window.riverMonitoringInterpretationText = interpretDiv.textContent || interpretDiv.innerText;
+            
+            interpretDiv.innerHTML = interpretation;
+        }
+
+        async function downloadRiverMonitoringGraph(format) {
+            const parameter = document.getElementById('riverMonitoringParameter').value;
+            const paramDef = waterParameterDefinitions[parameter];
+            const canvas = document.getElementById('riverMonitoringChart');
+            const interpretation = window.riverMonitoringInterpretationText || 'No interpretation available';
+            
+            if (format === 'png') {
+                const logoImg = await loadLogoImage();
+                
+                const exportCanvas = document.createElement('canvas');
+                const ctx = exportCanvas.getContext('2d');
+                
+                exportCanvas.width = canvas.width;
+                exportCanvas.height = canvas.height + 510;
+                
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+                
+                let headerStartY = 40;
+                if (logoImg) {
+                    const logoHeight = 60;
+                    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+                    const logoX = (exportCanvas.width - logoWidth) / 2;
+                    ctx.drawImage(logoImg, logoX, 20, logoWidth, logoHeight);
+                    headerStartY = 95;
+                }
+                
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Green Scorpions Environmental Compliance Portal', exportCanvas.width / 2, headerStartY);
+                
+                ctx.font = '18px Arial';
+                ctx.fillText('River Continuum Monitoring Tool', exportCanvas.width / 2, headerStartY + 30);
+                
+                ctx.font = '14px Arial';
+                ctx.fillText('Developed by Dr. Jonathan Levin', exportCanvas.width / 2, headerStartY + 55);
+                
+                ctx.font = 'italic 12px Arial';
+                ctx.fillStyle = '#555555';
+                ctx.fillText('Spatio-temporal analysis of water quality parameters along river continuum against SA regulatory thresholds.', exportCanvas.width / 2, headerStartY + 75);
+                
+                const chartY = headerStartY + 95;
+                ctx.drawImage(canvas, 0, chartY);
+                
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'left';
+                
+                const interpretLines = wrapText(ctx, interpretation, exportCanvas.width - 60, 12);
+                let yPos = chartY + canvas.height + 30;
+                interpretLines.forEach(line => {
+                    ctx.fillText(line, 30, yPos);
+                    yPos += 18;
+                });
+                
+                const link = document.createElement('a');
+                link.download = `river-continuum-${parameter}-${Date.now()}.png`;
+                link.href = exportCanvas.toDataURL('image/png');
+                link.click();
+                
+            } else if (format === 'pdf') {
+                const logoImg = await loadLogoImage();
+                
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                let headerStartY = 20;
+                if (logoImg) {
+                    const logoHeight = 20;
+                    const logoWidth = (logoImg.width / logoImg.height) * logoHeight;
+                    const logoX = (210 - logoWidth) / 2;
+                    
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = logoImg.width;
+                    tempCanvas.height = logoImg.height;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(logoImg, 0, 0);
+                    const logoDataUrl = tempCanvas.toDataURL('image/jpeg');
+                    
+                    pdf.addImage(logoDataUrl, 'JPEG', logoX, 10, logoWidth, logoHeight);
+                    headerStartY = 35;
+                }
+                
+                pdf.setFontSize(16);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('Green Scorpions Environmental Compliance Portal', 105, headerStartY, { align: 'center' });
+                
+                pdf.setFontSize(14);
+                pdf.text('River Continuum Monitoring Tool', 105, headerStartY + 8, { align: 'center' });
+                
+                pdf.setFontSize(10);
+                pdf.setFont(undefined, 'normal');
+                pdf.text('Developed by Dr. Jonathan Levin', 105, headerStartY + 15, { align: 'center' });
+                
+                pdf.setFontSize(9);
+                pdf.setFont(undefined, 'italic');
+                pdf.text('Spatio-temporal analysis of water quality parameters along river continuum', 105, headerStartY + 22, { align: 'center' });
+                
+                const imgData = canvas.toDataURL('image/png');
+                pdf.addImage(imgData, 'PNG', 15, headerStartY + 30, 180, 120);
+                
+                pdf.setFontSize(10);
+                pdf.setFont(undefined, 'normal');
+                const splitText = pdf.splitTextToSize(interpretation, 180);
+                pdf.text(splitText, 15, headerStartY + 155);
+                
+                pdf.save(`river-continuum-${parameter}-${Date.now()}.pdf`);
+            }
+            
+            alert(`✅ River continuum graph downloaded successfully as ${format.toUpperCase()}!`);
+        }
+
         // SEDIMENT QUALITY MONITORING TOOL FUNCTIONS
         
         let sedimentMonitoringChart = null;
