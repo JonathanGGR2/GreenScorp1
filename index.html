@@ -4981,10 +4981,13 @@
             
             interpretation += `</p>`;
             
-            // Store for download
-            window.riverMonitoringInterpretationText = interpretDiv.textContent || interpretDiv.innerText;
-            
+            // Set HTML first
             interpretDiv.innerHTML = interpretation;
+            
+            // Then extract plain text for download (remove HTML tags)
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = interpretation;
+            window.riverMonitoringInterpretationText = tempDiv.textContent || tempDiv.innerText;
         }
 
         async function downloadRiverMonitoringGraph(format) {
