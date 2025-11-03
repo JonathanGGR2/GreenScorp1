@@ -5090,13 +5090,46 @@
                 pdf.setFont(undefined, 'italic');
                 pdf.text('Spatio-temporal analysis of water quality parameters along river continuum', 105, headerStartY + 22, { align: 'center' });
                 
+                // Add graph
                 const imgData = canvas.toDataURL('image/png');
                 pdf.addImage(imgData, 'PNG', 15, headerStartY + 30, 180, 120);
                 
-                pdf.setFontSize(10);
+                // Add interpretation text with proper formatting
+                pdf.setFontSize(9);
                 pdf.setFont(undefined, 'normal');
-                const splitText = pdf.splitTextToSize(interpretation, 180);
-                pdf.text(splitText, 15, headerStartY + 155);
+                
+                // Clean the interpretation text - remove HTML and special characters
+                let cleanText = interpretation
+                    .replace(/<[^>]*>/g, '') // Remove HTML tags
+                    .replace(/&nbsp;/g, ' ') // Replace non-breaking spaces
+                    .replace(/&amp;/g, '&')  // Replace &amp;
+                    .replace(/&lt;/g, '<')   // Replace &lt;
+                    .replace(/&gt;/g, '>')   // Replace &gt;
+                    .replace(/&quot;/g, '"') // Replace &quot;
+                    .replace(/&#39;/g, "'")  // Replace &#39;
+                    .replace(/\s+/g, ' ')    // Normalize whitespace
+                    .trim();
+                
+                // Split text into lines that fit the page width (180mm with margins = 170mm usable)
+                const maxWidth = 170;
+                const splitText = pdf.splitTextToSize(cleanText, maxWidth);
+                
+                // Calculate if we need a second page
+                let currentY = headerStartY + 155;
+                const lineHeight = 5;
+                const pageHeight = 297; // A4 height in mm
+                const bottomMargin = 15;
+                
+                // Add text line by line, checking for page overflow
+                splitText.forEach((line, index) => {
+                    if (currentY + lineHeight > pageHeight - bottomMargin) {
+                        // Add new page if text overflows
+                        pdf.addPage();
+                        currentY = 20; // Reset Y position for new page
+                    }
+                    pdf.text(line, 15, currentY);
+                    currentY += lineHeight;
+                });
                 
                 pdf.save(`river-continuum-${parameter}-${Date.now()}.pdf`);
             }
